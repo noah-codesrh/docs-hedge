@@ -33,12 +33,13 @@ export default function LeverageOverview() {
       />
 
       <Note kind="warning" title="Read this part first">
-        This system is <strong className="text-white">not live</strong>. It is
-        behind a build flag, the contracts have{" "}
-        <strong className="text-white">not been audited</strong>, and the trading
-        panel deliberately refuses to submit a leveraged ticket until deployment
-        addresses are configured. Everything below describes what the code does,
-        not a service you can currently use.
+        Leverage is <strong className="text-white">not open to traders yet</strong>.
+        The contracts are deployed, but the feature is switched off in the build,
+        and the trading panel deliberately refuses to submit a leveraged ticket
+        while it is — so a levered ticket can never quietly fall through to an
+        unlevered spot fill. The contracts have{" "}
+        <strong className="text-white">not been audited</strong>. Everything below
+        describes what the code does, not a service you can currently use.
       </Note>
 
       <H2>How it differs from a spot trade</H2>
@@ -192,6 +193,25 @@ $2.50 margin at 2x  ->  $5.00 position`}</Code>
         A position keeps the carry rate it opened at, so a later change to the
         rate cannot be applied retroactively to positions already open.
       </Note>
+      <P>
+        The exit fee and the carry are both capped by whatever margin is left when
+        the position settles. A position wiped out by the price move pays neither —
+        not as a concession, but because there is nothing left to take. Your loss
+        cannot exceed the margin you posted.
+      </P>
+
+      <H3>What the interface offers</H3>
+      <P>
+        The multiples presented are 1x, 2x, and 3x, which is narrower than the
+        contract&rsquo;s current ceiling. Individual markets can also carry their
+        own lower cap, applied on top of whatever the vault-size tier allows.
+      </P>
+      <P>
+        Choosing 1x is not a leveraged position at all: it routes through the
+        ordinary spot path, where you buy real shares at the venue. The leverage
+        engine is only involved above 1x, which is also consistent with the carry
+        rule, since a 1x position borrows nothing.
+      </P>
 
       <H2>Liquidation</H2>
       <P>

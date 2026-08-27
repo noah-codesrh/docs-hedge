@@ -213,6 +213,56 @@ exit fee     = (closedSize × closeFeeBps) / BPS`}</Code>
         margin that still clears the minimum.
       </P>
 
+      <H3>The settlement order</H3>
+      <P>
+        What the trader receives is computed by working down from the net margin
+        being closed. The order is fixed, and each deduction is capped by what is
+        still left — which is how a wiped-out position settles without ever going
+        negative:
+      </P>
+      <Code>{`remaining = closedNet
+
+profit    remaining += pnl              (paid out of the vault)
+loss      loss = min(−pnl, remaining)   (absorbed by the vault)
+          remaining −= loss
+
+carry     owed = min(owed, remaining)
+          remaining −= owed
+
+exit fee  fee = min(fee, remaining)
+          remaining −= fee
+
+payout    = remaining`}</Code>
+      <Ul>
+        <Li>
+          Profit is added before anything is deducted, so a winning position pays
+          its carry and exit fee out of the enlarged balance.
+        </Li>
+        <Li>
+          Each of the three deductions is capped at what remains. A position whose
+          loss consumed the whole margin therefore pays no carry and no exit fee —
+          not because they are waived, but because there is nothing to take.
+        </Li>
+        <Li>
+          The floor is zero. A trader can lose the entire margin and no more, and
+          the vault cannot claim beyond it.
+        </Li>
+      </Ul>
+      <P>
+        Losses and liquidated margin are credited to the vault by a different path
+        than fees and carry, which is why the two have separate splits.
+      </P>
+
+      <H3>Liquidation and the emergency exit</H3>
+      <Code>{`liquidated       absorbed = netMargin      (trader receives nothing)
+emergency close  refund   = netMargin      (trader receives all of it)`}</Code>
+      <P>
+        The symmetry is the point. Both bypass the profit and loss calculation
+        entirely — one because the margin is spent, the other because no trustworthy
+        price exists to settle against. In both cases the entry fee stays with the
+        vault, having been collected at open, and no exit fee is charged.
+      </P>
+
       <H2>Worked example</H2>
       <P>
         A 2x long on a $0.50 outcome with $2.50 of margin, at the default
@@ -294,11 +344,25 @@ exit fee     = (closedSize × closeFeeBps) / BPS`}</Code>
       </P>
 
       <H2>Capacity</H2>
-      <Code>{`byExposure = (totalAssets × maxPoolExposureBps) / BPS`}</Code>
+      <P>
+        Two independent ceilings, and the binding one is whichever is lower:
+      </P>
+      <Code>{`used        = lockedAssets
+byExposure  = (totalAssets × maxPoolExposureBps) / BPS
+byLiquidity = used + freeAssets
+
+ceiling   = min(byExposure, byLiquidity)
+available = ceiling > used ? ceiling − used : 0`}</Code>
+      <P>
+        The exposure ceiling is the risk limit — a deliberate cap on how much of
+        the vault may be committed. The liquidity ceiling is physical: capital that
+        is not there cannot be reserved regardless of what the risk limit permits.
+      </P>
       <P>
         A position is rejected if its reservation exceeds what remains available,
         and the check runs before any transfer — so hitting a full pool costs the
-        trader nothing but gas and returns a distinguishable error.
+        trader nothing but gas and returns a distinguishable error rather than a
+        generic failure.
       </P>
 
       <H2>Available leverage</H2>
@@ -421,13 +485,40 @@ reverts if fromSenior > seniorAssets`}</Code>
         </Li>
       </Ul>
 
+      <H2>Two implementations, one of which is authoritative</H2>
+      <P>
+        Several of these formulas exist twice: once in the contract, and once in
+        the browser so the panel can show sizing before you commit. The browser
+        copy is an <em>estimate</em> and is labelled as such in the source. The
+        contract also exposes a quote function, and a figure read from that is the
+        real one.
+      </P>
+      <P>
+        The distinction matters for anything that has to agree with a settlement.
+        The two use different arithmetic — the contract is integer-only and
+        truncates, the browser uses floating point and clamps at slightly different
+        boundaries — so they can disagree in the final unit. When they do, the
+        contract is right.
+      </P>
+      <Note>
+        A market is identified on-chain by the hash of its slug, so the contracts
+        never store the venue&rsquo;s identifiers or any market text.
+      </Note>
+
       <H2>Where these numbers live</H2>
       <P>
         The contracts are a self-contained Foundry project inside the frontend
         repository, not imported by the web application and not part of its build.
-        The engine, the vault, and the price oracle are separate contracts, with a
-        test suite and a scripted local end-to-end run that opens a position and
-        walks the price down until it liquidates.
+        The engine, the vault, and the price oracle are separate contracts, covered
+        by a single test suite of roughly sixty tests, plus a scripted local
+        end-to-end run that deploys the stack, opens a position, and walks the
+        price down until it liquidates.
+      </P>
+      <P>
+        The tests assert the worked example above directly, along with the fee
+        split, the rule that the junior tranche absorbs trader profit first, the
+        capacity error being distinguishable, carry accrual pulling the liquidation
+        price in, and the leverage tiers responding to vault size.
       </P>
       <P>
         Defaults quoted here are the deployed-time values. Every one has an admin

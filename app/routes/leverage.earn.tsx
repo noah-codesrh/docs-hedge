@@ -3,6 +3,7 @@ import {
   C,
   Code,
   H2,
+  H3,
   Li,
   Note,
   P,
@@ -31,11 +32,12 @@ export default function LeverageEarn() {
         intro="Leverage needs capital on the other side of it. The vault is where that capital sits: you deposit USDG, it backs traders' positions, and it earns the fees and the margin those positions leave behind. It is the counterparty, which means it profits when traders lose and pays when they win."
       />
 
-      <Note kind="warning" title="Not live, and not audited">
-        The vault is behind the same build flag as leverage itself, and the Earn
-        page reports it as not yet live until deployment addresses are set. The
-        contracts have not been audited. Treat everything here as a description of
-        code, not an invitation to deposit.
+      <Note kind="warning" title="Not open yet, and not audited">
+        The vault contract is deployed, but deposits are switched off in the
+        build: the Earn page reports it as not yet live and shows no deposit form
+        until the feature flag and addresses are both set. The contracts have{" "}
+        <strong className="text-white">not been audited</strong>. Treat everything
+        here as a description of code, not an invitation to deposit.
       </Note>
 
       <H2>Two tranches</H2>
@@ -73,7 +75,8 @@ export default function LeverageEarn() {
       <Note>
         Junior can be topped up by anyone, deliberately, so that a revenue source
         can inject into the buffer without holding administrative rights. Only an
-        administrator can withdraw from it.
+        administrator can withdraw from it. There is no interface for junior
+        deposits — it is a contract call, not something the app exposes.
       </Note>
 
       <H2>Shares, not balances</H2>
@@ -105,18 +108,26 @@ withdrawing            assets = shares × seniorAssets / totalShares`}</Code>
           whether the trader wins or loses, at the moment they open and close.
         </Li>
         <Li>
-          <strong className="text-white">The entry spread.</strong> 1% moved
-          against the trader on entry, kept by the vault.
+          <strong className="text-white">Carry</strong> on borrowed capital, settled
+          out of the trader&rsquo;s margin on exit.
         </Li>
         <Li>
-          <strong className="text-white">Absorbed margin.</strong> When a position
-          is liquidated, the margin remaining in it goes to the vault. This is the
-          largest and least predictable component.
+          <strong className="text-white">Absorbed margin</strong> — trader losses.
+          This covers both a position closed at a loss and a liquidated one, where
+          the entire remaining margin is absorbed. It is the largest and least
+          predictable component.
         </Li>
       </Ul>
       <P>
-        Carry on borrowed capital settles out of the trader&rsquo;s margin on exit
-        and splits the same way.
+        The entry spread is a fourth source but works differently: it is not
+        transferred as a fee. It moves the entry price against the trader, so the
+        benefit reaches the vault through the position&rsquo;s profit and loss at
+        settlement rather than as a separate credit.
+      </P>
+      <P>
+        Fees and carry are credited through one path and trader losses through
+        another, each with its own split — which is why the two can be tuned
+        independently.
       </P>
       <P>
         Both splits are adjustable. Setting the liquidation split to zero would
@@ -199,22 +210,80 @@ withdrawing            assets = shares × seniorAssets / totalShares`}</Code>
         positions rather than twelve.
       </P>
 
-      <H2>Yield figures</H2>
+      <H2>Two yield figures, deliberately kept apart</H2>
       <P>
-        No rate is displayed anywhere yet. The inputs exist on-chain — fee and
-        absorbed-margin events, against the tranche&rsquo;s total assets — but the
-        figure is not currently computed or surfaced.
+        There are two ways to put a number on this, and the code treats keeping
+        them distinct as a correctness requirement rather than a presentation
+        choice. One reports what the vault has actually paid; the other is
+        arithmetic on assumptions. They must never be shown as the same number.
+      </P>
+
+      <H3>Realised — what has actually been paid</H3>
+      <P>
+        Read from the chain by summing the senior portion of fee and
+        absorbed-margin events over a trailing window of blocks, then annualising
+        by the real elapsed time of that window:
+      </P>
+      <Code>{`feesToSenior = Σ FeeCollected.toSenior + Σ MarginAbsorbed.toSenior
+
+APR = (feesToSenior / seniorAssets) × (365 / windowDays) × 100`}</Code>
+      <P>
+        Under a day of history annualises to nonsense, so below that threshold no
+        figure is returned at all rather than a misleading one.
+      </P>
+
+      <H3>Projected — what it could earn when busy</H3>
+      <P>
+        A forward-looking model answering a different question. It is driven by
+        assumed <em>trader demand</em>, not by pool capacity, and the reasoning for
+        that is worth repeating: at a 3% round trip, a fully utilised pool turning
+        over a few times a day annualises into four figures, which says a great
+        deal about the fee schedule and nothing about what a depositor will see.
+        So volume is the input, and capacity is applied afterwards as a ceiling.
+      </P>
+      <Code>{`concurrent      = tradesPerDay × avgHoldHours / 24
+capacityCeiling = (senior + junior) × 0.30
+
+demand beyond the ceiling is turned away, not earned on
+
+dailyFees        = dailyVolume × roundTripFee
+borrowedFraction = avgLeverage > 1 ? 1 − 1/avgLeverage : 0
+dailyCarry       = dailyVolume × borrowedFraction × (borrowRateBps/10000) × avgHoldHours
+
+dailyToSenior = (dailyFees + dailyCarry) × 0.70
+APR           = dailyToSenior × 365 × 100 / senior`}</Code>
+      <P>
+        The clamp matters. Without it the model would promise yield on trades the
+        engine would refuse, since the pool cannot back more open interest than
+        its exposure cap allows.
+      </P>
+
+      <H3>Why APY barely differs from APR here</H3>
+      <P>
+        The standard weekly-compounding formula assumes reinvested earnings go on
+        earning the same rate. That holds for lending, where more capital earns
+        more interest. It does not hold for this vault: fee income is set by
+        trading volume, and depositing more does not make anyone trade more.
+        Reinvesting grows the denominator while the numerator stands still.
       </P>
       <P>
-        The intended derivation annualises a trailing window and compounds weekly:
+        So the compounding formula is computed and then deliberately capped:
       </P>
-      <Code>{`APR = (senior fees over 30 days × 12) / total senior USDG × 100
-APY = (1 + APR / 52) ^ 52 − 1`}</Code>
+      <Code>{`apy     = ((1 + APR/100/52) ^ 52 − 1) × 100
+shown   = min(apy, APR × 1.05)`}</Code>
+      <P>
+        Applied naively to this product the formula turns a 1,925% APR into
+        roughly 12,900,000% — arithmetically faithful to a model that does not
+        describe the thing being measured. The small uplift that survives the cap
+        is the real one: a depositor who reinvests takes a slightly larger share of
+        a fixed pot than one who does not.
+      </P>
       <Note kind="warning">
-        Any figure derived this way is backward-looking. It annualises whatever
-        trading happened to occur in one 30-day window, and the largest component
-        of the yield — absorbed margin from liquidations — is the least
-        predictable. It is not a rate anyone is promising.
+        Neither figure is a promise. The realised one annualises whatever trading
+        happened to occur in one window, and its largest component — absorbed
+        margin — is the least predictable part. The projected one is only as good
+        as the assumptions fed into it, and it flags itself as implausible once
+        assumed daily volume exceeds twice the entire vault.
       </Note>
 
       <H2>Risks, stated plainly</H2>
