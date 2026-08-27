@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { Link } from "react-router";
 
 /** Turns a heading's text into a stable anchor id. */
 function slug(text: string) {
@@ -18,21 +19,31 @@ export function PageTitle({
   intro?: ReactNode;
 }) {
   return (
-    <header className="mb-10">
+    <header className="mb-12">
       {eyebrow ? (
-        <p className="text-[13px] font-semibold uppercase tracking-wider text-gold">
+        <p className="text-[12px] font-semibold uppercase tracking-[0.16em] text-gold">
           {eyebrow}
         </p>
       ) : null}
-      <h1 className="mt-1.5 text-3xl font-bold tracking-tight sm:text-4xl">
+      <h1 className="mt-2.5 text-[34px] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[42px]">
         {title}
       </h1>
       {intro ? (
-        <p className="mt-4 max-w-3xl text-[17px] leading-relaxed text-[#c9c9c9]">
-          {intro}
-        </p>
+        <p className="mt-5 text-[17px] leading-[1.65] text-[#b8b8b8]">{intro}</p>
       ) : null}
     </header>
+  );
+}
+
+function Anchor({ id, label }: { id: string; label: string }) {
+  return (
+    <a
+      href={`#${id}`}
+      aria-label={`Link to ${label}`}
+      className="heading-anchor absolute -left-5 top-0 text-muted no-underline hover:text-gold"
+    >
+      #
+    </a>
   );
 }
 
@@ -41,16 +52,12 @@ export function H2({ children }: { children: string }) {
   return (
     <h2
       id={id}
-      className="group mt-14 scroll-mt-24 border-b border-white/5 pb-2.5 text-[22px] font-bold tracking-tight sm:text-2xl"
+      data-toc={children}
+      data-level="2"
+      className="group relative mt-16 scroll-mt-28 text-[24px] font-bold tracking-[-0.015em] text-white first:mt-0"
     >
+      <Anchor id={id} label={children} />
       {children}
-      <a
-        href={`#${id}`}
-        aria-label={`Link to ${children}`}
-        className="heading-anchor ml-2 text-muted no-underline hover:text-gold"
-      >
-        #
-      </a>
     </h2>
   );
 }
@@ -60,31 +67,25 @@ export function H3({ children }: { children: string }) {
   return (
     <h3
       id={id}
-      className="group mt-9 scroll-mt-24 text-[17px] font-semibold tracking-tight text-white sm:text-lg"
+      data-toc={children}
+      data-level="3"
+      className="group relative mt-10 scroll-mt-28 text-[17px] font-semibold tracking-[-0.01em] text-white"
     >
+      <Anchor id={id} label={children} />
       {children}
-      <a
-        href={`#${id}`}
-        aria-label={`Link to ${children}`}
-        className="heading-anchor ml-2 text-muted no-underline hover:text-gold"
-      >
-        #
-      </a>
     </h3>
   );
 }
 
 export function P({ children }: { children: ReactNode }) {
   return (
-    <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-[#c4c4c4]">
-      {children}
-    </p>
+    <p className="mt-4 text-[15.5px] leading-[1.7] text-[#b8b8b8]">{children}</p>
   );
 }
 
 export function Ul({ children }: { children: ReactNode }) {
   return (
-    <ul className="mt-4 max-w-3xl space-y-2.5 text-[15px] leading-relaxed text-[#c4c4c4]">
+    <ul className="mt-4 space-y-2.5 text-[15.5px] leading-[1.7] text-[#b8b8b8]">
       {children}
     </ul>
   );
@@ -93,18 +94,66 @@ export function Ul({ children }: { children: ReactNode }) {
 export function Li({ children }: { children: ReactNode }) {
   return (
     <li className="relative pl-5">
-      <span className="absolute left-0 top-[0.62em] h-1.5 w-1.5 rounded-full bg-gold/70" />
+      <span className="absolute left-0 top-[0.66em] h-1.5 w-1.5 rounded-full bg-gold/60" />
       {children}
     </li>
+  );
+}
+
+/** An inline link inside body copy. Internal by default; pass href to leave. */
+export function A({
+  to,
+  href,
+  children,
+}: {
+  to?: string;
+  href?: string;
+  children: ReactNode;
+}) {
+  const className =
+    "font-medium text-gold underline decoration-gold/30 underline-offset-2 transition hover:decoration-gold";
+  if (href) {
+    return (
+      <a href={href} className={className}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link to={to ?? "/"} prefetch="intent" className={className}>
+      {children}
+    </Link>
   );
 }
 
 /** Inline literal: a file path, a symbol, an env var, a token amount. */
 export function C({ children }: { children: ReactNode }) {
   return (
-    <code className="rounded-md border border-white/10 bg-card-2 px-1.5 py-0.5 font-mono text-[0.86em] text-gold-soft">
+    <code className="whitespace-nowrap rounded-md border border-white/10 bg-white/[0.04] px-[0.4em] py-[0.15em] font-mono text-[0.85em] text-gold-soft">
       {children}
     </code>
+  );
+}
+
+function CopyButton({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        navigator.clipboard?.writeText(value).then(
+          () => {
+            setCopied(true);
+            window.setTimeout(() => setCopied(false), 1600);
+          },
+          () => {},
+        );
+      }}
+      className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 font-sans text-[11px] font-semibold text-muted opacity-0 transition hover:border-gold/30 hover:text-gold focus-visible:opacity-100 group-hover/code:opacity-100"
+    >
+      {copied ? "Copied" : "Copy"}
+    </button>
   );
 }
 
@@ -116,14 +165,15 @@ export function Code({
   title?: string;
 }) {
   return (
-    <figure className="mt-5 max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-card-2">
-      {title ? (
-        <figcaption className="border-b border-white/10 bg-white/[0.03] px-4 py-2 font-mono text-[12px] text-muted">
-          {title}
+    <figure className="group/code relative mt-5 overflow-hidden rounded-xl border border-white/10 bg-[#111]">
+      <div className="flex items-center gap-3 border-b border-white/[0.07] bg-white/[0.02] px-4 py-2">
+        <figcaption className="min-w-0 flex-1 truncate font-mono text-[11.5px] text-muted">
+          {title ?? ""}
         </figcaption>
-      ) : null}
-      <pre className="overflow-x-auto px-4 py-3.5 text-[13px] leading-relaxed">
-        <code className="font-mono text-[#d8d8d8]">{children}</code>
+        <CopyButton value={children} />
+      </div>
+      <pre className="overflow-x-auto px-4 py-3.5 text-[13px] leading-[1.65]">
+        <code className="font-mono text-[#d4d4d4]">{children}</code>
       </pre>
     </figure>
   );
@@ -141,13 +191,13 @@ export function Note({
   const warn = kind === "warning";
   return (
     <aside
-      className={`mt-5 max-w-3xl rounded-2xl border px-4 py-3.5 text-[14px] leading-relaxed ${
+      className={`mt-6 rounded-xl border-l-2 px-4 py-3.5 text-[14.5px] leading-[1.65] ${
         warn
-          ? "border-down/25 bg-down/10 text-[#f3c8c0]"
-          : "border-gold/20 bg-gold/[0.07] text-[#e6dcb4]"
+          ? "border-l-down border-y border-r border-y-down/15 border-r-down/15 bg-down/[0.07] text-[#e8bdb4]"
+          : "border-l-gold border-y border-r border-y-gold/15 border-r-gold/15 bg-gold/[0.05] text-[#ddd3ae]"
       }`}
     >
-      <p className="font-semibold text-white">
+      <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white">
         {title ?? (warn ? "Careful" : "Note")}
       </p>
       <div className="mt-1.5">{children}</div>
@@ -156,11 +206,7 @@ export function Note({
 }
 
 export function Steps({ children }: { children: ReactNode }) {
-  return (
-    <ol className="mt-5 max-w-3xl space-y-0 border-l border-white/10 pl-0">
-      {children}
-    </ol>
-  );
+  return <ol className="mt-6 space-y-0">{children}</ol>;
 }
 
 export function Step({
@@ -173,13 +219,15 @@ export function Step({
   children?: ReactNode;
 }) {
   return (
-    <li className="relative -ml-px border-l border-transparent pb-7 pl-7 last:pb-0">
-      <span className="absolute -left-[13px] top-0 grid h-6 w-6 place-items-center rounded-full bg-gold text-[12px] font-bold text-black">
+    <li className="group relative pb-8 pl-11 last:pb-0">
+      <span className="absolute left-0 top-0 grid h-7 w-7 place-items-center rounded-full border border-gold/30 bg-gold/10 text-[12px] font-bold text-gold">
         {n}
       </span>
-      <p className="text-[15px] font-semibold text-white">{title}</p>
+      {/* Connector, hidden on the last step so the line does not trail off. */}
+      <span className="absolute bottom-1 left-[13.5px] top-8 w-px bg-white/10 group-last:hidden" />
+      <p className="pt-1 text-[15.5px] font-semibold text-white">{title}</p>
       {children ? (
-        <div className="text-[15px] leading-relaxed text-[#c4c4c4]">
+        <div className="text-[15.5px] leading-[1.7] text-[#b8b8b8]">
           {children}
         </div>
       ) : null}
@@ -195,30 +243,147 @@ export function Table({
   children: ReactNode;
 }) {
   return (
-    <div className="mt-5 max-w-3xl overflow-x-auto rounded-2xl border border-white/10">
+    <div className="mt-6 overflow-x-auto rounded-xl border border-white/10">
       <table className="w-full border-collapse text-left text-[14px]">
         <thead>
-          <tr className="bg-white/[0.04]">
+          <tr className="bg-white/[0.03]">
             {head.map((cell) => (
               <th
                 key={cell}
-                className="whitespace-nowrap px-4 py-2.5 font-semibold text-white"
+                className="whitespace-nowrap px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.06em] text-muted"
               >
                 {cell}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="text-[#c4c4c4]">{children}</tbody>
+        <tbody className="text-[#b8b8b8]">{children}</tbody>
       </table>
     </div>
   );
 }
 
 export function Tr({ children }: { children: ReactNode }) {
-  return <tr className="border-t border-white/5 align-top">{children}</tr>;
+  return (
+    <tr className="border-t border-white/[0.07] align-top transition hover:bg-white/[0.02]">
+      {children}
+    </tr>
+  );
 }
 
 export function Td({ children }: { children: ReactNode }) {
-  return <td className="px-4 py-2.5 leading-relaxed">{children}</td>;
+  return <td className="px-4 py-3 leading-[1.6]">{children}</td>;
+}
+
+/* ------------------------------------------------------------------ *
+ * Diagrams
+ * ------------------------------------------------------------------ */
+
+/**
+ * A horizontal pipeline. Wraps on narrow screens rather than scrolling, so a
+ * phone reader still gets the whole shape instead of half of it.
+ */
+export function Flow({
+  caption,
+  children,
+}: {
+  caption?: string;
+  children: ReactNode;
+}) {
+  return (
+    <figure className="mt-6 rounded-xl border border-white/10 bg-card-2/60 p-4 sm:p-5">
+      {caption ? (
+        <figcaption className="mb-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+          {caption}
+        </figcaption>
+      ) : null}
+      <div className="flex flex-wrap items-stretch gap-x-1.5 gap-y-3">
+        {children}
+      </div>
+    </figure>
+  );
+}
+
+const FLOW_TONES = {
+  neutral: "border-white/12 bg-white/[0.03] text-white",
+  gold: "border-gold/30 bg-gold/[0.07] text-gold-soft",
+  up: "border-up/30 bg-up/[0.07] text-up",
+  down: "border-down/30 bg-down/[0.07] text-down",
+} as const;
+
+export function FlowStep({
+  label,
+  sub,
+  tone = "neutral",
+}: {
+  label: string;
+  sub?: string;
+  tone?: keyof typeof FLOW_TONES;
+}) {
+  return (
+    <div
+      className={`flex min-w-[86px] flex-1 flex-col justify-center rounded-lg border px-3 py-2.5 text-center ${FLOW_TONES[tone]}`}
+    >
+      <span className="text-[13px] font-semibold leading-tight">{label}</span>
+      {sub ? (
+        <span className="mt-1 font-mono text-[10.5px] leading-tight text-muted">
+          {sub}
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
+export function FlowArrow() {
+  return (
+    <div
+      aria-hidden
+      className="flex shrink-0 items-center px-0.5 text-[13px] text-muted"
+    >
+      →
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Link cards
+ * ------------------------------------------------------------------ */
+
+export function Cards({ children }: { children: ReactNode }) {
+  return (
+    <div className="mt-6 grid gap-3 sm:grid-cols-2">{children}</div>
+  );
+}
+
+export function Card({
+  to,
+  title,
+  children,
+}: {
+  to: string;
+  title: string;
+  children?: ReactNode;
+}) {
+  return (
+    <Link
+      to={to}
+      prefetch="intent"
+      className="group flex flex-col rounded-xl border border-white/10 bg-card-2/60 p-4 transition hover:border-gold/30 hover:bg-card-2"
+    >
+      <span className="flex items-center gap-1.5 text-[15px] font-semibold text-white group-hover:text-gold">
+        {title}
+        <span
+          aria-hidden
+          className="translate-x-0 text-muted transition group-hover:translate-x-0.5 group-hover:text-gold"
+        >
+          →
+        </span>
+      </span>
+      {children ? (
+        <span className="mt-1.5 text-[13.5px] leading-[1.6] text-[#a0a0a0]">
+          {children}
+        </span>
+      ) : null}
+    </Link>
+  );
 }

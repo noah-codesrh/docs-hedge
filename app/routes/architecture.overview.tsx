@@ -1,18 +1,4 @@
-import { Link } from "react-router";
-import {
-  C,
-  Code,
-  H2,
-  H3,
-  Li,
-  Note,
-  P,
-  PageTitle,
-  Table,
-  Td,
-  Tr,
-  Ul,
-} from "../components/prose";
+import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
 
 export function meta() {
   return [
@@ -194,12 +180,7 @@ layout("routes/shell.tsx", [     // header, nav, balances
         The ownership check is what stops a valid token being used to request a
         conversion into somebody else&rsquo;s wallet. Routes that move funds use
         it; routes that only read do not need to. The{" "}
-        <Link
-          to="/reference/api"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          API reference
-        </Link>{" "}
+        <A to="/reference/api">API reference</A>{" "}
         lists which is which.
       </Note>
 

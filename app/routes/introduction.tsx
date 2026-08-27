@@ -1,6 +1,19 @@
-import { Link } from "react-router";
 import { NAV } from "../lib/nav";
-import { C, H2, P, PageTitle, Ul, Li, Note } from "../components/prose";
+import {
+  A,
+  C,
+  Card,
+  Cards,
+  Flow,
+  FlowArrow,
+  FlowStep,
+  H2,
+  Li,
+  Note,
+  P,
+  PageTitle,
+  Ul,
+} from "../components/prose";
 
 export function meta() {
   return [
@@ -18,16 +31,31 @@ export default function Introduction() {
     <>
       <PageTitle
         eyebrow="Getting started"
-        title="Introduction"
+        title="Trade prediction markets, in dollars"
         intro="Hedge is an app for trading prediction markets. You deposit dollar-denominated funds, buy the side of a question you think is right, and sell when you want out. This documentation covers how to use it and how it is built."
       />
+
+      <Flow caption="One round trip, end to end">
+        <FlowStep label="Deposit" sub="USDG" tone="gold" />
+        <FlowArrow />
+        <FlowStep label="Convert" sub="to pUSD" />
+        <FlowArrow />
+        <FlowStep label="Buy" sub="yes / no" />
+        <FlowArrow />
+        <FlowStep label="Hold" sub="marked live" />
+        <FlowArrow />
+        <FlowStep label="Sell" sub="back to pUSD" />
+        <FlowArrow />
+        <FlowStep label="Cash out" sub="USDG" tone="gold" />
+      </Flow>
 
       <H2>What you actually trade</H2>
       <P>
         Every market is a question with two sides, <C>Yes</C> and <C>No</C>.
         Buying a side gives you shares in that outcome. A share pays out $1.00 if
-        the outcome happens and nothing if it does not, so a share priced at 40&cent;
-        is the market&rsquo;s way of saying the outcome looks roughly 40% likely.
+        the outcome happens and nothing if it does not, so a share priced at
+        40&cent; is the market&rsquo;s way of saying the outcome looks roughly 40%
+        likely.
       </P>
       <P>
         That single fact explains most of the interface. A price is a probability
@@ -68,13 +96,7 @@ export default function Introduction() {
         in its own collateral token on Polygon. A trade therefore involves a
         conversion between the two, which is the single most important thing to
         understand about how the app behaves, and it has{" "}
-        <Link
-          to="/concepts/tokens"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          a page of its own
-        </Link>
-        .
+        <A to="/concepts/tokens">a page of its own</A>.
       </P>
 
       <Note>
@@ -82,34 +104,40 @@ export default function Introduction() {
         about how a market will resolve or what a position will be worth.
       </Note>
 
+      <H2>Where to start</H2>
+      <Cards>
+        <Card to="/quick-start" title="Quick start">
+          Sign in, add funds, and place a first trade. Read this and stop if you
+          are only here to use the app.
+        </Card>
+        <Card to="/architecture/overview" title="System overview">
+          The app, its server routes, and the services behind them. Start here if
+          you are changing the code.
+        </Card>
+      </Cards>
+
       <H2>How to read these docs</H2>
       <P>
         The sections are ordered so you can stop whenever you have what you need.
         Guides are task-shaped and safe to follow blind. Concepts explain the
-        vocabulary behind them. Architecture and Reference are for people
-        changing or operating the code.
+        vocabulary behind them. Architecture and Reference are for people changing
+        or operating the code.
       </P>
 
-      <div className="mt-6 grid max-w-3xl gap-3 sm:grid-cols-2">
+      <div className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2">
         {NAV.filter((section) => section.title !== "Getting started").map(
           (section) => (
-            <div
-              key={section.title}
-              className="rounded-2xl border border-white/10 bg-card-2 p-4"
-            >
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">
+            <div key={section.title}>
+              <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">
                 {section.title}
               </p>
-              <ul className="mt-2.5 space-y-1.5">
+              <ul className="mt-2.5 space-y-2">
                 {section.items.map((item) => (
                   <li key={item.to}>
-                    <Link
-                      to={item.to}
-                      prefetch="intent"
-                      className="text-[14px] font-medium text-[#c4c4c4] transition hover:text-gold"
-                    >
-                      {item.title}
-                    </Link>
+                    <A to={item.to}>{item.title}</A>
+                    <span className="mt-0.5 block text-[13px] leading-snug text-[#8f8f8f]">
+                      {item.summary}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -117,32 +145,6 @@ export default function Introduction() {
           ),
         )}
       </div>
-
-      <H2>Where to start</H2>
-      <P>
-        If you are here to use the app, read the{" "}
-        <Link
-          to="/quick-start"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          quick start
-        </Link>{" "}
-        and stop. If you are here to work on it, skim{" "}
-        <Link
-          to="/architecture/overview"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          the system overview
-        </Link>{" "}
-        first, then set up{" "}
-        <Link
-          to="/operations/local-development"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          a local environment
-        </Link>
-        .
-      </P>
     </>
   );
 }

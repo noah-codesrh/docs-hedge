@@ -1,18 +1,4 @@
-import { Link } from "react-router";
-import {
-  C,
-  Code,
-  H2,
-  H3,
-  Li,
-  Note,
-  P,
-  PageTitle,
-  Table,
-  Td,
-  Tr,
-  Ul,
-} from "../components/prose";
+import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
 
 export function meta() {
   return [
@@ -160,13 +146,7 @@ pnpm dev                  # http://localhost:5175`}</Code>
       </Ul>
       <P>
         More failure modes, including ones that involve real funds, are in{" "}
-        <Link
-          to="/operations/troubleshooting"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          troubleshooting
-        </Link>
-        .
+        <A to="/operations/troubleshooting">troubleshooting</A>.
       </P>
     </>
   );

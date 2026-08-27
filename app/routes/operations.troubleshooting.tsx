@@ -1,18 +1,4 @@
-import { Link } from "react-router";
-import {
-  C,
-  Code,
-  H2,
-  H3,
-  Li,
-  Note,
-  P,
-  PageTitle,
-  Table,
-  Td,
-  Tr,
-  Ul,
-} from "../components/prose";
+import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
 
 export function meta() {
   return [
@@ -70,12 +56,7 @@ export default function Troubleshooting() {
         <Li>
           <strong className="text-white">Clear site data.</strong> Safe to do:
           nothing the app keeps in the browser is authoritative, as the{" "}
-          <Link
-            to="/architecture/data"
-            className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-          >
-            storage table
-          </Link>{" "}
+          <A to="/architecture/data">storage table</A>{" "}
           sets out. Your funds and positions are on-chain and at the venue.
         </Li>
       </Ul>
@@ -170,12 +151,7 @@ export default function Troubleshooting() {
       <P>
         That is the spread, not a fee. Buying pays the ask, selling receives the
         bid, and the gap is a real cost paid on both entry and exit.{" "}
-        <Link
-          to="/concepts/positions"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          Positions and P&amp;L
-        </Link>{" "}
+        <A to="/concepts/positions">Positions and P&amp;L</A>{" "}
         works through the arithmetic with an example.
       </P>
 
@@ -193,12 +169,7 @@ export default function Troubleshooting() {
         A server credential that route depends on is not set. This is deliberate:
         the routes check up front rather than failing deeper in, so a <C>503</C> is a
         configuration problem rather than an upstream outage. The{" "}
-        <Link
-          to="/reference/configuration"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          configuration reference
-        </Link>{" "}
+        <A to="/reference/configuration">configuration reference</A>{" "}
         lists which variable each one needs.
       </P>
 

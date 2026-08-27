@@ -1,15 +1,4 @@
-import { Link } from "react-router";
-import {
-  C,
-  H2,
-  Li,
-  Note,
-  P,
-  PageTitle,
-  Step,
-  Steps,
-  Ul,
-} from "../components/prose";
+import { A, C, H2, Li, Note, P, PageTitle, Step, Steps, Ul } from "../components/prose";
 
 export function meta() {
   return [
@@ -50,12 +39,7 @@ export default function QuickStart() {
           <P>
             Your balance appears as <strong className="text-white">Cash</strong>{" "}
             in the header once the deposit confirms. The{" "}
-            <Link
-              to="/guides/adding-funds"
-              className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-            >
-              full funding guide
-            </Link>{" "}
+            <A to="/guides/adding-funds">full funding guide</A>{" "}
             covers what to do if it does not show up.
           </P>
         </Step>
@@ -95,12 +79,7 @@ export default function QuickStart() {
           </strong>{" "}
           Buying pays the asking price and selling receives the bid, and the gap
           between them is a real cost even when the market has not moved.{" "}
-          <Link
-            to="/concepts/positions"
-            className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-          >
-            Positions and P&amp;L
-          </Link>{" "}
+          <A to="/concepts/positions">Positions and P&amp;L</A>{" "}
           explains why a brand new position can show a small loss.
         </Li>
         <Li>

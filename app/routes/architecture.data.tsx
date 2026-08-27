@@ -1,18 +1,4 @@
-import { Link } from "react-router";
-import {
-  C,
-  Code,
-  H2,
-  H3,
-  Li,
-  Note,
-  P,
-  PageTitle,
-  Table,
-  Td,
-  Tr,
-  Ul,
-} from "../components/prose";
+import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
 
 export function meta() {
   return [
@@ -212,13 +198,7 @@ conversion_id    Relay request id`}</Code>
 
       <P>
         Exact parameters for every route above are in the{" "}
-        <Link
-          to="/reference/api"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          HTTP API reference
-        </Link>
-        .
+        <A to="/reference/api">HTTP API reference</A>.
       </P>
     </>
   );

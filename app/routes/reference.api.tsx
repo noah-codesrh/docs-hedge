@@ -1,15 +1,4 @@
-import {
-  C,
-  Code,
-  H2,
-  H3,
-  Note,
-  P,
-  PageTitle,
-  Table,
-  Td,
-  Tr,
-} from "../components/prose";
+import { A, C, Code, H2, H3, Note, P, PageTitle, Table, Td, Tr } from "../components/prose";
 
 export function meta() {
   return [
@@ -288,12 +277,7 @@ Returns  { status }
         absent, rather than failing further in. So a <C>503</C> from{" "}
         <C>/api/relay/quote</C> or <C>/api/pm/builder-sign</C> is a deployment
         problem, not an upstream outage. The{" "}
-        <a
-          className="text-gold underline decoration-gold/30 hover:decoration-gold"
-          href="/reference/configuration"
-        >
-          configuration reference
-        </a>{" "}
+        <A to="/reference/configuration">configuration reference</A>{" "}
         lists which variable each route depends on.
       </Note>
     </>

@@ -34,12 +34,17 @@ body {
 html {
   scroll-behavior: smooth;
   /* Anchored headings otherwise land underneath the sticky header. */
-  scroll-padding-top: 5.5rem;
+  scroll-padding-top: 6.5rem;
 }
 
 body {
   overflow-x: clip;
   max-width: 100vw;
+}
+
+::selection {
+  background: rgba(241, 214, 90, 0.25);
+  color: #fff;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -48,6 +53,26 @@ body {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Thin, unobtrusive scrollbars on the rails and inside code blocks, so they do
+   not read as page furniture. */
+aside ::-webkit-scrollbar,
+aside::-webkit-scrollbar,
+pre::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+aside ::-webkit-scrollbar-thumb,
+aside::-webkit-scrollbar-thumb,
+pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+aside ::-webkit-scrollbar-track,
+aside::-webkit-scrollbar-track,
+pre::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 @keyframes hedge-fade-in {
@@ -62,8 +87,8 @@ body {
   animation: hedge-fade-in 0.2s ease-out both;
 }
 
-/* Only shows on keyboard focus, which is the one time a reader needs to see
-   where the anchor link on a heading actually is. */
+/* Sits in the left gutter and only appears on hover or keyboard focus, so it
+   never competes with the heading itself. */
 .heading-anchor {
   opacity: 0;
   transition: opacity 0.15s ease;
@@ -72,4 +97,24 @@ h2:hover > .heading-anchor,
 h3:hover > .heading-anchor,
 .heading-anchor:focus-visible {
   opacity: 1;
+}
+
+/* The gutter the anchor lives in does not exist on narrow screens, where it
+   would overlap the text. */
+@media (max-width: 1023px) {
+  .heading-anchor {
+    display: none;
+  }
+}
+
+/* Links written inline in page content, which are plain <a> or <Link> rather
+   than a prose component. */
+.animate-fade-in a:not([class]) {
+  color: var(--color-gold);
+  text-decoration: underline;
+  text-decoration-color: rgba(241, 214, 90, 0.3);
+  text-underline-offset: 2px;
+}
+.animate-fade-in a:not([class]):hover {
+  text-decoration-color: var(--color-gold);
 }

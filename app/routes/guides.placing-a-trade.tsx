@@ -1,18 +1,4 @@
-import { Link } from "react-router";
-import {
-  C,
-  H2,
-  Li,
-  Note,
-  P,
-  PageTitle,
-  Step,
-  Steps,
-  Table,
-  Td,
-  Tr,
-  Ul,
-} from "../components/prose";
+import { A, C, H2, Li, Note, P, PageTitle, Step, Steps, Table, Td, Tr, Ul } from "../components/prose";
 
 export function meta() {
   return [
@@ -175,12 +161,7 @@ export default function PlacingATrade() {
         Buying pays the ask and selling receives the bid, so a position is worth
         slightly less than you paid the moment it opens. That is the spread, not a
         charge, and{" "}
-        <Link
-          to="/concepts/positions"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          positions and P&amp;L
-        </Link>{" "}
+        <A to="/concepts/positions">positions and P&amp;L</A>{" "}
         works through the arithmetic.
       </P>
     </>

@@ -1,19 +1,4 @@
-import { Link } from "react-router";
-import {
-  C,
-  H2,
-  H3,
-  Li,
-  Note,
-  P,
-  PageTitle,
-  Step,
-  Steps,
-  Table,
-  Td,
-  Tr,
-  Ul,
-} from "../components/prose";
+import { A, C, H2, H3, Li, Note, P, PageTitle, Step, Steps, Table, Td, Tr, Ul } from "../components/prose";
 
 export function meta() {
   return [
@@ -176,13 +161,7 @@ export default function CashingOut() {
 
       <P>
         For the underlying hops, see the{" "}
-        <Link
-          to="/architecture/trade-lifecycle"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          trade lifecycle
-        </Link>
-        .
+        <A to="/architecture/trade-lifecycle">trade lifecycle</A>.
       </P>
     </>
   );

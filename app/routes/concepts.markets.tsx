@@ -1,18 +1,4 @@
-import { Link } from "react-router";
-import {
-  C,
-  Code,
-  H2,
-  H3,
-  Li,
-  Note,
-  P,
-  PageTitle,
-  Table,
-  Td,
-  Tr,
-  Ul,
-} from "../components/prose";
+import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
 
 export function meta() {
   return [
@@ -131,13 +117,7 @@ GET /api/quotes        current prices for a set of markets
 GET /api/pm/book       raw order book for one or more token ids`}</Code>
       <P>
         Full parameters and responses are in the{" "}
-        <Link
-          to="/reference/api"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          HTTP API reference
-        </Link>
-        .
+        <A to="/reference/api">HTTP API reference</A>.
       </P>
 
       <H2>Market states</H2>

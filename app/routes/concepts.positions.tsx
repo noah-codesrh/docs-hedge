@@ -1,15 +1,4 @@
-import { Link } from "react-router";
-import {
-  C,
-  Code,
-  H2,
-  H3,
-  Li,
-  Note,
-  P,
-  PageTitle,
-  Ul,
-} from "../components/prose";
+import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Ul } from "../components/prose";
 
 export function meta() {
   return [
@@ -124,12 +113,7 @@ Round trip                   -$0.24, about -4.8%`}</Code>
       <P>
         Position and price data is read from Polymarket rather than stored by the
         app, so it reflects the venue&rsquo;s own view of what you hold. See{" "}
-        <Link
-          to="/architecture/data"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          data and storage
-        </Link>{" "}
+        <A to="/architecture/data">data and storage</A>{" "}
         for where each number originates.
       </P>
     </>

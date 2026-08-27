@@ -1,7 +1,10 @@
-import { Link } from "react-router";
 import {
+  A,
   C,
   Code,
+  Flow,
+  FlowArrow,
+  FlowStep,
   H2,
   H3,
   Li,
@@ -61,25 +64,32 @@ export default function TradeLifecycle() {
         Stages reported to the UI are <C>setup</C>, <C>debit</C>, <C>convert</C>,
         and <C>fill</C>.
       </P>
-      <Code title="runLiveTrade, in app/lib/trade/live.ts">{`Cash wallet — USDG on Robinhood Chain
-  |
-  |  read the proxy's pUSD balance first
-  |    >= $1 and covers the order?  -> skip straight to the fill
-  |
-  |  GET  /api/pm/status          refuse early if the venue is down
-  |  POST /api/relay/quote        USDG on 4663 -> pUSD on 137, via permit
-  |  executeRelayQuote            sign permits, submit steps
-  |  POST /api/relay/forward      hand signed steps back to Relay
-  |  GET  /api/relay/status       poll until Relay reports success
-  |  waitForPusd                  poll the proxy until the pUSD lands
-  v
-Polymarket proxy — pUSD on Polygon        <-- resting point
-  |
-  |  size the order against the live proxy balance
-  |  estimate the price, derive a maximum
-  |  placeMarketOrder — fill-or-kill buy, with the builder code
-  v
-Outcome shares — on Polygon`}</Code>
+
+      <Flow caption="Buy — gold marks a point where funds can rest">
+        <FlowStep label="Cash wallet" sub="USDG · 4663" tone="gold" />
+        <FlowArrow />
+        <FlowStep label="Relay" sub="convert" />
+        <FlowArrow />
+        <FlowStep label="Proxy" sub="pUSD · 137" tone="gold" />
+        <FlowArrow />
+        <FlowStep label="CLOB" sub="FAK buy" />
+        <FlowArrow />
+        <FlowStep label="Shares" sub="on Polygon" tone="up" />
+      </Flow>
+
+      <Code title="runLiveTrade, in app/lib/trade/live.ts">{`read the proxy's pUSD balance first
+  >= $1 and covers the order?  -> skip ahead to the fill
+
+GET  /api/pm/status          refuse early if the venue is down
+POST /api/relay/quote        USDG on 4663 -> pUSD on 137, via permit
+executeRelayQuote            sign permits, submit steps
+POST /api/relay/forward      hand signed steps back to Relay
+GET  /api/relay/status       poll until Relay reports success
+waitForPusd                  poll the proxy until the pUSD lands
+
+size the order against the live proxy balance
+estimate the price, derive a maximum
+placeMarketOrder             fill-or-kill buy, with the builder code`}</Code>
 
       <H3>Notes on the buy</H3>
       <Ul>
@@ -121,18 +131,24 @@ Outcome shares — on Polygon`}</Code>
         Stages reported to the UI are <C>sell</C>, <C>move</C>, <C>convert</C>, and{" "}
         <C>arrive</C>.
       </P>
-      <Code title="runClosePosition, in app/lib/trade/close.ts">{`Outcome shares — on Polygon
-  |
-  |  check the venue is healthy   GET /api/pm/status
-  |  ensure approvals are set
-  |  estimate the sell price, derive a minimum
-  |  placeMarketOrder — fill-or-kill sell
-  v
-Polymarket proxy — pUSD on Polygon        <-- resting point
-  |
-  |  (see cash out, below)
-  v
-Cash wallet — USDG on Robinhood Chain`}</Code>
+      <Flow caption="Close — the same path, walked backwards">
+        <FlowStep label="Shares" sub="on Polygon" tone="up" />
+        <FlowArrow />
+        <FlowStep label="CLOB" sub="FAK sell" />
+        <FlowArrow />
+        <FlowStep label="Proxy" sub="pUSD · 137" tone="gold" />
+        <FlowArrow />
+        <FlowStep label="Relay" sub="convert" />
+        <FlowArrow />
+        <FlowStep label="Cash wallet" sub="USDG · 4663" tone="gold" />
+      </Flow>
+
+      <Code title="runClosePosition, in app/lib/trade/close.ts">{`GET /api/pm/status           check the venue is healthy
+ensure approvals are set
+estimate the sell price, derive a minimum
+placeMarketOrder             fill-or-kill sell
+
+then the cash-out path below, from the proxy onwards`}</Code>
       <P>
         Selling rounds the share amount down before submitting. A quantity even
         slightly above the real position triggers a balance rejection from the
@@ -186,13 +202,7 @@ Cash wallet — USDG on Robinhood Chain`}</Code>
       </Ul>
       <P>
         The user-facing version of this table is in{" "}
-        <Link
-          to="/guides/cashing-out"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          closing and cashing out
-        </Link>
-        .
+        <A to="/guides/cashing-out">closing and cashing out</A>.
       </P>
     </>
   );

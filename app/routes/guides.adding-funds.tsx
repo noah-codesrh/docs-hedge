@@ -1,15 +1,4 @@
-import { Link } from "react-router";
-import {
-  C,
-  H2,
-  Li,
-  Note,
-  P,
-  PageTitle,
-  Step,
-  Steps,
-  Ul,
-} from "../components/prose";
+import { A, C, H2, Li, Note, P, PageTitle, Step, Steps, Ul } from "../components/prose";
 
 export function meta() {
   return [
@@ -107,13 +96,7 @@ export default function AddingFunds() {
         out to any address on Robinhood Chain. Anything currently held as a
         position or as <C>pUSD</C> has to be closed and converted back first, which
         is covered in{" "}
-        <Link
-          to="/guides/cashing-out"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          closing and cashing out
-        </Link>
-        .
+        <A to="/guides/cashing-out">closing and cashing out</A>.
       </P>
     </>
   );

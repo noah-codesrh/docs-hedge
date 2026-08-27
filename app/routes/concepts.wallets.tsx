@@ -1,18 +1,4 @@
-import { Link } from "react-router";
-import {
-  C,
-  Code,
-  H2,
-  H3,
-  Li,
-  Note,
-  P,
-  PageTitle,
-  Table,
-  Td,
-  Tr,
-  Ul,
-} from "../components/prose";
+import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
 
 export function meta() {
   return [
@@ -182,12 +168,7 @@ export default function Wallets() {
 
       <P>
         Next, see{" "}
-        <Link
-          to="/concepts/tokens"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          money and tokens
-        </Link>{" "}
+        <A to="/concepts/tokens">money and tokens</A>{" "}
         for what moves between these wallets.
       </P>
     </>

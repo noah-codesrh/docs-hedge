@@ -1,7 +1,10 @@
-import { Link } from "react-router";
 import {
+  A,
   C,
   Code,
+  Flow,
+  FlowArrow,
+  FlowStep,
   H2,
   H3,
   Li,
@@ -33,6 +36,18 @@ export default function Tokens() {
         title="Money and tokens"
         intro="Your balance and the markets live on different chains in different tokens. Every trade therefore includes a conversion, and that single fact explains most of the app's timing and most of its error messages."
       />
+
+      <Flow caption="Where your money is at each stage">
+        <FlowStep label="USDG" sub="Robinhood Chain" tone="gold" />
+        <FlowArrow />
+        <FlowStep label="pUSD" sub="Polygon" />
+        <FlowArrow />
+        <FlowStep label="Shares" sub="Polygon" tone="up" />
+        <FlowArrow />
+        <FlowStep label="pUSD" sub="Polygon" />
+        <FlowArrow />
+        <FlowStep label="USDG" sub="Robinhood Chain" tone="gold" />
+      </Flow>
 
       <H2>The two tokens</H2>
       <Table head={["Token", "Chain", "Role", "Decimals"]}>
@@ -135,13 +150,7 @@ Outcome shares (Polygon)`}</Code>
       </P>
       <P>
         For the full step-by-step of both directions, see the{" "}
-        <Link
-          to="/architecture/trade-lifecycle"
-          className="font-semibold text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
-        >
-          trade lifecycle
-        </Link>
-        .
+        <A to="/architecture/trade-lifecycle">trade lifecycle</A>.
       </P>
     </>
   );
