@@ -3,6 +3,7 @@ import { type RouteConfig, index, layout, route } from "@react-router/dev/routes
 export default [
   layout("components/DocsLayout.tsx", [
     index("routes/introduction.tsx"),
+    route("why", "routes/why.tsx"),
     route("quick-start", "routes/quick-start.tsx"),
 
     route("concepts/wallets", "routes/concepts.wallets.tsx"),
@@ -19,20 +20,5 @@ export default [
     route("leverage/earn", "routes/leverage.earn.tsx"),
     route("leverage/market-makers", "routes/leverage.market-makers.tsx"),
     route("leverage/mathematics", "routes/leverage.mathematics.tsx"),
-
-    route("architecture/overview", "routes/architecture.overview.tsx"),
-    route(
-      "architecture/trade-lifecycle",
-      "routes/architecture.trade-lifecycle.tsx",
-    ),
-    route("architecture/data", "routes/architecture.data.tsx"),
-
-    route("reference/api", "routes/reference.api.tsx"),
-    route("reference/configuration", "routes/reference.configuration.tsx"),
-    route("reference/project-layout", "routes/reference.project-layout.tsx"),
-
-    route("operations/local-development", "routes/operations.local-development.tsx"),
-    route("operations/deployment", "routes/operations.deployment.tsx"),
-    route("operations/troubleshooting", "routes/operations.troubleshooting.tsx"),
   ]),
 ] satisfies RouteConfig;

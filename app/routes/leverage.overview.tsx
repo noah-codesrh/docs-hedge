@@ -154,6 +154,18 @@ $2.50 margin at 2x  ->  $5.00 position`}</Code>
         below it lowers the cap again — so the pool cannot end up backing more
         leverage than it can absorb.
       </P>
+      <P>
+        This is the mechanism behind the claim that leverage scales with what
+        providers supply. It is also the honest answer to &ldquo;how do you get to
+        10x&rdquo;: the schedule and the ceiling are both parameters, so reaching
+        it is a configuration change once the vault is deep enough to stand behind
+        it — not new code.
+      </P>
+      <Note title="What the numbers are today">
+        The deployed ceiling is 5x, the schedule above tops out at 5x, and the
+        interface offers up to 3x. Where you see 10x described as the target,
+        that is what it is: a target.
+      </Note>
 
       <H2>What it costs</H2>
       <Table head={["Charge", "Default", "Basis"]}>

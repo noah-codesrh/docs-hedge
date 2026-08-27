@@ -94,6 +94,21 @@ export default function MarketMakers() {
         attracting better market makers, because there are none to attract.
       </P>
 
+      <H2>The intended role</H2>
+      <P>
+        The reason a maker belongs here at all is the relationship between two
+        prices for the same outcome: the 1x spot share on the underlying venue,
+        and the leveraged synthetic perpetual on Hedge. A maker could run
+        delta-neutral across the two and capture the difference, which requires
+        fast finality since both legs have to be held in line.
+      </P>
+      <P>
+        That is a coherent role and it is the one described in{" "}
+        <A to="/why">Why Hedge</A>. It is also entirely unbuilt — there is no way
+        to quote into the leverage engine, so there is currently no second price
+        for anyone to arbitrage toward.
+      </P>
+
       <H2>What a market maker programme would require</H2>
       <P>
         Set out plainly, because the distance is larger than it might appear. None

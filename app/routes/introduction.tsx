@@ -14,7 +14,8 @@ import { docMeta } from "../lib/seo";
 export function meta() {
   return docMeta({
     title: "Hedge Docs",
-    description: "What Hedge is, the vocabulary the rest of the documentation uses, and where to go next.",
+    description:
+      "Hedge brings leveraged perpetual trading to prediction markets. Trade news, elections, and global events in USDG on Robinhood Chain.",
     bare: true,
   });
 }
@@ -24,9 +25,25 @@ export default function Introduction() {
     <>
       <PageTitle
         eyebrow="Getting started"
-        title="Trade prediction markets, in dollars"
-        intro="Hedge is an app for trading prediction markets. You deposit dollar-denominated funds, buy the side of a question you think is right, and sell when you want out. This documentation covers how to use it and how it is built."
+        title="Welcome to Hedge"
+        intro="Hedge brings high-leverage perpetual trading to prediction markets. Trade major news, elections, and global events in USDG on Robinhood Chain. Prediction markets capped you at 1x — Hedge is the leverage layer for event betting."
       />
+
+      <P>
+        There are two products described in these docs, and it is worth knowing
+        which is which before you read further.{" "}
+        <strong className="text-white">Spot trading is live:</strong> deposit
+        dollar-denominated funds, buy the side of a question you think is right,
+        and sell when you want out.{" "}
+        <strong className="text-white">Leverage is built but not open yet</strong>{" "}
+        — the contracts are deployed and unaudited, and the feature is switched
+        off in the build.
+      </P>
+      <P>
+        The reasoning behind the whole thing is on{" "}
+        <A to="/why">Why Hedge</A>. If you just want to place a trade, skip to{" "}
+        <A to="/quick-start">Quick start</A>.
+      </P>
 
       <H2>What you actually trade</H2>
       <P>
@@ -43,14 +60,20 @@ export default function Introduction() {
         currently pay for those shares, which is why its value moves before the
         question is ever settled.
       </P>
-
-      <H2>The shape of the system</H2>
       <P>
-        Hedge is one web application, built with React Router and served
-        server-side. Your funds are held as <C>USDG</C> on Robinhood Chain, and
-        placing a trade converts them into the token the markets settle in. That
-        conversion is the single most important thing to understand about how the
-        app behaves, and it has <A to="/concepts/tokens">a page of its own</A>.
+        Leverage changes what that exposure costs you rather than what it is. A
+        leveraged position is synthetic — priced against the same outcome, but you
+        do not hold the shares, and a small deposit controls a larger position.
+      </P>
+
+      <H2>One balance, one chain</H2>
+      <P>
+        Your funds are held as <C>USDG</C> on Robinhood Chain and stay
+        denominated that way throughout. Spot trades convert into the token the
+        underlying markets settle in and back again, which is the single most
+        important thing to understand about how the app behaves; it has{" "}
+        <A to="/concepts/tokens">a page of its own</A>. Leveraged positions never
+        leave the chain at all.
       </P>
 
       <Note>
@@ -64,13 +87,13 @@ export default function Introduction() {
           Sign in, add funds, and place a first trade. Read this and stop if you
           are only here to use the app.
         </Card>
-        <Card to="/architecture/overview" title="System overview">
-          The app, its server routes, and the services behind them. Start here if
-          you are changing the code.
+        <Card to="/why" title="Why Hedge">
+          The gap this is built to fill, and an honest table of what is live
+          versus what is intended.
         </Card>
         <Card to="/leverage/overview" title="Leverage markets">
-          A separate on-chain system for leveraged positions, and the vault that
-          backs them. Not yet live.
+          Margin, position size, carry, and liquidation — plus the vault that
+          backs it all.
         </Card>
         <Card to="/leverage/mathematics" title="The mathematics">
           Every formula behind sizing, carry, liquidation, and the vault&rsquo;s
@@ -82,8 +105,8 @@ export default function Introduction() {
       <P>
         The sections are ordered so you can stop whenever you have what you need.
         Guides are task-shaped and safe to follow blind. Concepts explain the
-        vocabulary behind them. Architecture and Reference are for people changing
-        or operating the code.
+        vocabulary behind them. The Leverage section is deeper and assumes you
+        have read the concepts first.
       </P>
 
       <div className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2">

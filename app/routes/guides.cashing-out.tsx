@@ -157,8 +157,8 @@ export default function CashingOut() {
       </Ul>
 
       <P>
-        For the underlying hops, see the{" "}
-        <A to="/architecture/trade-lifecycle">trade lifecycle</A>.
+        For why the money moves between two tokens at all, see{" "}
+        <A to="/concepts/tokens">money and tokens</A>.
       </P>
     </>
   );

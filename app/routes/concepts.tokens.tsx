@@ -131,8 +131,9 @@ Outcome shares (Polygon)`}</Code>
         not.
       </P>
       <P>
-        For the full step-by-step of both directions, see the{" "}
-        <A to="/architecture/trade-lifecycle">trade lifecycle</A>.
+        Both directions are walked through step by step in{" "}
+        <A to="/guides/placing-a-trade">placing a trade</A> and{" "}
+        <A to="/guides/cashing-out">cashing out</A>.
       </P>
     </>
   );

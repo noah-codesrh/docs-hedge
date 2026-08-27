@@ -1,4 +1,4 @@
-import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Ul } from "../components/prose";
+import { Code, H2, H3, Li, Note, P, PageTitle, Ul } from "../components/prose";
 import { docMeta } from "../lib/seo";
 
 export function meta() {
@@ -109,9 +109,8 @@ Round trip                   -$0.24, about -4.8%`}</Code>
       </P>
       <P>
         Position and price data is read from the venue rather than stored by the
-        app, so it reflects the venue&rsquo;s own view of what you hold. See{" "}
-        <A to="/architecture/data">data and storage</A>{" "}
-        for where each number originates.
+        app, so it reflects the venue&rsquo;s own view of what you hold. Nothing
+        here is cached in a way that could go stale against it.
       </P>
     </>
   );

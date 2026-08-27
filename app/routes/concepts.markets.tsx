@@ -1,4 +1,4 @@
-import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
+import { C, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
 import { docMeta } from "../lib/seo";
 
 export function meta() {
@@ -109,12 +109,10 @@ export default function Markets() {
         server routes rather than directly from the browser. That keeps upstream
         hosts and any keys off the client and lets responses be cached briefly.
       </P>
-      <Code title="Server routes backing the market pages">{`GET /api/events        listings, filtered by tag and sort
-GET /api/quotes        current prices for a set of markets
-GET /api/pm/book       raw order book for one or more token ids`}</Code>
       <P>
-        Full parameters and responses are in the{" "}
-        <A to="/reference/api">HTTP API reference</A>.
+        Prices you see are therefore a moment old rather than a live stream, and
+        the order book is re-read when it matters — notably when sizing an order,
+        so the estimate reflects real depth rather than a cached top of book.
       </P>
 
       <H2>Market states</H2>

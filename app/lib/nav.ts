@@ -24,6 +24,11 @@ export const NAV: NavSection[] = [
         summary: "What Hedge is and how the pieces fit together.",
       },
       {
+        title: "Why Hedge",
+        to: "/why",
+        summary: "The gap between a dollar onchain and a market worth trading.",
+      },
+      {
         title: "Quick start",
         to: "/quick-start",
         summary: "Sign in, add funds, and place a first trade.",
@@ -102,66 +107,6 @@ export const NAV: NavSection[] = [
         title: "The mathematics",
         to: "/leverage/mathematics",
         summary: "Every formula, as implemented on-chain.",
-      },
-    ],
-  },
-  {
-    title: "Architecture",
-    items: [
-      {
-        title: "System overview",
-        to: "/architecture/overview",
-        summary: "The app, its server routes, and the services behind them.",
-      },
-      {
-        title: "Trade lifecycle",
-        to: "/architecture/trade-lifecycle",
-        summary: "Every hop a buy and a cash-out actually make.",
-      },
-      {
-        title: "Data and storage",
-        to: "/architecture/data",
-        summary: "Where market data comes from and what is persisted.",
-      },
-    ],
-  },
-  {
-    title: "Reference",
-    items: [
-      {
-        title: "HTTP API",
-        to: "/reference/api",
-        summary: "Every server route, its inputs, and its responses.",
-      },
-      {
-        title: "Configuration",
-        to: "/reference/configuration",
-        summary: "Environment variables and chain settings.",
-      },
-      {
-        title: "Project layout",
-        to: "/reference/project-layout",
-        summary: "Where things live in the repository.",
-      },
-    ],
-  },
-  {
-    title: "Operations",
-    items: [
-      {
-        title: "Local development",
-        to: "/operations/local-development",
-        summary: "Install, run, typecheck, and build.",
-      },
-      {
-        title: "Deployment",
-        to: "/operations/deployment",
-        summary: "Build output, the server, and the container image.",
-      },
-      {
-        title: "Troubleshooting",
-        to: "/operations/troubleshooting",
-        summary: "Common failures and what they actually mean.",
       },
     ],
   },

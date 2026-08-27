@@ -41,10 +41,7 @@ export function docMeta({
     { property: "og:image", content: IMAGE },
     { property: "og:image:width", content: "1200" },
     { property: "og:image:height", content: "630" },
-    {
-      property: "og:image:alt",
-      content: "Hedge Docs — trade prediction markets, in dollars",
-    },
+    { property: "og:image:alt", content: "Welcome to Hedge" },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: full },
