@@ -68,6 +68,14 @@ export default function Introduction() {
           The app, its server routes, and the services behind them. Start here if
           you are changing the code.
         </Card>
+        <Card to="/leverage/overview" title="Leverage markets">
+          A separate on-chain system for leveraged positions, and the vault that
+          backs them. Not yet live.
+        </Card>
+        <Card to="/leverage/mathematics" title="The mathematics">
+          Every formula behind sizing, carry, liquidation, and the vault&rsquo;s
+          share accounting.
+        </Card>
       </Cards>
 
       <H2>How to read these docs</H2>

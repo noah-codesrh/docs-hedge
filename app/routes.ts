@@ -15,6 +15,11 @@ export default [
     route("guides/cashing-out", "routes/guides.cashing-out.tsx"),
     route("guides/sharing", "routes/guides.sharing.tsx"),
 
+    route("leverage/overview", "routes/leverage.overview.tsx"),
+    route("leverage/earn", "routes/leverage.earn.tsx"),
+    route("leverage/market-makers", "routes/leverage.market-makers.tsx"),
+    route("leverage/mathematics", "routes/leverage.mathematics.tsx"),
+
     route("architecture/overview", "routes/architecture.overview.tsx"),
     route(
       "architecture/trade-lifecycle",

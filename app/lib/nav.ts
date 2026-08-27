@@ -81,6 +81,31 @@ export const NAV: NavSection[] = [
     ],
   },
   {
+    title: "Leverage",
+    items: [
+      {
+        title: "Leverage markets",
+        to: "/leverage/overview",
+        summary: "Margin, position size, and the limits that apply.",
+      },
+      {
+        title: "Earning as an LP",
+        to: "/leverage/earn",
+        summary: "The vault, its two tranches, and where the yield comes from.",
+      },
+      {
+        title: "Market makers",
+        to: "/leverage/market-makers",
+        summary: "What exists today and what is still only intended.",
+      },
+      {
+        title: "The mathematics",
+        to: "/leverage/mathematics",
+        summary: "Every formula, as implemented on-chain.",
+      },
+    ],
+  },
+  {
     title: "Architecture",
     items: [
       {
