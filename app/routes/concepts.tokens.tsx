@@ -2,9 +2,6 @@ import {
   A,
   C,
   Code,
-  Flow,
-  FlowArrow,
-  FlowStep,
   H2,
   H3,
   Li,
@@ -16,16 +13,13 @@ import {
   Tr,
   Ul,
 } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Money and tokens · Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "USDG, Polymarket collateral, and why placing a trade converts between two chains.",
-    },
-  ];
+  return docMeta({
+    title: "Money and tokens",
+    description: "USDG, the collateral the markets settle in, and why placing a trade converts between two chains.",
+  });
 }
 
 export default function Tokens() {
@@ -36,18 +30,6 @@ export default function Tokens() {
         title="Money and tokens"
         intro="Your balance and the markets live on different chains in different tokens. Every trade therefore includes a conversion, and that single fact explains most of the app's timing and most of its error messages."
       />
-
-      <Flow caption="Where your money is at each stage">
-        <FlowStep label="USDG" sub="Robinhood Chain" tone="gold" />
-        <FlowArrow />
-        <FlowStep label="pUSD" sub="Polygon" />
-        <FlowArrow />
-        <FlowStep label="Shares" sub="Polygon" tone="up" />
-        <FlowArrow />
-        <FlowStep label="pUSD" sub="Polygon" />
-        <FlowArrow />
-        <FlowStep label="USDG" sub="Robinhood Chain" tone="gold" />
-      </Flow>
 
       <H2>The two tokens</H2>
       <Table head={["Token", "Chain", "Role", "Decimals"]}>
@@ -64,7 +46,7 @@ export default function Tokens() {
             <C>pUSD</C>
           </Td>
           <Td>Polygon</Td>
-          <Td>Polymarket&rsquo;s collateral. What orders settle in.</Td>
+          <Td>the venue&rsquo;s collateral. What orders settle in.</Td>
           <Td>6</Td>
         </Tr>
       </Table>
@@ -81,7 +63,7 @@ pUSD   0xC011a7E12a19f7B1f670d46F03B03f3342E82DFB   (Polygon)`}</Code>
       <H2>Why a conversion is needed</H2>
       <P>
         You hold <C>USDG</C> because that is the chain the app&rsquo;s balances and
-        deposits live on. Polymarket only accepts its own collateral on Polygon.
+        deposits live on. The venue only accepts its own collateral on Polygon.
         Neither side can be changed from the app, so buying means turning{" "}
         <C>USDG</C> into <C>pUSD</C> first, and cashing out means turning it back.
       </P>
@@ -95,7 +77,7 @@ pUSD   0xC011a7E12a19f7B1f670d46F03B03f3342E82DFB   (Polygon)`}</Code>
       <Ul>
         <Li>
           <strong className="text-white">Buying</strong> converts <C>USDG</C> from
-          your cash wallet into <C>pUSD</C> in your Polymarket proxy, then places
+          your cash wallet into <C>pUSD</C> in your trading proxy, then places
           the order.
         </Li>
         <Li>
@@ -121,7 +103,7 @@ pUSD   0xC011a7E12a19f7B1f670d46F03B03f3342E82DFB   (Polygon)`}</Code>
       |
       |  Relay conversion
       v
-Polymarket proxy (pUSD, Polygon)
+trading proxy (pUSD, Polygon)
       |
       |  order fills on the CLOB
       v
@@ -135,14 +117,14 @@ Outcome shares (Polygon)`}</Code>
       </P>
 
       <Note kind="warning" title="A stalled trade is not a lost trade">
-        If you see a message saying your <C>pUSD</C> is still in the Polymarket
+        If you see a message saying your <C>pUSD</C> is still in the trading
         proxy, the funds are intact at that address. Retrying the buy fills from
         that balance, and cashing out converts it back.
       </Note>
 
       <H2>Gas</H2>
       <P>
-        Movements on Polygon are sponsored through Polymarket&rsquo;s gasless
+        Movements on Polygon are sponsored through the venue&rsquo;s gasless
         relayer, so you never hold <C>POL</C>. On Robinhood Chain, gas is paid in{" "}
         <C>ETH</C>; the app sponsors some transfers itself, but keeping a small{" "}
         <C>ETH</C> balance in the cash wallet avoids trouble on the ones it does

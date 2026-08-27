@@ -1,13 +1,11 @@
 import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Local development · Hedge Docs" },
-    {
-      name: "description",
-      content: "Install, run, typecheck, and build both applications.",
-    },
-  ];
+  return docMeta({
+    title: "Local development",
+    description: "Install, run, typecheck, and build both applications.",
+  });
 }
 
 export default function LocalDevelopment() {

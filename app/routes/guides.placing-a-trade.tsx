@@ -1,14 +1,11 @@
 import { A, C, H2, Li, Note, P, PageTitle, Step, Steps, Table, Td, Tr, Ul } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Placing a trade · Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "Choose a side, size the order, read the confirmation steps, and understand what can go wrong.",
-    },
-  ];
+  return docMeta({
+    title: "Placing a trade",
+    description: "Choose a side, size the order, read the confirmation steps, and understand what can go wrong.",
+  });
 }
 
 export default function PlacingATrade() {

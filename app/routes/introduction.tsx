@@ -4,26 +4,19 @@ import {
   C,
   Card,
   Cards,
-  Flow,
-  FlowArrow,
-  FlowStep,
   H2,
-  Li,
   Note,
   P,
   PageTitle,
-  Ul,
 } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Introduction · Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "What Hedge is, the vocabulary the rest of the documentation uses, and where to go next.",
-    },
-  ];
+  return docMeta({
+    title: "Hedge Docs",
+    description: "What Hedge is, the vocabulary the rest of the documentation uses, and where to go next.",
+    bare: true,
+  });
 }
 
 export default function Introduction() {
@@ -34,20 +27,6 @@ export default function Introduction() {
         title="Trade prediction markets, in dollars"
         intro="Hedge is an app for trading prediction markets. You deposit dollar-denominated funds, buy the side of a question you think is right, and sell when you want out. This documentation covers how to use it and how it is built."
       />
-
-      <Flow caption="One round trip, end to end">
-        <FlowStep label="Deposit" sub="USDG" tone="gold" />
-        <FlowArrow />
-        <FlowStep label="Convert" sub="to pUSD" />
-        <FlowArrow />
-        <FlowStep label="Buy" sub="yes / no" />
-        <FlowArrow />
-        <FlowStep label="Hold" sub="marked live" />
-        <FlowArrow />
-        <FlowStep label="Sell" sub="back to pUSD" />
-        <FlowArrow />
-        <FlowStep label="Cash out" sub="USDG" tone="gold" />
-      </Flow>
 
       <H2>What you actually trade</H2>
       <P>
@@ -68,35 +47,10 @@ export default function Introduction() {
       <H2>The shape of the system</H2>
       <P>
         Hedge is one web application, built with React Router and served
-        server-side. It talks to a handful of outside services, and each one has a
-        clear job:
-      </P>
-      <Ul>
-        <Li>
-          <strong className="text-white">Polymarket</strong> supplies the markets,
-          the prices, the order book, and the venue where orders are matched and
-          positions are held.
-        </Li>
-        <Li>
-          <strong className="text-white">Privy</strong> handles sign-in and
-          creates the wallets that hold your funds, so there is no seed phrase to
-          write down.
-        </Li>
-        <Li>
-          <strong className="text-white">Relay</strong> moves value between the
-          chain your cash sits on and the chain the markets settle on.
-        </Li>
-        <Li>
-          <strong className="text-white">Supabase</strong> stores a small amount
-          of app data such as trade records and display names.
-        </Li>
-      </Ul>
-      <P>
-        Your funds are held as <C>USDG</C> on Robinhood Chain. Polymarket settles
-        in its own collateral token on Polygon. A trade therefore involves a
-        conversion between the two, which is the single most important thing to
-        understand about how the app behaves, and it has{" "}
-        <A to="/concepts/tokens">a page of its own</A>.
+        server-side. Your funds are held as <C>USDG</C> on Robinhood Chain, and
+        placing a trade converts them into the token the markets settle in. That
+        conversion is the single most important thing to understand about how the
+        app behaves, and it has <A to="/concepts/tokens">a page of its own</A>.
       </P>
 
       <Note>

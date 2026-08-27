@@ -1,13 +1,11 @@
 import { C, Code, H2, H3, Note, P, PageTitle } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Project layout · Hedge Docs" },
-    {
-      name: "description",
-      content: "Where everything lives in the repository.",
-    },
-  ];
+  return docMeta({
+    title: "Project layout",
+    description: "Where everything lives in the repository.",
+  });
 }
 
 export default function ProjectLayout() {
@@ -58,10 +56,7 @@ robinhood.ts            Robinhood Chain constants and helpers
 evm.ts                  chain switching, receipts, rejection detection
 wallet.ts               wallet selection and classification
 pm-wallet.ts            deposit wallet storage
-pm-funder.ts            deriving the Polymarket proxy
-polymarket.ts           market shaping and liveness
-polymarket-portfolio.ts positions and portfolio value
-polymarket-account.ts   venue account lookups
+pm-funder.ts            deriving the trading proxy
 orderbook.ts            fetching and walking the book
 positions.ts            local position bookkeeping
 pnl.ts                  profit and loss formatting
@@ -71,6 +66,12 @@ sponsored-send.ts       sponsored transfer helpers
 track.ts                analytics reporting
 seo.ts                  meta tags
 env.ts                  reading client configuration`}</Code>
+      <P>
+        Three further modules in the same folder wrap the market venue&rsquo;s
+        APIs — market shaping and liveness, positions and portfolio value, and
+        account lookups. They are named after the venue in the source, so they are
+        easiest to find by listing the folder.
+      </P>
 
       <H3>app/lib/trade/</H3>
       <P>The trading flows, kept apart from the rest of the library:</P>

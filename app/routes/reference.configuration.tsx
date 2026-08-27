@@ -10,16 +10,13 @@ import {
   Td,
   Tr,
 } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Configuration · Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "Environment variables, what breaks without them, and the chain and token constants.",
-    },
-  ];
+  return docMeta({
+    title: "Configuration",
+    description: "Environment variables, what breaks without them, and the chain and token constants.",
+  });
 }
 
 export default function Configuration() {
@@ -118,7 +115,13 @@ export default function Configuration() {
         </Tr>
       </Table>
 
-      <H3>Polymarket builder attribution</H3>
+      <H3>Builder attribution</H3>
+      <P>
+        Four variables identify Hedge to the market venue so orders are attributed
+        to it. Three are the credential triple below; the fourth is the builder
+        code itself, prefixed with the venue&rsquo;s name and listed in{" "}
+        <C>.env.example</C>.
+      </P>
       <Table head={["Variable", "Purpose"]}>
         <Tr>
           <Td>
@@ -138,19 +141,12 @@ export default function Configuration() {
           </Td>
           <Td>Builder passphrase</Td>
         </Tr>
-        <Tr>
-          <Td>
-            <C>POLYMARKET_BUILDER_CODE</C>
-          </Td>
-          <Td>
-            The code attached to orders, served to the client via{" "}
-            <C>/api/pm/config</C>
-          </Td>
-        </Tr>
       </Table>
       <P>
-        These back the <C>/api/pm/builder-sign</C> route. Without them order
-        signing cannot be completed on the server.
+        The triple backs the <C>/api/pm/builder-sign</C> route; without it order
+        signing cannot be completed on the server. The builder code is served to
+        the client through <C>/api/pm/config</C>, which returns <C>503</C> when it
+        is unset.
       </P>
 
       <H3>Gasless relayer</H3>
@@ -202,6 +198,26 @@ export default function Configuration() {
         nickname tracking rather than breaking trading, so a local environment runs
         without a database.
       </Note>
+
+      <H2>Documentation site</H2>
+      <P>
+        The docs are a separate app with one variable of their own.
+      </P>
+      <Table head={["Variable", "Purpose", "If missing"]}>
+        <Tr>
+          <Td>
+            <C>VITE_DOCS_ORIGIN</C>
+          </Td>
+          <Td>
+            Absolute origin used to build the social card URL, since Open Graph
+            will not accept a relative one
+          </Td>
+          <Td>
+            Falls back to <C>https://docs.hedgeapp.trade</C>. A wrong value means
+            link previews show no image.
+          </Td>
+        </Tr>
+      </Table>
 
       <H2>Accepted aliases</H2>
       <P>

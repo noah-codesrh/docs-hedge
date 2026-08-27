@@ -9,15 +9,13 @@ import {
   Steps,
   Ul,
 } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Sharing a position · Hedge Docs" },
-    {
-      name: "description",
-      content: "Generate a shareable P&L card for a position.",
-    },
-  ];
+  return docMeta({
+    title: "Sharing a position",
+    description: "Generate a shareable P&L card for a position.",
+  });
 }
 
 export default function Sharing() {

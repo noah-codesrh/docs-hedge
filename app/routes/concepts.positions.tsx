@@ -1,14 +1,11 @@
 import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Ul } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Positions and P&L · Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "How a position is valued, how profit and loss is derived, and why a new position can open slightly negative.",
-    },
-  ];
+  return docMeta({
+    title: "Positions and P&L",
+    description: "How a position is valued, how profit and loss is derived, and why a new position can open slightly negative.",
+  });
 }
 
 export default function Positions() {
@@ -46,7 +43,7 @@ export default function Positions() {
       </P>
       <P>
         For a closed one the app does not recompute anything. It shows the realised
-        figure Polymarket reports, alongside the total you originally paid. That way
+        figure the venue reports, alongside the total you originally paid. That way
         a closed position cannot drift as prices move afterwards, and it agrees with
         what the venue itself says you made.
       </P>
@@ -111,7 +108,7 @@ Round trip                   -$0.24, about -4.8%`}</Code>
         into a portfolio value alongside your cash balance.
       </P>
       <P>
-        Position and price data is read from Polymarket rather than stored by the
+        Position and price data is read from the venue rather than stored by the
         app, so it reflects the venue&rsquo;s own view of what you hold. See{" "}
         <A to="/architecture/data">data and storage</A>{" "}
         for where each number originates.

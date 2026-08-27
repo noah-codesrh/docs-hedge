@@ -1,14 +1,11 @@
 import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Data and storage · Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "Where market and position data comes from, and the small amount the app persists itself.",
-    },
-  ];
+  return docMeta({
+    title: "Data and storage",
+    description: "Where market and position data comes from, and the small amount the app persists itself.",
+  });
 }
 
 export default function Data() {
@@ -24,28 +21,28 @@ export default function Data() {
       <Table head={["Shown in the UI", "Source", "Via"]}>
         <Tr>
           <Td>Market listings, metadata</Td>
-          <Td>Polymarket Gamma</Td>
+          <Td>Venue market data</Td>
           <Td>
             <C>/api/events</C>
           </Td>
         </Tr>
         <Tr>
           <Td>Current prices</Td>
-          <Td>Polymarket CLOB</Td>
+          <Td>Venue order book</Td>
           <Td>
             <C>/api/quotes</C>
           </Td>
         </Tr>
         <Tr>
           <Td>Order book depth</Td>
-          <Td>Polymarket CLOB</Td>
+          <Td>Venue order book</Td>
           <Td>
             <C>/api/pm/book</C>
           </Td>
         </Tr>
         <Tr>
           <Td>Open positions, portfolio value</Td>
-          <Td>Polymarket Data API</Td>
+          <Td>Venue positions API</Td>
           <Td>
             <C>/api/pm/portfolio</C>
           </Td>
@@ -66,7 +63,7 @@ export default function Data() {
         </Tr>
         <Tr>
           <Td>Venue health</Td>
-          <Td>Polymarket status</Td>
+          <Td>Venue status</Td>
           <Td>
             <C>/api/pm/status</C>
           </Td>
@@ -113,7 +110,7 @@ export default function Data() {
       </P>
       <Code title="Notable columns">{`privy_user_id    stable identity of the trader
 wallet           Robinhood Chain address the USDG moved through
-proxy_wallet     the Polymarket funder
+proxy_wallet     the trading proxy
 direction        'buy' | 'sell'
 outcome          'yes' | 'no'   (+ outcome_label for the market's own name)
 event_slug, market_slug, token_id, title
@@ -153,7 +150,7 @@ conversion_id    Relay request id`}</Code>
           <Td>
             <C>hedge:pm:deposit:&lt;signer&gt;</C>
           </Td>
-          <Td>The derived Polymarket proxy address</Td>
+          <Td>The derived trading proxy address</Td>
           <Td>Re-derived deterministically; the address is unchanged.</Td>
         </Tr>
         <Tr>

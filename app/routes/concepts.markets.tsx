@@ -1,14 +1,11 @@
 import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Markets and prices · Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "Events, markets, outcomes, order books, and what a price actually represents.",
-    },
-  ];
+  return docMeta({
+    title: "Markets and prices",
+    description: "Events, markets, outcomes, order books, and what a price actually represents.",
+  });
 }
 
 export default function Markets() {
@@ -108,7 +105,7 @@ export default function Markets() {
 
       <H2>Where the data comes from</H2>
       <P>
-        Market data is Polymarket&rsquo;s, fetched through the app&rsquo;s own
+        Market data comes from the venue, fetched through the app&rsquo;s own
         server routes rather than directly from the browser. That keeps upstream
         hosts and any keys off the client and lets responses be cached briefly.
       </P>
@@ -124,7 +121,7 @@ GET /api/pm/book       raw order book for one or more token ids`}</Code>
       <P>
         Not every market can be traded. The app checks whether a market is live
         before enabling the buy panel, and a market that is closed, resolved, or
-        missing a valid price renders as read-only. If Polymarket&rsquo;s order
+        missing a valid price renders as read-only. If the venue&rsquo;s order
         book is down for maintenance the app reports that explicitly instead of
         letting an order fail in a confusing way.
       </P>

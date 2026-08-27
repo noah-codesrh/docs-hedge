@@ -9,15 +9,13 @@ import {
   PageTitle,
   Ul,
 } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Deployment · Hedge Docs" },
-    {
-      name: "description",
-      content: "Build output, running the server, and the container image.",
-    },
-  ];
+  return docMeta({
+    title: "Deployment",
+    description: "Build output, running the server, and the container image.",
+  });
 }
 
 export default function Deployment() {

@@ -1,14 +1,11 @@
 import { A, C, H2, H3, Li, Note, P, PageTitle, Step, Steps, Table, Td, Tr, Ul } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Closing and cashing out · Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "Sell a position, convert the proceeds back to USDG, and recover funds from an interrupted flow.",
-    },
-  ];
+  return docMeta({
+    title: "Closing and cashing out",
+    description: "Sell a position, convert the proceeds back to USDG, and recover funds from an interrupted flow.",
+  });
 }
 
 export default function CashingOut() {
@@ -65,7 +62,7 @@ export default function CashingOut() {
             <strong className="text-white">Move</strong>
           </Td>
           <Td>
-            Gathering the resulting <C>pUSD</C> into your Polymarket proxy wallet.
+            Gathering the resulting <C>pUSD</C> into your trading proxy wallet.
           </Td>
         </Tr>
         <Tr>
@@ -105,7 +102,7 @@ export default function CashingOut() {
       <Table head={["What you see", "Where the money is", "What to do"]}>
         <Tr>
           <Td>
-            <C>pUSD</C> is still in the Polymarket proxy
+            <C>pUSD</C> is still in the trading proxy
           </Td>
           <Td>Proxy wallet, on Polygon</Td>
           <Td>
@@ -113,7 +110,7 @@ export default function CashingOut() {
           </Td>
         </Tr>
         <Tr>
-          <Td>Position sold, pUSD still in the Polymarket wallet</Td>
+          <Td>Position sold, pUSD still in the trading proxy</Td>
           <Td>Proxy wallet, on Polygon</Td>
           <Td>
             <C>Cash out</C>
@@ -134,7 +131,7 @@ export default function CashingOut() {
       </Table>
 
       <Note kind="warning" title="A relayer timeout is not a failed transfer">
-        Moving pUSD out of the proxy goes through Polymarket&rsquo;s gasless
+        Moving pUSD out of the proxy goes through the venue&rsquo;s gasless
         relayer, which can take longer than the app is willing to wait. A timeout
         means the app stopped watching, not that the transfer failed. Check your
         balances before assuming anything went wrong, and retry rather than

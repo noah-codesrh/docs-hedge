@@ -1,13 +1,11 @@
 import { A, C, H2, Li, Note, P, PageTitle, Step, Steps, Ul } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Adding funds · Hedge Docs" },
-    {
-      name: "description",
-      content: "Deposit USDG on Robinhood Chain and confirm it arrived.",
-    },
-  ];
+  return docMeta({
+    title: "Adding funds",
+    description: "Deposit USDG on Robinhood Chain and confirm it arrived.",
+  });
 }
 
 export default function AddingFunds() {
@@ -54,8 +52,8 @@ export default function AddingFunds() {
 
       <Note kind="warning" title="Send on the right chain, to the right address">
         Only send to the address the app gives you, and only on Robinhood Chain.
-        Funds sent on a different network, or to the trading wallet or Polymarket
-        proxy instead of the cash wallet, will not appear as spendable cash.
+        Funds sent on a different network, or to the trading wallet or the proxy
+        instead of the cash wallet, will not appear as spendable cash.
       </Note>
 
       <H2>Keep a little ETH</H2>

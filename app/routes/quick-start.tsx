@@ -1,13 +1,11 @@
 import { A, C, H2, Li, Note, P, PageTitle, Step, Steps, Ul } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Quick start · Hedge Docs" },
-    {
-      name: "description",
-      content: "Sign in, add funds, and place your first trade on Hedge.",
-    },
-  ];
+  return docMeta({
+    title: "Quick start",
+    description: "Sign in, add funds, and place your first trade on Hedge.",
+  });
 }
 
 export default function QuickStart() {

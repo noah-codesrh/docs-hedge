@@ -2,9 +2,6 @@ import {
   A,
   C,
   Code,
-  Flow,
-  FlowArrow,
-  FlowStep,
   H2,
   H3,
   Li,
@@ -13,16 +10,13 @@ import {
   PageTitle,
   Ul,
 } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Trade lifecycle · Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "Every hop a buy and a cash-out make, and where funds rest if one is interrupted.",
-    },
-  ];
+  return docMeta({
+    title: "Trade lifecycle",
+    description: "Every hop a buy and a cash-out make, and where funds rest if one is interrupted.",
+  });
 }
 
 export default function TradeLifecycle() {
@@ -40,7 +34,7 @@ export default function TradeLifecycle() {
         once and is reused:
       </P>
       <Code title="Session setup">{`1. Switch the trading wallet's provider to Polygon
-2. Derive the Polymarket proxy (funder) from the signer address
+2. Derive the trading proxy (funder) from the signer address
 3. Load cached CLOB credentials, or sign an EIP-712 "ClobAuth"
    message and exchange it for fresh ones
 4. Open a secure client bound to the proxy as the funder
@@ -64,18 +58,6 @@ export default function TradeLifecycle() {
         Stages reported to the UI are <C>setup</C>, <C>debit</C>, <C>convert</C>,
         and <C>fill</C>.
       </P>
-
-      <Flow caption="Buy — gold marks a point where funds can rest">
-        <FlowStep label="Cash wallet" sub="USDG · 4663" tone="gold" />
-        <FlowArrow />
-        <FlowStep label="Relay" sub="convert" />
-        <FlowArrow />
-        <FlowStep label="Proxy" sub="pUSD · 137" tone="gold" />
-        <FlowArrow />
-        <FlowStep label="CLOB" sub="FAK buy" />
-        <FlowArrow />
-        <FlowStep label="Shares" sub="on Polygon" tone="up" />
-      </Flow>
 
       <Code title="runLiveTrade, in app/lib/trade/live.ts">{`read the proxy's pUSD balance first
   >= $1 and covers the order?  -> skip ahead to the fill
@@ -131,18 +113,6 @@ placeMarketOrder             fill-or-kill buy, with the builder code`}</Code>
         Stages reported to the UI are <C>sell</C>, <C>move</C>, <C>convert</C>, and{" "}
         <C>arrive</C>.
       </P>
-      <Flow caption="Close — the same path, walked backwards">
-        <FlowStep label="Shares" sub="on Polygon" tone="up" />
-        <FlowArrow />
-        <FlowStep label="CLOB" sub="FAK sell" />
-        <FlowArrow />
-        <FlowStep label="Proxy" sub="pUSD · 137" tone="gold" />
-        <FlowArrow />
-        <FlowStep label="Relay" sub="convert" />
-        <FlowArrow />
-        <FlowStep label="Cash wallet" sub="USDG · 4663" tone="gold" />
-      </Flow>
-
       <Code title="runClosePosition, in app/lib/trade/close.ts">{`GET /api/pm/status           check the venue is healthy
 ensure approvals are set
 estimate the sell price, derive a minimum
@@ -167,12 +137,12 @@ then the cash-out path below, from the proxy onwards`}</Code>
 3. POST /api/relay/quote with direction "out"
      -> yields a deposit address and a request id
 4. Transfer the proxy's pUSD to that deposit address
-     via Polymarket's gasless relayer
+     via the venue's gasless relayer
 5. GET /api/relay/status until Relay reports success
 6. Poll the cash wallet's USDG balance until it rises`}</Code>
 
       <Note kind="warning" title="Step 4 is the fragile one">
-        The transfer is submitted to Polymarket&rsquo;s relayer, which estimates
+        The transfer is submitted to the venue&rsquo;s relayer, which estimates
         gas, signs, and broadcasts to Polygon. That can take longer than the SDK
         is willing to wait, and the SDK does not retry this kind of request. A
         timeout there means the app gave up watching — not necessarily that the
@@ -191,7 +161,7 @@ then the cash-out path below, from the proxy onwards`}</Code>
           nothing happened, or a conversion was refunded.
         </Li>
         <Li>
-          <strong className="text-white">Polymarket proxy</strong>, as <C>pUSD</C>{" "}
+          <strong className="text-white">Trading proxy</strong>, as <C>pUSD</C>{" "}
           — the common case. Retry the buy to spend it, or cash out to convert it
           back.
         </Li>

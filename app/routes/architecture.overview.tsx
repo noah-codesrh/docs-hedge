@@ -1,14 +1,11 @@
 import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "System overview · Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "The application, its server routes, and the external services behind them.",
-    },
-  ];
+  return docMeta({
+    title: "System overview",
+    description: "The application, its server routes, and the external services behind them.",
+  });
 }
 
 export default function Overview() {
@@ -40,9 +37,7 @@ export default function Overview() {
         </Tr>
         <Tr>
           <Td>Venue SDK</Td>
-          <Td>
-            <C>@polymarket/client</C>
-          </Td>
+          <Td>The market venue&rsquo;s official client library</Td>
         </Tr>
         <Tr>
           <Td>Auth and wallets</Td>
@@ -95,66 +90,46 @@ layout("routes/shell.tsx", [     // header, nav, balances
       </P>
 
       <H2>External services</H2>
-      <Table head={["Service", "Host", "Used for"]}>
+      <P>
+        Nine upstreams, grouped by what they are responsible for. Exact hostnames
+        are in the source rather than here, since they are an implementation
+        detail the browser never sees.
+      </P>
+      <Table head={["Service", "Used for"]}>
         <Tr>
-          <Td>Polymarket Gamma</Td>
-          <Td>
-            <C>gamma-api.polymarket.com</C>
-          </Td>
+          <Td>Venue — market data</Td>
           <Td>Events, markets, metadata</Td>
         </Tr>
         <Tr>
-          <Td>Polymarket CLOB</Td>
-          <Td>
-            <C>clob.polymarket.com</C>
-          </Td>
-          <Td>Order book, prices, order placement</Td>
+          <Td>Venue — order book</Td>
+          <Td>Book depth, prices, order placement</Td>
         </Tr>
         <Tr>
-          <Td>Polymarket Data</Td>
-          <Td>
-            <C>data-api.polymarket.com</C>
-          </Td>
-          <Td>Positions and portfolio value</Td>
+          <Td>Venue — positions</Td>
+          <Td>Open and closed positions, activity, portfolio value</Td>
         </Tr>
         <Tr>
-          <Td>Polymarket status</Td>
-          <Td>
-            <C>status.polymarket.com</C>
-          </Td>
+          <Td>Venue — status</Td>
           <Td>Checked before a trade so an outage is reported plainly</Td>
         </Tr>
         <Tr>
-          <Td>Polymarket relayer</Td>
-          <Td>reached through the SDK</Td>
+          <Td>Venue — relayer</Td>
           <Td>Gasless transfers and approvals on Polygon</Td>
         </Tr>
         <Tr>
           <Td>Privy</Td>
-          <Td>
-            <C>api.privy.io</C>
-          </Td>
           <Td>Token verification, embedded wallets, sponsored transactions</Td>
         </Tr>
         <Tr>
           <Td>Relay</Td>
-          <Td>
-            <C>api.relay.link</C>
-          </Td>
           <Td>Converting between USDG and pUSD</Td>
         </Tr>
         <Tr>
           <Td>Robinhood Chain RPC</Td>
-          <Td>
-            <C>rpc.mainnet.chain.robinhood.com</C>
-          </Td>
           <Td>USDG, ETH, and WETH balances and transfers</Td>
         </Tr>
         <Tr>
           <Td>Polygon RPC</Td>
-          <Td>
-            <C>polygon-bor-rpc.publicnode.com</C>
-          </Td>
           <Td>Reading Polygon state and receipts</Td>
         </Tr>
       </Table>

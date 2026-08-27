@@ -1,14 +1,11 @@
 import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Accounts and wallets · Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "How sign-in works and the difference between the cash wallet, the trading wallet, and the Polymarket proxy.",
-    },
-  ];
+  return docMeta({
+    title: "Accounts and wallets",
+    description: "How sign-in works and the difference between the cash wallet, the trading wallet, and the trading proxy.",
+  });
 }
 
 export default function Wallets() {
@@ -66,7 +63,7 @@ export default function Wallets() {
         </Tr>
         <Tr>
           <Td>
-            <strong className="text-white">Polymarket proxy</strong>
+            <strong className="text-white">Trading proxy</strong>
           </Td>
           <Td>Polygon</Td>
           <Td>Collateral and your outcome shares</Td>
@@ -96,9 +93,9 @@ export default function Wallets() {
         it usually holds nothing at all.
       </P>
 
-      <H3>Polymarket proxy</H3>
+      <H3>Trading proxy</H3>
       <P>
-        Polymarket gives each signer a deterministic wallet of its own, referred
+        The venue gives each signer a deterministic wallet of its own, referred
         to in the code as the <em>funder</em> or deposit wallet. It is a contract
         rather than a key you hold, computed with <C>CREATE2</C> from a deposit
         wallet factory and the trading wallet&rsquo;s address, so it is always the
@@ -113,7 +110,7 @@ export default function Wallets() {
       </P>
       <P>
         It also explains a message you may see if a trade stops partway: funds
-        described as sitting &ldquo;in the Polymarket proxy&rdquo; are yours and
+        described as sitting &ldquo;in the trading proxy&rdquo; are yours and
         are recoverable, they are simply one hop short of where they were headed.
       </P>
 
@@ -121,7 +118,7 @@ export default function Wallets() {
         The app refuses to open a session if the derived proxy comes back equal to
         the signer address, because that would mean trading directly from the
         signer rather than through the proxy. That check is why you occasionally
-        see &ldquo;Could not open the Polymarket proxy wallet&rdquo; instead of a
+        see &ldquo;Could not open the trading proxy wallet&rdquo; instead of a
         stranger failure later on.
       </Note>
 
@@ -132,7 +129,7 @@ export default function Wallets() {
       <Ul>
         <Li>
           On <strong className="text-white">Polygon</strong>, orders and approvals
-          go through Polymarket&rsquo;s gasless relayer. Your trading wallet signs
+          go through the venue&rsquo;s gasless relayer. Your trading wallet signs
           and the relayer pays, so you never need to hold <C>POL</C>.
         </Li>
         <Li>
@@ -146,7 +143,7 @@ export default function Wallets() {
       <H2>Trading credentials</H2>
       <P>
         Before it can place orders, the app has to prove control of the trading
-        wallet to Polymarket&rsquo;s order book. It does this by signing a typed
+        wallet to the venue&rsquo;s order book. It does this by signing a typed
         message and exchanging it for API credentials:
       </P>
       <Code title="The credential handshake, in order">{`1. Sign an EIP-712 "ClobAuth" message with the trading wallet

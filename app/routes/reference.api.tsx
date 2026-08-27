@@ -1,14 +1,11 @@
 import { A, C, Code, H2, H3, Note, P, PageTitle, Table, Td, Tr } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "HTTP API · Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "Every server route in the Hedge app, its inputs, its auth requirement, and what it returns.",
-    },
-  ];
+  return docMeta({
+    title: "HTTP API",
+    description: "Every server route in the Hedge app, its inputs, its auth requirement, and what it returns.",
+  });
 }
 
 function Auth({ level }: { level: "none" | "session" | "user" }) {
@@ -80,7 +77,7 @@ export default function Api() {
 
       <H3>GET /api/events</H3>
       <P>
-        <Auth level="none" /> Market listings from Polymarket Gamma.
+        <Auth level="none" /> Market listings from the venue’s market data API.
       </P>
       <Code>{`Query
   tag      string   defaults to "all"
@@ -148,7 +145,7 @@ Returns  { pusd: number, raw: string }
       <H3>GET /api/pm/portfolio</H3>
       <P>
         <Auth level="none" /> Open positions and portfolio value from
-        Polymarket&rsquo;s data API.
+        the venue&rsquo;s data API.
       </P>
       <Code>{`Query
   addresses   comma-separated wallet addresses, up to 6
@@ -157,7 +154,7 @@ Returns  open positions, closed positions, activity, and total value`}</Code>
 
       <H3>GET /api/pm/account</H3>
       <P>
-        <Auth level="none" /> Polymarket account information for one or more
+        <Auth level="none" /> Venue account information for one or more
         addresses.
       </P>
       <Code>{`Query

@@ -1,13 +1,11 @@
 import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Table, Td, Tr, Ul } from "../components/prose";
+import { docMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Troubleshooting · Hedge Docs" },
-    {
-      name: "description",
-      content: "Common failures, what they actually mean, and how to recover.",
-    },
-  ];
+  return docMeta({
+    title: "Troubleshooting",
+    description: "Common failures, what they actually mean, and how to recover.",
+  });
 }
 
 export default function Troubleshooting() {
@@ -71,7 +69,7 @@ export default function Troubleshooting() {
         </Li>
         <Li>
           Confirm it went to the cash wallet address shown under <C>Deposit</C>,
-          not the trading wallet or the Polymarket proxy.
+          not the trading wallet or the proxy.
         </Li>
         <Li>
           Confirm the token was <C>USDG</C>. Other stablecoins are not counted as
@@ -82,16 +80,20 @@ export default function Troubleshooting() {
 
       <H3>My money is showing as pUSD instead of cash</H3>
       <P>
-        A flow stopped after converting. The <C>pUSD</C> is in your Polymarket
+        A flow stopped after converting. The <C>pUSD</C> is in your trading
         proxy. Retry the buy to spend it, or use <C>Cash out</C> to convert it back
         to <C>USDG</C>. Cashing out needs at least $1 in the proxy.
       </P>
 
       <H2>Trading</H2>
 
-      <Table head={["Message", "What it means", "What to do"]}>
+      <P>
+        Messages are paraphrased here rather than quoted exactly, since the
+        wording changes from time to time. Match on the gist.
+      </P>
+      <Table head={["What you see", "What it means", "What to do"]}>
         <Tr>
-          <Td>pUSD is still in the Polymarket proxy</Td>
+          <Td>pUSD is still in the trading proxy</Td>
           <Td>Conversion succeeded, the next hop did not</Td>
           <Td>
             Retry the buy, or <C>Cash out</C>
@@ -108,17 +110,17 @@ export default function Troubleshooting() {
           <Td>Top it up so the total clears $1</Td>
         </Tr>
         <Tr>
-          <Td>Polymarket trading is down for maintenance</Td>
+          <Td>Trading is down for maintenance</Td>
           <Td>The venue is not accepting orders</Td>
           <Td>Wait and retry</Td>
         </Tr>
         <Tr>
-          <Td>Could not open the Polymarket proxy wallet</Td>
+          <Td>Could not open the trading proxy wallet</Td>
           <Td>Session setup failed, or the derived proxy looked wrong</Td>
           <Td>Reload and retry; the session rebuilds</Td>
         </Tr>
         <Tr>
-          <Td>Could not connect this wallet to Polymarket</Td>
+          <Td>Could not connect this wallet to the venue</Td>
           <Td>Credential derivation failed</Td>
           <Td>Retry; cached credentials are cleared and re-derived</Td>
         </Tr>
@@ -136,7 +138,7 @@ export default function Troubleshooting() {
 
       <H3>A request timed out against the relayer</H3>
       <P>
-        Moving <C>pUSD</C> out of the proxy goes through Polymarket&rsquo;s gasless
+        Moving <C>pUSD</C> out of the proxy goes through the venue&rsquo;s gasless
         relayer, which estimates gas, signs, and broadcasts. That can take longer
         than the SDK waits, and the SDK does not retry this class of request.
       </P>

@@ -8,6 +8,7 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import { docMeta } from "./lib/seo";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -22,14 +23,12 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function meta() {
-  return [
-    { title: "Hedge Docs" },
-    {
-      name: "description",
-      content:
-        "Documentation for Hedge: accounts, funding, trading, and the architecture behind them.",
-    },
-  ];
+  return docMeta({
+    title: "Hedge Docs",
+    description:
+      "Documentation for Hedge: accounts, funding, trading, and the architecture behind them.",
+    bare: true,
+  });
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
