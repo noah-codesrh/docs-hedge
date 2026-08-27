@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: Onest;
+  src: url("/assets/Font/Onest/Onest-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Same tokens as the app, so a reader moving between the two does not feel a
+   seam. Keep these in sync with frontend/app/app.css. */
+@theme {
+  --font-sans: "Onest", ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: #141414;
+  --color-card: #252525;
+  --color-card-2: #1c1c1c;
+  --color-line: #333333;
+  --color-gold: #f1d65a;
+  --color-gold-soft: #f7e08a;
+  --color-muted: #8a8a8a;
+  --color-up: #34d399;
+  --color-down: #f26d5b;
+}
+
+html,
+body {
+  @apply bg-bg text-white font-sans;
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Anchored headings otherwise land underneath the sticky header. */
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes hedge-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fade-in {
+  animation: hedge-fade-in 0.2s ease-out both;
+}
+
+/* Only shows on keyboard focus, which is the one time a reader needs to see
+   where the anchor link on a heading actually is. */
+.heading-anchor {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+h2:hover > .heading-anchor,
+h3:hover > .heading-anchor,
+.heading-anchor:focus-visible {
+  opacity: 1;
+}
