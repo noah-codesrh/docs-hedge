@@ -26,23 +26,15 @@ export default function Introduction() {
       <PageTitle
         eyebrow="Getting started"
         title="Welcome to Hedge"
-        intro="Hedge brings high-leverage perpetual trading to prediction markets. Trade major news, elections, and global events in USDG on Robinhood Chain. Prediction markets capped you at 1x — Hedge is the leverage layer for event betting."
+        intro="Trade Yes/No event markets in USDG on Robinhood Chain. Spot is 1x on the venue book. Listed markets also offer 2x and 3x against the vault."
       />
 
       <P>
-        There are two products described in these docs, and it is worth knowing
-        which is which before you read further.{" "}
-        <strong className="text-white">Spot trading is live:</strong> deposit
-        dollar-denominated funds, buy the side of a question you think is right,
-        and sell when you want out.{" "}
-        <strong className="text-white">Leverage is built but not open yet</strong>{" "}
-        — the contracts are deployed and unaudited, and the feature is switched
-        off in the build.
-      </P>
-      <P>
-        The reasoning behind the whole thing is on{" "}
-        <A to="/why">Why Hedge</A>. If you just want to place a trade, skip to{" "}
-        <A to="/quick-start">Quick start</A>.
+        <strong className="text-white">Spot</strong> buys real shares.{" "}
+        <strong className="text-white">Leverage</strong> is synthetic margin
+        vs LPs, on listed markets only.{" "}
+        <A to="/getting-started">Get started</A>, or read{" "}
+        <A to="/why">Why Hedge</A>.
       </P>
 
       <H2>What you actually trade</H2>
@@ -61,19 +53,15 @@ export default function Introduction() {
         question is ever settled.
       </P>
       <P>
-        Leverage changes what that exposure costs you rather than what it is. A
-        leveraged position is synthetic — priced against the same outcome, but you
-        do not hold the shares, and a small deposit controls a larger position.
+        2x/3x uses the same price. You do not hold the shares. Margin controls
+        a larger size; the vault takes the other side.
       </P>
 
       <H2>One balance, one chain</H2>
       <P>
-        Your funds are held as <C>USDG</C> on Robinhood Chain and stay
-        denominated that way throughout. Spot trades convert into the token the
-        underlying markets settle in and back again, which is the single most
-        important thing to understand about how the app behaves; it has{" "}
-        <A to="/concepts/tokens">a page of its own</A>. Leveraged positions never
-        leave the chain at all.
+        Cash is <C>USDG</C> on Robinhood Chain. Spot converts to the venue
+        token and back. See <A to="/concepts/tokens">Money and tokens</A>.
+        Levered margin never leaves this chain.
       </P>
 
       <Note>
@@ -83,30 +71,31 @@ export default function Introduction() {
 
       <H2>Where to start</H2>
       <Cards>
-        <Card to="/quick-start" title="Quick start">
-          Sign in, add funds, and place a first trade. Read this and stop if you
-          are only here to use the app.
+        <Card
+          to="/getting-started"
+          title="How to get started with predicting on Hedge"
+        >
+          Sign in, fund the wallet, pick a market, and place a first trade.
+          Read this and stop if you are only here to use the app.
         </Card>
         <Card to="/why" title="Why Hedge">
-          The gap this is built to fill, and an honest table of what is live
-          versus what is intended.
+          Traders, LPs, and makers, and what is live.
         </Card>
         <Card to="/leverage/overview" title="Leverage markets">
-          Margin, position size, carry, and liquidation — plus the vault that
-          backs it all.
+          Margin, fees, liquidation, and how 2x/3x differs from spot.
+        </Card>
+        <Card to="/leverage/earn" title="Earning as an LP">
+          Deposit USDG. Back levered tickets. Earn fees and losses.
         </Card>
         <Card to="/leverage/mathematics" title="The mathematics">
-          Every formula behind sizing, carry, liquidation, and the vault&rsquo;s
-          share accounting.
+          Sizing, carry, liquidation, and vault share accounting.
         </Card>
       </Cards>
 
       <H2>How to read these docs</H2>
       <P>
-        The sections are ordered so you can stop whenever you have what you need.
-        Guides are task-shaped and safe to follow blind. Concepts explain the
-        vocabulary behind them. The Leverage section is deeper and assumes you
-        have read the concepts first.
+        Guides first if you just want to trade. Concepts for the vocabulary.
+        Leverage for traders, LPs, and future makers.
       </P>
 
       <div className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2">

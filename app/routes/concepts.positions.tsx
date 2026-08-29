@@ -20,19 +20,19 @@ export default function Positions() {
       <H2>What a position is made of</H2>
       <Ul>
         <Li>
-          <strong className="text-white">Shares</strong> — how many units of the
+          <strong className="text-white">Shares.</strong> How many units of the
           outcome you hold.
         </Li>
         <Li>
-          <strong className="text-white">Entry price</strong> — the average price
+          <strong className="text-white">Entry price.</strong> The average price
           you paid per share.
         </Li>
         <Li>
-          <strong className="text-white">Cost basis</strong> — shares multiplied
+          <strong className="text-white">Cost basis.</strong> Shares multiplied
           by entry price. What you put in.
         </Li>
         <Li>
-          <strong className="text-white">Current value</strong> — what the shares
+          <strong className="text-white">Current value.</strong> What the shares
           are worth at the market&rsquo;s present price.
         </Li>
       </Ul>

@@ -24,9 +24,14 @@ export const NAV: NavSection[] = [
         summary: "What Hedge is and how the pieces fit together.",
       },
       {
+        title: "How to get started with predicting on Hedge",
+        to: "/getting-started",
+        summary: "Sign in, fund the wallet, and place a first prediction.",
+      },
+      {
         title: "Why Hedge",
         to: "/why",
-        summary: "The gap between a dollar onchain and a market worth trading.",
+        summary: "Traders, LPs, makers, and what is live.",
       },
       {
         title: "Quick start",
@@ -91,17 +96,17 @@ export const NAV: NavSection[] = [
       {
         title: "Leverage markets",
         to: "/leverage/overview",
-        summary: "Margin, position size, and the limits that apply.",
+        summary: "2x/3x: margin, fees, liquidation, vault as counterparty.",
       },
       {
         title: "Earning as an LP",
         to: "/leverage/earn",
-        summary: "The vault, its two tranches, and where the yield comes from.",
+        summary: "Deposit USDG. Back tickets. Earn fees and trader losses.",
       },
       {
         title: "Market makers",
         to: "/leverage/market-makers",
-        summary: "What exists today and what is still only intended.",
+        summary: "Vault fills leverage today. No maker programme yet.",
       },
       {
         title: "The mathematics",

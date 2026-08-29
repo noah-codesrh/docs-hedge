@@ -319,7 +319,7 @@ function PageFooter() {
 
 /**
  * Used as a layout route in `routes.ts`, which resolves the module's default
- * export — a named-only export renders the child page with no chrome at all.
+ * export. A named-only export renders the child page with no chrome at all.
  */
 export default function DocsLayout() {
   const [navOpen, setNavOpen] = useState(false);

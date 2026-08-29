@@ -50,6 +50,14 @@ export default function PlacingATrade() {
         </Step>
       </Steps>
 
+      <H2>2x and 3x</H2>
+      <P>
+        On listed markets the panel offers a multiple. 1x is the spot path
+        above. 2x/3x stays on Robinhood Chain: margin vs the vault, no share
+        conversion. You get a success modal and a P&amp;L card when it lands.
+        Rules and fees: <A to="/leverage/overview">Leverage markets</A>.
+      </P>
+
       <H2>What is happening while you wait</H2>
       <P>
         The overlay is a progress ring rather than a labelled checklist, so it

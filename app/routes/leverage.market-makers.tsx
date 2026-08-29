@@ -1,7 +1,6 @@
 import {
   A,
   H2,
-  H3,
   Li,
   Note,
   P,
@@ -17,7 +16,7 @@ export function meta() {
   return docMeta({
     title: "Market makers",
     description:
-      "Where liquidity comes from today, and what a market maker programme would require that does not yet exist.",
+      "Where Hedge liquidity comes from today, and what a market maker programme would need.",
   });
 }
 
@@ -27,163 +26,72 @@ export default function MarketMakers() {
       <PageTitle
         eyebrow="Leverage"
         title="Market makers"
-        intro="This page is here to be clear about a gap. Hedge has no market maker programme, no market maker interface, and no incentive scheme — none of it exists in the code. What follows is where liquidity actually comes from today, and what would have to be built for designated market making to mean anything."
+        intro="There is no Hedge order book and no maker programme. Spot takes the venue book. Leverage is filled entirely by the vault."
       />
 
-      <Note kind="warning" title="Nothing here is implemented">
-        There is no contract, route, configuration, or interface for market makers
-        anywhere in the repository. If you are reading this looking for how to
-        register as one, the answer is that you cannot, because the concept does
-        not exist yet.
+      <Note kind="warning" title="Nothing to register for">
+        No contract, route, or rebate exists for designated makers. You cannot
+        quote into the leverage engine today.
       </Note>
 
-      <H2>Where liquidity comes from today</H2>
-      <P>
-        Two different mechanisms, depending on which product you are using, and
-        neither involves a market maker relationship with Hedge.
-      </P>
-      <Table head={["Product", "Liquidity source", "Hedge's role"]}>
+      <H2>Liquidity today</H2>
+      <Table head={["Product", "Who fills you", "Hedge"]}>
         <Tr>
-          <Td>Spot trading</Td>
-          <Td>
-            The market venue&rsquo;s own central limit order book, populated by
-            whoever is quoting there
-          </Td>
-          <Td>
-            None. Hedge routes an order to the venue and takes whatever is resting
-            on the book.
-          </Td>
+          <Td>Spot (1x)</Td>
+          <Td>The venue CLOB</Td>
+          <Td>Taker only. Fill-or-kill market orders.</Td>
         </Tr>
         <Tr>
-          <Td>Leverage</Td>
-          <Td>The vault, as sole counterparty</Td>
-          <Td>
-            Hedge sets the price from a relayed feed and the vault takes the other
-            side of every position.
-          </Td>
+          <Td>Leverage (2x / 3x)</Td>
+          <Td>The vault</Td>
+          <Td>Prices from the oracle plus a fixed 1% spread.</Td>
         </Tr>
       </Table>
-
-      <H3>Spot: Hedge is a taker, not a venue</H3>
       <P>
-        For spot trades Hedge places fill-or-kill market orders against the
-        venue&rsquo;s book. The depth you trade against belongs to that venue, and
-        the spread you pay is theirs. Hedge does not quote, does not hold
-        inventory, and has no ability to offer anyone a rebate for quoting —
-        there is no book of its own to quote into.
-      </P>
-      <P>
-        The one thing Hedge does do is read that book honestly. Before you commit,
-        the panel walks the resting orders to simulate what your size would
-        actually fill at, rather than quoting the top of book and letting you
-        discover the difference afterwards.{" "}
-        <A to="/concepts/markets">Markets and prices</A> covers this.
+        Spot depth and spread are the venue&rsquo;s. Hedge walks the book
+        before you confirm so the quoted fill is real. See{" "}
+        <A to="/concepts/markets">Markets and prices</A>.
       </P>
 
-      <H3>Leverage: the vault is the only counterparty</H3>
-      <P>
-        A leveraged position has no counterparty trader. The vault takes the entire
-        other side, at a price derived from the relayed feed plus a fixed spread.
-        There is no order book, so there is nothing for a third party to make a
-        market in.
-      </P>
-      <P>
-        This is a deliberate simplification and it has a real consequence: pricing
-        quality depends entirely on the feed and on the fixed spread, not on
-        competition between quoters. A tighter spread cannot be achieved by
-        attracting better market makers, because there are none to attract.
-      </P>
-
-      <H2>The intended role</H2>
-      <P>
-        The reason a maker belongs here at all is the relationship between two
-        prices for the same outcome: the 1x spot share on the underlying venue,
-        and the leveraged synthetic perpetual on Hedge. A maker could run
-        delta-neutral across the two and capture the difference, which requires
-        fast finality since both legs have to be held in line.
-      </P>
-      <P>
-        That is a coherent role and it is the one described in{" "}
-        <A to="/why">Why Hedge</A>. It is also entirely unbuilt — there is no way
-        to quote into the leverage engine, so there is currently no second price
-        for anyone to arbitrage toward.
-      </P>
-
-      <H2>What a market maker programme would require</H2>
-      <P>
-        Set out plainly, because the distance is larger than it might appear. None
-        of this exists.
-      </P>
+      <H2>The vault is not an AMM</H2>
       <Ul>
+        <Li>It does not quote two-sided or move price with inventory.</Li>
+        <Li>No bonding curve. Size is capped, not repriced.</Li>
         <Li>
-          <strong className="text-white">An order book of Hedge&rsquo;s
-          own,</strong> or a quoting interface into the leverage engine. Today the
-          engine prices from a feed and a constant; there is no mechanism for a
-          third party to offer a better price.
-        </Li>
-        <Li>
-          <strong className="text-white">Identity and permissioning</strong> for
-          designated participants, with the obligations that make the designation
-          mean something — quote presence, maximum spread, minimum size.
-        </Li>
-        <Li>
-          <strong className="text-white">Measurement.</strong> Uptime, spread, and
-          depth would have to be recorded on-chain or attested, since an incentive
-          paid against unmeasured obligations is just a transfer.
-        </Li>
-        <Li>
-          <strong className="text-white">An incentive source.</strong> Fees
-          currently route entirely to the vault&rsquo;s two tranches. Paying market
-          makers means diverting part of that, which changes the return LPs are
-          being offered.
-        </Li>
-        <Li>
-          <strong className="text-white">Inventory risk management,</strong> since a
-          maker quoting both sides of a binary outcome needs a way to hedge, and
-          the only venue for that is the external book Hedge is already taking
-          from.
-        </Li>
-      </Ul>
-
-      <H2>Why the vault is not a market maker</H2>
-      <P>
-        It is worth being precise about this, because the vault superficially
-        resembles an automated market maker and is not one.
-      </P>
-      <Ul>
-        <Li>
-          It does not quote a two-sided price and does not adjust its price based
-          on its own inventory or flow. The price comes from an external feed.
-        </Li>
-        <Li>
-          It has no pricing curve. There is no bonding function; size is limited by
-          hard caps rather than by a price that worsens as you take more.
-        </Li>
-        <Li>
-          It cannot decline a trade on pricing grounds. Within the configured
-          limits it takes the other side at the feed price plus the fixed spread,
-          whether or not that price is good for it.
+          Inside the limits it must take the other side at feed + spread,
+          even when that is a bad print for LPs.
         </Li>
       </Ul>
       <P>
-        The protections against that are structural rather than economic: the
-        tradeable price band, the position and exposure caps, the staleness window,
-        and the rule that blocks opening while the on-chain price is catching up to
-        a gap. Those are described in{" "}
+        Protection is structural: the $0.35 to $0.65 band, position and 30%
+        exposure caps, a 5-minute stale cutoff, and no new opens while the
+        on-chain price is catching up a gap. Details in{" "}
         <A to="/leverage/overview">Leverage markets</A>.
       </P>
 
-      <H2>If you are evaluating this</H2>
+      <H2>The role that is not built yet</H2>
       <P>
-        The honest summary is that Hedge currently has one source of leverage
-        liquidity — its own vault — and depends on an external venue for spot
-        depth. That concentrates two risks worth naming: the vault is exposed to
-        informed flow it cannot re-price against, and spot execution quality is
-        entirely outside Hedge&rsquo;s control.
+        A maker could sit between the venue 1x share and the Hedge synthetic
+        and keep the two in line. That needs a way to quote the engine. There
+        is none, so there is no second price to arb.
       </P>
+      <P>To make that real, all of this would have to exist:</P>
+      <Ul>
+        <Li>A Hedge book, or a quoting API into the engine.</Li>
+        <Li>Who is allowed to quote, and rules (presence, spread, size).</Li>
+        <Li>Measured uptime, spread, and depth. Without that, the rebate is just a transfer.</Li>
+        <Li>
+          A cut of fees. Those fees currently go 70/30 to senior/junior LPs.
+        </Li>
+        <Li>A hedge venue. Today that is the same external book Hedge already takes.</Li>
+      </Ul>
+
+      <H2>If you are sizing this up</H2>
       <P>
-        A market maker programme is the usual answer to the first. It is not
-        started.
+        Leverage liquidity is one pool that cannot re-price against informed
+        flow. Spot quality is outside Hedge. A maker programme is the usual
+        answer to the first. It is not started. LPs who want the current
+        setup: <A to="/leverage/earn">Earning as an LP</A>.
       </P>
     </>
   );

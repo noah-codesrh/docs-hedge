@@ -22,7 +22,7 @@ export default function Wallets() {
         Authentication runs through Privy, and there are five ways in: an email
         one-time code, Google, X, Discord, or connecting an external wallet.
         Whichever you use, Privy provisions an <em>embedded</em> wallet for you on
-        login — keys it manages on your behalf, so there is nothing to back up.
+        login. It manages the keys on your behalf, so there is nothing to back up.
       </P>
       <P>
         Supported external wallets include MetaMask, Coinbase Wallet, Rainbow,

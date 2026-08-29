@@ -111,7 +111,7 @@ export default function Markets() {
       </P>
       <P>
         Prices you see are therefore a moment old rather than a live stream, and
-        the order book is re-read when it matters — notably when sizing an order,
+        the order book is re-read when it matters, notably when sizing an order,
         so the estimate reflects real depth rather than a cached top of book.
       </P>
 

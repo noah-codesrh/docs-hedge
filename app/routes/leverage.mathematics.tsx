@@ -29,7 +29,7 @@ export default function Mathematics() {
       <PageTitle
         eyebrow="Leverage"
         title="The mathematics"
-        intro="Every expression on this page is the one the contracts evaluate, transcribed rather than derived. Where integer arithmetic changes the answer, that is noted, because it does — several of these quantities round in the protocol's favour by construction."
+        intro="The formulas the contracts run. Integer math truncates. The chain is the source of truth; the trade panel estimate can differ by a unit."
       />
 
       <H2>Units and notation</H2>
@@ -204,7 +204,7 @@ exit fee     = (closedSize × closeFeeBps) / BPS`}</Code>
       <P>
         Because both size and margin shrink by the same fraction, the remainder
         accrues carry from the original timestamp on a smaller base, and the two
-        pieces sum to what the whole position would have owed — nothing is double
+        pieces sum to what the whole position would have owed. Nothing is double
         charged and nothing is forgiven. Entry price and liquidation price are
         unchanged, so the remainder is the same trade in miniature.
       </P>
@@ -217,7 +217,7 @@ exit fee     = (closedSize × closeFeeBps) / BPS`}</Code>
       <P>
         What the trader receives is computed by working down from the net margin
         being closed. The order is fixed, and each deduction is capped by what is
-        still left — which is how a wiped-out position settles without ever going
+        still left, which is how a wiped-out position settles without ever going
         negative:
       </P>
       <Code>{`remaining = closedNet
@@ -240,7 +240,7 @@ payout    = remaining`}</Code>
         </Li>
         <Li>
           Each of the three deductions is capped at what remains. A position whose
-          loss consumed the whole margin therefore pays no carry and no exit fee —
+          loss consumed the whole margin therefore pays no carry and no exit fee,
           not because they are waived, but because there is nothing to take.
         </Li>
         <Li>
@@ -258,7 +258,7 @@ payout    = remaining`}</Code>
 emergency close  refund   = netMargin      (trader receives all of it)`}</Code>
       <P>
         The symmetry is the point. Both bypass the profit and loss calculation
-        entirely — one because the margin is spent, the other because no trustworthy
+        entirely. One because the margin is spent, the other because no trustworthy
         price exists to settle against. In both cases the entry fee stays with the
         vault, having been collected at open, and no exit fee is charged.
       </P>
@@ -338,7 +338,7 @@ emergency close  refund   = netMargin      (trader receives all of it)`}</Code>
       </P>
       <P>
         Note also that the vault reserves $4.90 against a position the trader
-        entered with $2.50 — nearly twice the borrowed amount. That is the cost of
+        entered with $2.50, nearly twice the borrowed amount. That is the cost of
         reserving the true worst case, and it is why a $100 vault at the 30%
         exposure cap backs about six concurrent $5 positions rather than twelve.
       </P>
@@ -354,13 +354,13 @@ byLiquidity = used + freeAssets
 ceiling   = min(byExposure, byLiquidity)
 available = ceiling > used ? ceiling − used : 0`}</Code>
       <P>
-        The exposure ceiling is the risk limit — a deliberate cap on how much of
+        The exposure ceiling is the risk limit, a deliberate cap on how much of
         the vault may be committed. The liquidity ceiling is physical: capital that
         is not there cannot be reserved regardless of what the risk limit permits.
       </P>
       <P>
         A position is rejected if its reservation exceeds what remains available,
-        and the check runs before any transfer — so hitting a full pool costs the
+        and the check runs before any transfer, so hitting a full pool costs the
         trader nothing but gas and returns a distinguishable error rather than a
         generic failure.
       </P>
@@ -387,7 +387,7 @@ default schedule
       <Note kind="warning" title="A silent interaction">
         The maximum position size bounds the whole position, so it caps leverage
         too. With a $5 maximum margin and a $10 maximum size, nobody posting the
-        full margin can exceed 2x — the upper tiers stay advertised while every
+        full margin can exceed 2x. The upper tiers stay advertised while every
         attempt to use them reverts. Keeping maximum size at or above{" "}
         <C>maxMargin × maxLeverage</C> avoids this; the $25 default does.
       </Note>
@@ -447,7 +447,7 @@ reverts if fromSenior > seniorAssets`}</Code>
         </Tr>
         <Tr>
           <Td>Converging</Td>
-          <Td>—</Td>
+          <Td>n/a</Td>
           <Td>
             True while the stored price differs from the reported target. Opening
             reverts; closing and liquidation stay available.
@@ -471,7 +471,7 @@ reverts if fromSenior > seniorAssets`}</Code>
           exposure than the exact quotient.
         </Li>
         <Li>
-          Fees truncate down, which favours the trader by at most one unit — and is
+          Fees truncate down, which favours the trader by at most one unit, and is
           precisely why a minimum margin exists, since below roughly $0.67 a 1.5%
           fee truncates to zero.
         </Li>
@@ -485,49 +485,17 @@ reverts if fromSenior > seniorAssets`}</Code>
         </Li>
       </Ul>
 
-      <H2>Two implementations, one of which is authoritative</H2>
+      <H2>Panel vs chain</H2>
       <P>
-        Several of these formulas exist twice: once in the contract, and once in
-        the browser so the panel can show sizing before you commit. The browser
-        copy is an <em>estimate</em> and is labelled as such in the source. The
-        contract also exposes a quote function, and a figure read from that is the
-        real one.
+        The browser quotes in floating point. The contract uses integer
+        division. If they disagree, the contract is right. Read{" "}
+        <C>quoteOpen</C> on-chain for the number you will be held to. Markets
+        are keyed by the hash of the slug. No venue ids on-chain.
       </P>
       <P>
-        The distinction matters for anything that has to agree with a settlement.
-        The two use different arithmetic — the contract is integer-only and
-        truncates, the browser uses floating point and clamps at slightly different
-        boundaries — so they can disagree in the final unit. When they do, the
-        contract is right.
-      </P>
-      <Note>
-        A market is identified on-chain by the hash of its slug, so the contracts
-        never store the venue&rsquo;s identifiers or any market text.
-      </Note>
-
-      <H2>Where these numbers live</H2>
-      <P>
-        The contracts are a self-contained Foundry project inside the frontend
-        repository, not imported by the web application and not part of its build.
-        The engine, the vault, and the price oracle are separate contracts, covered
-        by a single test suite of roughly sixty tests, plus a scripted local
-        end-to-end run that deploys the stack, opens a position, and walks the
-        price down until it liquidates.
-      </P>
-      <P>
-        The tests assert the worked example above directly, along with the fee
-        split, the rule that the junior tranche absorbs trader profit first, the
-        capacity error being distinguishable, carry accrual pulling the liquidation
-        price in, and the leverage tiers responding to vault size.
-      </P>
-      <P>
-        Defaults quoted here are the deployed-time values. Every one has an admin
-        setter, so treat them as the current configuration rather than as fixed
-        properties — see{" "}
-        <A to="/leverage/overview">Leverage markets</A> for which are adjustable
-        and{" "}
-        <A to="/leverage/earn">Earning as an LP</A> for what the vault side means
-        in practice.
+        Defaults above are deploy-time and admin-settable.{" "}
+        <A to="/leverage/overview">Leverage markets</A> for traders,{" "}
+        <A to="/leverage/earn">Earning as an LP</A> for the vault.
       </P>
     </>
   );
