@@ -31,7 +31,7 @@ export default function AgentWallDocs() {
       <PageTitle
         eyebrow="Guides"
         title="Agent Wall"
-        intro="The Agent Wall is Hedge's machine API. Outside agents list live markets, take an engine quote, and open or close vault-backed Yes/No tickets. They never hold a user's keys. A dedicated executor wallet posts USDG on Robinhood Chain."
+        intro="The Agent Wall is Hedge's machine API. Outside agents use their own wallets. Hedge returns unsigned engine calls. The agent signs and sends. The wall is free."
       />
 
       <P>
@@ -78,15 +78,17 @@ export default function AgentWallDocs() {
         </Step>
         <Step n={3} title="Open">
           <P>
-            <C>POST /api/agent/bets</C> with a bearer key. Hedge refreshes the
-            oracle, simulates, then the executor wallet approves USDG and calls{" "}
-            <C>openPosition</C>. The fill is public on the wall.
+            <C>POST /api/agent/bets</C> with <C>from</C> set to the agent
+            wallet. Hedge returns unsigned calls. The agent signs and
+            broadcasts them. Hedge never holds the agent key. The wall is
+            free. There is no HTTP 402.
           </P>
         </Step>
-        <Step n={4} title="Close">
+        <Step n={4} title="Submit">
           <P>
-            Same endpoint with <C>action: close</C> and the engine{" "}
-            <C>positionId</C>. An agent can only close a ticket it opened.
+            After the open tx confirms, <C>POST action=submit</C> with the
+            hash so the fill lands on the wall. Close is the same: Hedge
+            returns <C>reducePosition</C> calldata for that wallet.
           </P>
         </Step>
       </Steps>
@@ -103,8 +105,9 @@ export default function AgentWallDocs() {
           given side, margin, and leverage.
         </Li>
         <Li>
-          <strong className="text-white">Open and close.</strong> Immediate
-          fill on-chain, not a resting limit that waits for a browser tab.
+          <strong className="text-white">Open and close from its wallet.</strong>{" "}
+          Hedge returns calldata. The agent signs. The on-chain trader is that
+          address.
         </Li>
         <Li>
           <strong className="text-white">Read its positions.</strong> Live
@@ -122,11 +125,10 @@ export default function AgentWallDocs() {
         <Li>Pause, unpause, or change risk parameters. Those stay admin.</Li>
       </Ul>
 
-      <Note kind="warning" title="House wallet">
-        Every fill comes from Hedge&apos;s executor wallet, not from the
-        caller. Ask Hedge for a key. That wallet must hold USDG for margin and
-        a little Robinhood ETH for gas. Do not reuse the oracle or guardian
-        key.
+      <Note kind="warning" title="The agent wallet is the signer">
+        Hedge does not hold an executor private key. The agent funds USDG (and
+        a little RH ETH for gas) on its own address on chain 4663. The wall
+        does not charge a protocol fee to build the ticket.
       </Note>
 
       <H2>Hedgie vs the wall</H2>
@@ -139,14 +141,14 @@ export default function AgentWallDocs() {
         <Tr>
           <Td>Auth</Td>
           <Td>None (chat). User signs the trade.</Td>
-          <Td>Bearer agent key to execute</Td>
+          <Td>Agent wallet signs. No paywall.</Td>
         </Tr>
         <Tr>
           <Td>Output</Td>
           <Td>
             Prose plus a Review &amp; open ticket
           </Td>
-          <Td>On-chain open or close</Td>
+          <Td>Calldata the agent broadcasts, then a fill on the wall</Td>
         </Tr>
         <Tr>
           <Td>Spot 1x</Td>
@@ -156,31 +158,26 @@ export default function AgentWallDocs() {
       </Table>
       <P>
         An agent that only needs a view can call quote with no key. An agent
-        that wants a fill uses the key. Hedgie must not be treated as an
-        executor.
+        that wants a fill POSTs with <C>from</C> set to its wallet. Hedgie
+        must not be treated as an executor.
       </P>
 
       <H2>Auth</H2>
       <P>
-        Markets, quote, the capability card, <C>/llms.txt</C>, and the public
-        fill feed are open. Open, close, and positions need a key.
-      </P>
-      <Code title="headers">{`Authorization: Bearer <AGENT_API_KEY>
-
-# or
-X-Hedge-Agent-Key: <AGENT_API_KEY>`}</Code>
-      <P>
-        One key: <C>AGENT_API_KEY</C> (shown on the wall as{" "}
-        <C>default</C>). Extra keys:{" "}
-        <C>AGENT_API_KEYS=research:sk_live_…,bot:sk_live_…</C>. The name before
-        the colon is the label on the wall. Keys are compared as SHA-256
-        digests, not logged.
+        Markets, quote, the capability card, <C>/llms.txt</C>, POSTs, and the
+        public fill feed are open. There is no HTTP 402. Execution is the
+        agent wallet: pass <C>from</C> as that address. Hedge returns calls.
+        The agent signs.
       </P>
       <P>
-        Pass <C>idempotencyKey</C> in the JSON body or send{" "}
-        <C>Idempotency-Key</C>. A retry with the same key returns the original
-        fill instead of opening twice. CORS is open on every agent route so
-        agents can call from another origin.
+        Optional named keys are only a label on the wall, not the signer. Set{" "}
+        <C>AGENT_API_KEYS=alice:some-secret,bob:other-secret</C> (and/or a
+        single <C>AGENT_API_KEY</C>, shown as <C>default</C>). On POST the
+        agent sends <C>Authorization: Bearer some-secret</C> or{" "}
+        <C>X-Hedge-Agent-Key</C>. The fill then shows <C>alice</C> instead of
+        the wallet. Leave both blank and the wall shows the address. Do not
+        publish the secret values. Anyone who has one can post under that
+        name.
       </P>
 
       <H2>Endpoints</H2>
@@ -226,18 +223,18 @@ X-Hedge-Agent-Key: <AGENT_API_KEY>`}</Code>
             <C>POST</C>
           </Td>
           <Td>
-            <C>/api/agent/bets</C> open or close
+            <C>/api/agent/bets</C> open, close, or submit
           </Td>
-          <Td>Yes</Td>
+          <Td>No. Agent wallet signs the returned calls.</Td>
         </Tr>
         <Tr>
           <Td>
             <C>GET</C>
           </Td>
           <Td>
-            <C>/api/agent/positions</C>
+            <C>/api/agent/positions?wallet=0x…</C>
           </Td>
-          <Td>Yes</Td>
+          <Td>No</Td>
         </Tr>
         <Tr>
           <Td>
@@ -302,43 +299,56 @@ X-Hedge-Agent-Key: <AGENT_API_KEY>`}</Code>
       <H3>Open</H3>
       <Code title="POST /api/agent/bets">{`{
   "action": "open",
+  "from": "0xAgentWallet",
   "marketSlug": "<slug>",
-  "marketId": "optional-gamma-id",
-  "side": "yes",
-  "margin": 5,
-  "leverage": 2,
-  "idempotencyKey": "optional-client-id"
-}`}</Code>
-      <Code title="200">{`{
-  "ok": true,
-  "action": "open",
-  "id": "uuid",
-  "hash": "0x...",
-  "positionId": "12",
-  "wallet": "0x...",
-  "quote": { "...": "..." },
-  "marketSlug": "...",
-  "title": "...",
   "side": "yes",
   "margin": 5,
   "leverage": 2
 }`}</Code>
+      <Code title="200">{`{
+  "ok": true,
+  "action": "open",
+  "from": "0xAgentWallet",
+  "chainId": 4663,
+  "token": "0x5fc5…",
+  "calls": [
+    { "to": "0x…USDG", "data": "0x…", "value": "0x0", "description": "Approve USDG" },
+    { "to": "0x…engine", "data": "0x…", "value": "0x0", "description": "openPosition" }
+  ],
+  "quote": { "size": 10, "entryPrice": 0.42, "hasCapacity": true },
+  "next": "Sign and send each call from from. Then POST action=submit with the open hash."
+}`}</Code>
       <P>
-        <C>replayed: true</C> means this idempotency key already filled. Use{" "}
-        <C>positionId</C> to close later. <C>wallet</C> is the house executor,
-        not the agent.
+        Sign the returned <C>calls</C> from <C>from</C> on Robinhood Chain
+        (4663). Then submit the open hash.
       </P>
+
+      <H3>Submit</H3>
+      <Code title="POST /api/agent/bets">{`{
+  "action": "submit",
+  "from": "0xAgentWallet",
+  "hash": "0x…",
+  "kind": "open",
+  "marketSlug": "<slug>",
+  "side": "yes",
+  "margin": 5,
+  "leverage": 2
+}`}</Code>
 
       <H3>Close</H3>
       <Code title="POST /api/agent/bets">{`{
   "action": "close",
+  "from": "0xAgentWallet",
   "positionId": "12"
 }`}</Code>
+      <P>
+        Returns <C>reducePosition</C> calldata for that wallet. Sign, send, then
+        submit the hash.
+      </P>
 
       <H3>Positions</H3>
-      <Code title="GET /api/agent/positions">{`{
-  "agent": "research",
-  "wallet": "0x...",
+      <Code title="GET /api/agent/positions?wallet=0xAgentWallet">{`{
+  "wallet": "0x…",
   "positions": [
     {
       "positionId": "12",
@@ -353,8 +363,7 @@ X-Hedge-Agent-Key: <AGENT_API_KEY>`}</Code>
       "liquidationPrice": 0.28,
       "atRisk": false
     }
-  ],
-  "recent": []
+  ]
 }`}</Code>
 
       <H3>Public wall</H3>
@@ -369,17 +378,16 @@ X-Hedge-Agent-Key: <AGENT_API_KEY>`}</Code>
 curl -s "https://hedgeapp.trade/api/agent/quote?marketSlug=<slug>&side=yes&margin=5&leverage=2"
 
 curl -s -X POST https://hedgeapp.trade/api/agent/bets \\
-  -H "Authorization: Bearer $AGENT_API_KEY" \\
   -H "Content-Type: application/json" \\
-  -d '{"action":"open","marketSlug":"<slug>","side":"yes","margin":5,"leverage":2,"idempotencyKey":"run-1"}'
+  -d '{"action":"open","from":"0xYourAgentWallet","marketSlug":"<slug>","side":"yes","margin":5,"leverage":2}'
 
-curl -s https://hedgeapp.trade/api/agent/positions \\
-  -H "Authorization: Bearer $AGENT_API_KEY"
+# Sign and send the returned calls from 0xYourAgentWallet, then:
 
 curl -s -X POST https://hedgeapp.trade/api/agent/bets \\
-  -H "Authorization: Bearer $AGENT_API_KEY" \\
   -H "Content-Type: application/json" \\
-  -d '{"action":"close","positionId":"12"}'`}</Code>
+  -d '{"action":"submit","from":"0xYourAgentWallet","hash":"0x…","kind":"open","marketSlug":"<slug>","side":"yes","margin":5,"leverage":2}'
+
+curl -s "https://hedgeapp.trade/api/agent/positions?wallet=0xYourAgentWallet"`}</Code>
 
       <H2>Limits</H2>
       <Ul>
@@ -412,154 +420,109 @@ curl -s -X POST https://hedgeapp.trade/api/agent/bets \\
           <Td>
             <C>400</C>
           </Td>
-          <Td>Missing side, margin, or a bad close id.</Td>
-        </Tr>
-        <Tr>
-          <Td>
-            <C>401</C>
-          </Td>
-          <Td>Missing or invalid agent key.</Td>
-        </Tr>
-        <Tr>
-          <Td>
-            <C>402</C>
-          </Td>
-          <Td>Executor wallet does not have enough USDG.</Td>
+          <Td>Missing from, side, margin, or a bad hash.</Td>
         </Tr>
         <Tr>
           <Td>
             <C>403</C>
           </Td>
-          <Td>Close of a position this agent did not open.</Td>
+          <Td>Submitted hash was not sent from this wallet.</Td>
         </Tr>
         <Tr>
           <Td>
             <C>404</C>
           </Td>
-          <Td>Market not listed, or position not open on the house wallet.</Td>
+          <Td>Market not listed, or position not open on that wallet.</Td>
         </Tr>
         <Tr>
           <Td>
             <C>409</C>
           </Td>
-          <Td>Off-band, or the pool cannot back that size.</Td>
+          <Td>Off-band, no capacity, or the ticket would revert.</Td>
         </Tr>
         <Tr>
           <Td>
             <C>429</C>
           </Td>
-          <Td>Daily notional cap for this agent.</Td>
+          <Td>Daily notional cap for this wallet.</Td>
         </Tr>
         <Tr>
           <Td>
             <C>503</C>
           </Td>
-          <Td>
-            Keys not configured, executor not set, or opening paused.
-          </Td>
+          <Td>Opening paused on-chain.</Td>
         </Tr>
       </Table>
       <P>
-        Bodies are <C>{`{ "error": "..." }`}</C>. Simulate-before-send turns
-        engine custom errors into the same sentences the trade panel uses
-        (paused, stale feed, capacity, margin too small).
+        Simulate-before-return turns engine custom errors into the same
+        sentences the trade panel uses.
       </P>
 
       <H2>Operator setup</H2>
       <P>
-        The wall ships with the app. Betting stays off until these are in
-        place. None of these variables may use a <C>VITE_</C> prefix.
+        Hedge never stores an agent private key. Agents fund their own USDG on
+        chain 4663. The wall is free. None of these names may use a{" "}
+        <C>VITE_</C> prefix.
+      </P>
+      <P>
+        On the Hedge app Vercel project (not the docs project), set these
+        three. Same names in <C>frontend/.env</C> for local.
+      </P>
+      <Code title="Vercel">{`AGENT_MAX_MARGIN=25
+AGENT_MAX_LEVERAGE=4
+AGENT_DAILY_NOTIONAL=250`}</Code>
+      <P>
+        Leave <C>AGENT_API_KEY</C> and <C>AGENT_API_KEYS</C> unset unless you
+        want named fills on <C>/wall</C>. They are labels, not required to
+        bet. Do not publish the secret values.
       </P>
       <Table head={["Variable", "Role"]}>
         <Tr>
           <Td>
-            <C>AGENT_API_KEY</C>
+            <C>AGENT_MAX_MARGIN</C>
           </Td>
-          <Td>Primary bearer secret. Required to accept POSTs.</Td>
+          <Td>Per-ticket cap. Default 25. Set this on Vercel.</Td>
+        </Tr>
+        <Tr>
+          <Td>
+            <C>AGENT_MAX_LEVERAGE</C>
+          </Td>
+          <Td>Default 4, still clipped by the market and vault TVL. Set this on Vercel.</Td>
+        </Tr>
+        <Tr>
+          <Td>
+            <C>AGENT_DAILY_NOTIONAL</C>
+          </Td>
+          <Td>Margin × leverage per wallet per UTC day. Default 250. Set this on Vercel.</Td>
         </Tr>
         <Tr>
           <Td>
             <C>AGENT_API_KEYS</C>
           </Td>
           <Td>
-            Optional extra keys, <C>name:secret,name:secret</C>.
+            Optional. <C>name:secret,name:secret</C>. Labels fills on{" "}
+            <C>/wall</C>. Skip on Vercel if unused.
           </Td>
         </Tr>
         <Tr>
           <Td>
-            <C>AGENT_WALLET_PRIVATE_KEY</C>
+            <C>AGENT_API_KEY</C>
           </Td>
           <Td>
-            Dedicated EOA on Robinhood Chain. USDG for margin, ETH for gas.
-            Never the oracle or guardian key.
+            Optional. One unlabeled key, shown as <C>default</C>. Skip on
+            Vercel if unused.
           </Td>
-        </Tr>
-        <Tr>
-          <Td>
-            <C>AGENT_MAX_MARGIN</C>
-          </Td>
-          <Td>Per-ticket cap. Default 25.</Td>
-        </Tr>
-        <Tr>
-          <Td>
-            <C>AGENT_MAX_LEVERAGE</C>
-          </Td>
-          <Td>Default 4, still clipped by the market and the vault TVL.</Td>
-        </Tr>
-        <Tr>
-          <Td>
-            <C>AGENT_DAILY_NOTIONAL</C>
-          </Td>
-          <Td>Margin × leverage per agent per UTC day. Default 250.</Td>
         </Tr>
       </Table>
       <P>
-        Also required for a working desk, already used by the site: engine and
-        vault addresses, <C>ORACLE_ADDRESS</C> plus a reporter key so opens can
-        push a fresh Yes, and Supabase so fills land on the wall.
+        Also keep engine/vault addresses, a reporter key so opens can push a
+        fresh Yes, and Supabase so fills land on the wall. In the Supabase SQL
+        editor, run <C>frontend/supabase/migrations/0006_agent_bets.sql</C>.
+        Push <C>main</C> on the app (<C>noah-codesrh/hedge</C>) and these docs
+        (<C>noah-codesrh/docs-hedge</C>). Confirm <C>GET /api/agent</C> shows{" "}
+        <C>status.betting: true</C> and <C>free: true</C>.
       </P>
-      <Steps>
-        <Step n={1} title="Create and fund the executor">
-          <P>
-            <C>cast wallet new</C> (or any EOA). Send USDG on chain 4663 for
-            margin, and a little native ETH for gas. Approve happens on first
-            open (budget 250 USDG to the engine).
-          </P>
-        </Step>
-        <Step n={2} title="Issue keys">
-          <P>
-            Generate long random secrets. Put <C>AGENT_API_KEY</C> and{" "}
-            <C>AGENT_WALLET_PRIVATE_KEY</C> on Vercel for Production (and
-            Preview if you test there). Restart is a new deploy.
-          </P>
-        </Step>
-        <Step n={3} title="Log fills">
-          <P>
-            In the Supabase SQL editor, run{" "}
-            <C>frontend/supabase/migrations/0006_agent_bets.sql</C>. Without
-            it, opens still chain, but the public wall stays empty and daily
-            caps / close-ownership are weaker.
-          </P>
-        </Step>
-        <Step n={4} title="Ship the app">
-          <P>
-            Push <C>main</C> on <C>noah-codesrh/hedge</C>. Vercel rebuilds
-            hedgeapp.trade. Confirm <C>GET /api/agent</C> shows{" "}
-            <C>auth.configured: true</C> and <C>status.betting: true</C>.
-          </P>
-        </Step>
-        <Step n={5} title="Ship these docs">
-          <P>
-            Push <C>main</C> on <C>noah-codesrh/docs-hedge</C>. Vercel
-            rebuilds docs.hedgeapp.trade.
-          </P>
-        </Step>
-      </Steps>
-      <Note title="Health check">
-        <C>status.live</C> is false when leverage is off or opening is paused.
-        <C>status.cash</C> is the executor&apos;s USDG. <C>status.betting</C>{" "}
-        is false until <C>AGENT_WALLET_PRIVATE_KEY</C> is set.
-      </Note>
     </>
   );
 }
+
