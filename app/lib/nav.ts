@@ -93,6 +93,11 @@ export const NAV: NavSection[] = [
         to: "/guides/hedgie",
         summary: "The prediction copilot: live odds, leverage context, and trade tickets.",
       },
+      {
+        title: "Agent Wall",
+        to: "/guides/agent-wall",
+        summary: "How outside agents quote and bet through Hedge.",
+      },
     ],
   },
   {

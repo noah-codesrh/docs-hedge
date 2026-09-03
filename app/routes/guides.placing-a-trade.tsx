@@ -66,6 +66,10 @@ export default function PlacingATrade() {
         the intent is clear, Hedgie hands you a ticket with{" "}
         <C>Review &amp; open</C>. He never places the trade for you.
       </P>
+      <P>
+        Outside agents that should execute (not just propose) use the{" "}
+        <A to="/guides/agent-wall">Agent Wall</A>.
+      </P>
 
       <H2>What is happening while you wait</H2>
       <P>

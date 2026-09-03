@@ -103,7 +103,9 @@ export default function LeverageOverview() {
       </Table>
       <P>
         Why LPs should add size: <A to="/why">Why Hedge</A> and{" "}
-        <A to="/leverage/earn">Earning as an LP</A>.
+        <A to="/leverage/earn">Earning as an LP</A>. Outside agents open the
+        same tickets through the{" "}
+        <A to="/guides/agent-wall">Agent Wall</A>.
       </P>
 
       <H2>If the price feed lags</H2>

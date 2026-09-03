@@ -139,7 +139,9 @@ export default function GettingStartedPredicting() {
         <A href="https://hedgeapp.trade/ai">hedgeapp.trade/ai</A>. The copilot
         reads the live book, explains spot vs leverage, and can hand you a ticket
         with <C>Review &amp; open</C>. Full guide:{" "}
-        <A to="/guides/hedgie">Hedgie</A>.
+        <A to="/guides/hedgie">Hedgie</A>. Outside agents that should place
+        the ticket themselves use the{" "}
+        <A to="/guides/agent-wall">Agent Wall</A>.
       </P>
 
       <H2>What a first trade feels like</H2>

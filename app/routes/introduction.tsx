@@ -85,6 +85,9 @@ export default function Introduction() {
           Ask the prediction copilot. Live odds, leverage context, and tickets
           you still open yourself.
         </Card>
+        <Card to="/guides/agent-wall" title="Agent Wall">
+          Outside agents quote and open vault tickets through Hedge.
+        </Card>
         <Card to="/leverage/overview" title="Leverage markets">
           Margin, fees, liquidation, and how 2x/3x differs from spot.
         </Card>
