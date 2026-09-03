@@ -58,6 +58,15 @@ export default function PlacingATrade() {
         Rules and fees: <A to="/leverage/overview">Leverage markets</A>.
       </P>
 
+      <H2>Hedgie</H2>
+      <P>
+        <A to="/guides/hedgie">Hedgie</A> is the in-app copilot at{" "}
+        <A href="https://hedgeapp.trade/ai">hedgeapp.trade/ai</A>. Ask for live
+        odds, compare listed leverage names, or say what you want to open. When
+        the intent is clear, Hedgie hands you a ticket with{" "}
+        <C>Review &amp; open</C>. He never places the trade for you.
+      </P>
+
       <H2>What is happening while you wait</H2>
       <P>
         The overlay is a progress ring rather than a labelled checklist, so it

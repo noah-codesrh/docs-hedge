@@ -81,6 +81,10 @@ export default function Introduction() {
         <Card to="/why" title="Why Hedge">
           Traders, LPs, and makers, and what is live.
         </Card>
+        <Card to="/guides/hedgie" title="Hedgie">
+          Ask the prediction copilot. Live odds, leverage context, and tickets
+          you still open yourself.
+        </Card>
         <Card to="/leverage/overview" title="Leverage markets">
           Margin, fees, liquidation, and how 2x/3x differs from spot.
         </Card>

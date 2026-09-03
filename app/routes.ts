@@ -16,6 +16,7 @@ export default [
     route("guides/placing-a-trade", "routes/guides.placing-a-trade.tsx"),
     route("guides/cashing-out", "routes/guides.cashing-out.tsx"),
     route("guides/sharing", "routes/guides.sharing.tsx"),
+    route("guides/hedgie", "routes/guides.hedgie.tsx"),
 
     route("leverage/overview", "routes/leverage.overview.tsx"),
     route("leverage/earn", "routes/leverage.earn.tsx"),

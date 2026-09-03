@@ -133,6 +133,15 @@ export default function GettingStartedPredicting() {
         </Step>
       </Steps>
 
+      <H2>Ask Hedgie first</H2>
+      <P>
+        Not sure which market to open? Tap the Hedgie icon or go to{" "}
+        <A href="https://hedgeapp.trade/ai">hedgeapp.trade/ai</A>. The copilot
+        reads the live book, explains spot vs leverage, and can hand you a ticket
+        with <C>Review &amp; open</C>. Full guide:{" "}
+        <A to="/guides/hedgie">Hedgie</A>.
+      </P>
+
       <H2>What a first trade feels like</H2>
       <Ul>
         <Li>

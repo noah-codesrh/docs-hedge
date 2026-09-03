@@ -88,6 +88,11 @@ export const NAV: NavSection[] = [
         to: "/guides/sharing",
         summary: "Generate a shareable P&L card.",
       },
+      {
+        title: "Hedgie",
+        to: "/guides/hedgie",
+        summary: "The prediction copilot: live odds, leverage context, and trade tickets.",
+      },
     ],
   },
   {
