@@ -21,7 +21,7 @@ export function meta() {
   return docMeta({
     title: "Agent Wall",
     description:
-      "How outside agents quote, open, and close vault-backed prediction tickets through Hedge. Full API, limits, errors, and operator setup.",
+      "How outside agents quote every live Hedge market. 1x fills in the app. Vault tickets are optional on listed names.",
   });
 }
 
@@ -31,7 +31,7 @@ export default function AgentWallDocs() {
       <PageTitle
         eyebrow="Guides"
         title="Agent Wall"
-        intro="The Agent Wall is Hedge's machine API. Outside agents quote every live market. Vault tickets are unsigned engine calls the agent signs from its own wallet. The wall is free."
+        intro="The Agent Wall is Hedge's machine API. Outside agents quote every live market. 1x fills in the app. Listed names can also return unsigned vault calls the agent signs from its own wallet. The wall is free."
       />
 
       <P>
@@ -56,9 +56,10 @@ export default function AgentWallDocs() {
       <H2>How it works</H2>
       <P>
         Spot 1x on the venue book still fills in a signed-in browser. The wall
-        quotes that book. It opens synthetic tickets on{" "}
-        <C>HedgeLeverageEngine</C> for listed leverage names, same desk as 2x
-        to 4x in the trade panel. Rules:{" "}
+        quotes that book. Vault tickets on{" "}
+        <C>HedgeLeverageEngine</C> are optional, and only for listed leverage
+        names. <C>status.live</C> is the venue. <C>openingPaused</C> is
+        vault-only and does not take the wall offline. Rules:{" "}
         <A to="/leverage/overview">Leverage markets</A>. Maths:{" "}
         <A to="/leverage/mathematics">The mathematics</A>.
       </P>
@@ -68,20 +69,21 @@ export default function AgentWallDocs() {
             <C>GET /api/agent</C> and <C>/llms.txt</C> describe the surface.
             <C>GET /api/agent/markets</C> returns live venue markets (same book
             as the app), tagged <C>desk: leverage</C> or <C>desk: spot</C>.
-            Filter with <C>?desk=leverage</C> or <C>?q=</C>.
+            Filter with <C>?desk=spot</C>, <C>?desk=leverage</C>, or <C>?q=</C>.
           </P>
         </Step>
         <Step n={2} title="Quote">
           <P>
-            <C>GET /api/agent/quote</C> works on any live slug or Gamma id. On{" "}
-            <C>desk=leverage</C> it calls the engine&rsquo;s <C>quoteOpen</C>.
-            On spot it returns the venue book (1x).
+            <C>GET /api/agent/quote</C> works on any live slug or Gamma id. On
+            spot it returns the venue book (1x). On{" "}
+            <C>desk=leverage</C> it also calls the engine&rsquo;s{" "}
+            <C>quoteOpen</C>.
           </P>
         </Step>
         <Step n={3} title="Open">
           <P>
             <C>POST /api/agent/bets</C> with <C>from</C> set to the agent
-            wallet, on a <C>desk=leverage</C> name. Hedge returns unsigned
+            wallet, on a <C>desk=leverage</C> name, returns unsigned vault
             calls. The agent signs and broadcasts them. Hedge never holds the
             agent key. Spot names return 409 plus a <C>ticketUrl</C> into the
             app. The wall is free. There is no HTTP 402.
@@ -109,8 +111,8 @@ export default function AgentWallDocs() {
         </Li>
         <Li>
           <strong className="text-white">Open and close from its wallet.</strong>{" "}
-          Hedge returns calldata. The agent signs. The on-chain trader is that
-          address.
+          Vault tickets only. Hedge returns calldata. The agent signs. The
+          on-chain trader is that address.
         </Li>
         <Li>
           <strong className="text-white">Read its positions.</strong> Live
@@ -391,7 +393,7 @@ export default function AgentWallDocs() {
       <H2>Worked example</H2>
       <Code title="shell">{`curl -s https://hedgeapp.trade/api/agent/markets
 
-curl -s "https://hedgeapp.trade/api/agent/quote?marketSlug=<slug>&side=yes&margin=5&leverage=2"
+curl -s "https://hedgeapp.trade/api/agent/quote?marketSlug=<slug>&side=yes&margin=5"
 
 curl -s -X POST https://hedgeapp.trade/api/agent/bets \\
   -H "Content-Type: application/json" \\
@@ -426,8 +428,9 @@ curl -s "https://hedgeapp.trade/api/agent/positions?wallet=0xYourAgentWallet"`}<
           <A to="/leverage/overview">Leverage markets</A>.
         </Li>
         <Li>
-          <C>openingPaused</C> on-chain, stale oracle, converging price, or a
-          full pool refuses the POST.
+          <C>openingPaused</C> on-chain refuses vault <C>POST</C> only. It does
+          not mark the wall paused. Stale oracle, converging price, or a full
+          pool also refuse a vault ticket.
         </Li>
       </Ul>
 
@@ -467,7 +470,7 @@ curl -s "https://hedgeapp.trade/api/agent/positions?wallet=0xYourAgentWallet"`}<
           <Td>
             <C>503</C>
           </Td>
-          <Td>Opening paused on-chain.</Td>
+          <Td>Vault openings paused on-chain. Quotes and 1x ticketUrl still work.</Td>
         </Tr>
       </Table>
       <P>
