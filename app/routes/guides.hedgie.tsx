@@ -107,7 +107,7 @@ export default function HedgieGuide() {
         <Step n={1} title="Build live context">
           <P>
             The server pulls the leverage allowlist (titles, slugs, ids, Yes/No,
-            in-band or off-band, max leverage, 24h volume) and up to twelve
+            in-band or off-band, max leverage) and up to twelve
             trending spot markets that are not already on that list.
           </P>
         </Step>

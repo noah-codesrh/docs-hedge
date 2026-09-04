@@ -31,7 +31,7 @@ export default function AgentWallDocs() {
       <PageTitle
         eyebrow="Guides"
         title="Agent Wall"
-        intro="The Agent Wall is Hedge's machine API. Outside agents use their own wallets. Hedge returns unsigned engine calls. The agent signs and sends. The wall is free."
+        intro="The Agent Wall is Hedge's machine API. Outside agents quote every live market. Vault tickets are unsigned engine calls the agent signs from its own wallet. The wall is free."
       />
 
       <P>
@@ -55,33 +55,36 @@ export default function AgentWallDocs() {
 
       <H2>How it works</H2>
       <P>
-        Spot 1x on the venue book still runs in a signed-in browser. The wall
-        does not wrap that path. It opens synthetic tickets on{" "}
-        <C>HedgeLeverageEngine</C>, same desk as 2x to 4x in the trade panel.
-        Rules: <A to="/leverage/overview">Leverage markets</A>. Maths:{" "}
+        Spot 1x on the venue book still fills in a signed-in browser. The wall
+        quotes that book. It opens synthetic tickets on{" "}
+        <C>HedgeLeverageEngine</C> for listed leverage names, same desk as 2x
+        to 4x in the trade panel. Rules:{" "}
+        <A to="/leverage/overview">Leverage markets</A>. Maths:{" "}
         <A to="/leverage/mathematics">The mathematics</A>.
       </P>
       <Steps>
         <Step n={1} title="Discover">
           <P>
             <C>GET /api/agent</C> and <C>/llms.txt</C> describe the surface.
-            <C>GET /api/agent/markets</C> returns the live allowlist with Yes/No
-            and whether the name is in the 35¢ to 65¢ band.
+            <C>GET /api/agent/markets</C> returns live venue markets (same book
+            as the app), tagged <C>desk: leverage</C> or <C>desk: spot</C>.
+            Filter with <C>?desk=leverage</C> or <C>?q=</C>.
           </P>
         </Step>
         <Step n={2} title="Quote">
           <P>
-            <C>GET /api/agent/quote</C> calls the engine&rsquo;s{" "}
-            <C>quoteOpen</C>. Size, fee, liquidation price, and capacity are
-            what the chain will use, not a client estimate.
+            <C>GET /api/agent/quote</C> works on any live slug or Gamma id. On{" "}
+            <C>desk=leverage</C> it calls the engine&rsquo;s <C>quoteOpen</C>.
+            On spot it returns the venue book (1x).
           </P>
         </Step>
         <Step n={3} title="Open">
           <P>
             <C>POST /api/agent/bets</C> with <C>from</C> set to the agent
-            wallet. Hedge returns unsigned calls. The agent signs and
-            broadcasts them. Hedge never holds the agent key. The wall is
-            free. There is no HTTP 402.
+            wallet, on a <C>desk=leverage</C> name. Hedge returns unsigned
+            calls. The agent signs and broadcasts them. Hedge never holds the
+            agent key. Spot names return 409 plus a <C>ticketUrl</C> into the
+            app. The wall is free. There is no HTTP 402.
           </P>
         </Step>
         <Step n={4} title="Submit">
@@ -96,13 +99,13 @@ export default function AgentWallDocs() {
       <H2>What an agent can do</H2>
       <Ul>
         <Li>
-          <strong className="text-white">List markets.</strong> Leverage
-          allowlist only: slug, Gamma id, title, Yes/No, in-band or off-band,
-          max leverage, 24h volume, ticket URL.
+          <strong className="text-white">List markets.</strong> Every live
+          venue market: slug, Gamma id, title, Yes/No, desk (leverage or
+          spot), in-band or off-band, max leverage, ticket URL.
         </Li>
         <Li>
-          <strong className="text-white">Quote.</strong> Engine quote for a
-          given side, margin, and leverage.
+          <strong className="text-white">Quote.</strong> Engine quote on listed
+          names. Book quote (1x) on everything else.
         </Li>
         <Li>
           <strong className="text-white">Open and close from its wallet.</strong>{" "}
@@ -118,8 +121,11 @@ export default function AgentWallDocs() {
       <H2>What an agent cannot do</H2>
       <Ul>
         <Li>Trade as a signed-in user or spend their cash wallet.</Li>
-        <Li>Buy 1x spot on the Polymarket book. That stays in the app.</Li>
-        <Li>Open a name that is not listed, or size past wall and engine caps.</Li>
+        <Li>
+          Fill 1x on the Polymarket book through this API. Quote and{" "}
+          <C>ticketUrl</C> are here. The fill stays in the app.
+        </Li>
+        <Li>Open a vault ticket on a name that is not leverage-listed, or size past wall and engine caps.</Li>
         <Li>Offer vault leverage when Yes is outside 35¢–65¢ (anything above 1x).</Li>
         <Li>Close a position another agent opened.</Li>
         <Li>Pause, unpause, or change risk parameters. Those stay admin.</Li>
@@ -153,13 +159,13 @@ export default function AgentWallDocs() {
         <Tr>
           <Td>Spot 1x</Td>
           <Td>Can deep-link a 1x ticket</Td>
-          <Td>Not offered</Td>
+          <Td>Quote plus a ticket URL. Fill stays in the app</Td>
         </Tr>
       </Table>
       <P>
-        An agent that only needs a view can call quote with no key. An agent
-        that wants a fill POSTs with <C>from</C> set to its wallet. Hedgie
-        must not be treated as an executor.
+        An agent that only needs a view can quote any live market with no key.
+        An agent that wants a vault fill POSTs with <C>from</C> on a leverage
+        name. Hedgie must not be treated as an executor.
       </P>
 
       <H2>Auth</H2>
@@ -196,7 +202,7 @@ export default function AgentWallDocs() {
             <C>GET</C>
           </Td>
           <Td>
-            <C>/api/agent/markets</C>
+            <C>/api/agent/markets</C> live venue, <C>?desk=</C> <C>?q=</C>
           </Td>
           <Td>No</Td>
         </Tr>
@@ -259,15 +265,22 @@ export default function AgentWallDocs() {
       "no": 0.58,
       "yesCents": "42¢",
       "band": "in-band",
+      "desk": "leverage",
       "maxLeverage": 4,
-      "volume24h": 12000,
+      "openable": true,
       "ticketUrl": "https://hedgeapp.trade/market/brazil-presidential-election?m=601819"
     }
-  ]
+  ],
+  "total": 80,
+  "leverageMarkets": 6,
+  "hasMore": true
 }`}</Code>
       <P>
-        Identify a market with <C>marketSlug</C> or Gamma <C>marketId</C>.
-        <C>band</C> is <C>in-band</C> when Yes is inside 35¢–65¢.
+        Identify a market with <C>marketSlug</C> or Gamma <C>marketId</C>.{" "}
+        <C>desk</C> is <C>leverage</C> (vault ticket) or <C>spot</C> (1x in
+        the app). <C>band</C> is <C>in-band</C> when Yes is inside 35¢–65¢.
+        Query <C>?desk=leverage</C>, <C>?q=</C>, <C>?limit=</C>,{" "}
+        <C>?offset=</C>.
       </P>
 
       <H3>Quote</H3>
@@ -277,6 +290,8 @@ export default function AgentWallDocs() {
         <C>margin</C> is USDG. <C>leverage</C> defaults to 1.
       </P>
       <Code title="200">{`{
+  "desk": "leverage",
+  "openable": true,
   "marketSlug": "...",
   "marketId": "601819",
   "title": "...",
@@ -292,7 +307,8 @@ export default function AgentWallDocs() {
     "shares": "...",
     "liquidationPrice": 0.28,
     "reserve": "...",
-    "hasCapacity": true
+    "hasCapacity": true,
+    "source": "engine"
   }
 }`}</Code>
 
@@ -392,8 +408,9 @@ curl -s "https://hedgeapp.trade/api/agent/positions?wallet=0xYourAgentWallet"`}<
       <H2>Limits</H2>
       <Ul>
         <Li>
-          Listed markets only. Same allowlist as the trade panel (
-          <C>app/lib/leverage.ts</C>).
+          Quote every live market. Vault <C>POST</C> only on listed leverage
+          names (same allowlist as the trade panel, <C>app/lib/leverage.ts</C>
+          ).
         </Li>
         <Li>
           Yes inside 35¢–65¢ for anything above 1x. The engine reverts off-band.
@@ -432,13 +449,13 @@ curl -s "https://hedgeapp.trade/api/agent/positions?wallet=0xYourAgentWallet"`}<
           <Td>
             <C>404</C>
           </Td>
-          <Td>Market not listed, or position not open on that wallet.</Td>
+          <Td>No live market with that slug or id, or position not open on that wallet.</Td>
         </Tr>
         <Tr>
           <Td>
             <C>409</C>
           </Td>
-          <Td>Off-band, no capacity, or the ticket would revert.</Td>
+          <Td>Off-band, no capacity, spot name on vault POST, or the ticket would revert.</Td>
         </Tr>
         <Tr>
           <Td>
