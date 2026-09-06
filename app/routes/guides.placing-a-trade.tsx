@@ -58,6 +58,15 @@ export default function PlacingATrade() {
         Rules and fees: <A to="/leverage/overview">Leverage markets</A>.
       </P>
 
+      <H2>Pool</H2>
+      <P>
+        <A href="https://hedgeapp.trade/pool">hedgeapp.trade/pool</A> is a
+        different ticket. You pick a side, stake $1–$25 of USDG, and wait
+        for the window. There are no shares to sell. Winners split the two
+        pots. How the pots pay:{" "}
+        <A to="/pool">Pool and liquidity</A>.
+      </P>
+
       <H2>Hedgie</H2>
       <P>
         <A to="/guides/hedgie">Hedgie</A> is the in-app copilot at{" "}

@@ -26,13 +26,15 @@ export default function Introduction() {
       <PageTitle
         eyebrow="Getting started"
         title="Welcome to Hedge"
-        intro="Trade Yes/No event markets in USDG on Robinhood Chain. Spot is 1x on the venue book. Listed markets also offer 2x and 3x against the vault."
+        intro="Trade Yes/No event markets in USDG on Robinhood Chain. Spot is 1x on the venue book. Listed markets also offer 2x and 3x against the vault. Robinhood memes have a native parimutuel pool."
       />
 
       <P>
         <strong className="text-white">Spot</strong> buys real shares.{" "}
         <strong className="text-white">Leverage</strong> is synthetic margin
         vs LPs, on listed markets only.{" "}
+        <strong className="text-white">Pool</strong> is USDG vs USDG on
+        allowlisted memes: the two pots pay, the tape is display.{" "}
         <A to="/getting-started">Get started</A>, or read{" "}
         <A to="/why">Why Hedge</A>.
       </P>
@@ -88,6 +90,9 @@ export default function Introduction() {
         <Card to="/guides/agent-wall" title="Agent Wall">
           Outside agents quote and open vault tickets through Hedge.
         </Card>
+        <Card to="/pool" title="Pool and liquidity">
+          Parimutuel USDG on Robinhood memes. Pots pay. Tape is display.
+        </Card>
         <Card to="/leverage/overview" title="Leverage markets">
           Margin, fees, liquidation, and how 2x/3x differs from spot.
         </Card>
@@ -102,7 +107,8 @@ export default function Introduction() {
       <H2>How to read these docs</H2>
       <P>
         Guides first if you just want to trade. Concepts for the vocabulary.
-        Leverage for traders, LPs, and future makers.
+        Pool for the native meme desk. Leverage for traders, LPs, and future
+        makers.
       </P>
 
       <div className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2">

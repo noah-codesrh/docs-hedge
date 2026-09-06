@@ -41,7 +41,9 @@ export default function GettingStartedPredicting() {
       <P>
         Start on spot. On listed markets the panel also offers 2x and 3x.
         That path is{" "}
-        <A to="/leverage/overview">Leverage markets</A>.
+        <A to="/leverage/overview">Leverage markets</A>. Robinhood memes
+        have a separate desk:{" "}
+        <A to="/pool">Pool and liquidity</A>.
       </P>
 
       <Steps>

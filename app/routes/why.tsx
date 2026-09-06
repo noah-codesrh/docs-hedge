@@ -87,6 +87,14 @@ export default function Why() {
           </Td>
         </Tr>
         <Tr>
+          <Td>Native pool</Td>
+          <Td>
+            <strong className="text-white">Live.</strong> Parimutuel USDG
+            on Robinhood memes.{" "}
+            <A to="/pool">Pool and liquidity</A>.
+          </Td>
+        </Tr>
+        <Tr>
           <Td>2x / 3x on listed markets</Td>
           <Td>
             <strong className="text-white">Live.</strong> Vault is the only

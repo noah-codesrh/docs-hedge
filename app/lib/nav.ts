@@ -101,6 +101,16 @@ export const NAV: NavSection[] = [
     ],
   },
   {
+    title: "Pool",
+    items: [
+      {
+        title: "Pool and liquidity",
+        to: "/pool",
+        summary: "Parimutuel USDG on Robinhood memes. Pots pay. Tape is display.",
+      },
+    ],
+  },
+  {
     title: "Leverage",
     items: [
       {

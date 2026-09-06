@@ -310,6 +310,86 @@ export function PriceBandFigure() {
   );
 }
 
+/** Native pool: traders are both sides of the book. */
+export function PoolDeskFigure() {
+  return (
+    <Figure
+      title="The desk"
+      caption="USDG never sits in an app wallet. HedgePool holds it until you claim."
+    >
+      <div className="grid gap-2 sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-center">
+        <Node label="You" sub="Pick a side. Stake USDG." />
+        <Arrow label="stake()" />
+        <Node
+          label="HedgePool"
+          sub="Two pots. Caps. One ticket."
+          tone="gold"
+        />
+        <Arrow label="claim()" />
+        <Node label="USDG back" sub="Winners split the pot" />
+      </div>
+    </Figure>
+  );
+}
+
+/** Parimutuel: payout is the other side, not a fixed multiple. */
+export function PoolSplitFigure() {
+  return (
+    <Figure
+      title="Liquidity is the other side"
+      caption="No vault. No LP. The losing pot pays the winning pot. A thin side pays more if it hits, and nothing if it does not."
+    >
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-muted">
+            Side A
+          </p>
+          <p className="mt-2 text-[22px] font-bold tracking-tight text-white">
+            $60
+          </p>
+          <p className="mt-1 text-[13px] leading-snug text-muted">
+            Favorite. If A wins, $60 splits $100. About 1.67x.
+          </p>
+        </div>
+        <div className="rounded-xl border border-gold/25 bg-gold/[0.06] p-4">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-gold">
+            Side B
+          </p>
+          <p className="mt-2 text-[22px] font-bold tracking-tight text-white">
+            $40
+          </p>
+          <p className="mt-1 text-[13px] leading-snug text-muted">
+            Underdog. If B wins, $40 splits $100. 2.5x.
+          </p>
+        </div>
+      </div>
+      <p className="mt-4 text-center text-[13px] text-muted">
+        Pot $100. Payout = stake × pot / winning side.
+      </p>
+    </Figure>
+  );
+}
+
+/** Display odds from the tape. Money from the pots. */
+export function PoolTapeFigure() {
+  return (
+    <Figure
+      title="Tape shows. Pools pay."
+      caption="The board quotes Dexscreener. Settlement ignores that quote. Only USDG in each pot sets the multiple."
+    >
+      <div className="grid gap-2 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
+        <Node label="Live tape" sub="Odds and the strike line" />
+        <Arrow label="display" />
+        <Node
+          label="Two USDG pots"
+          sub="This is the payout"
+          tone="gold"
+        />
+      </div>
+    </Figure>
+  );
+}
+
 /** Why the vault needs to grow. */
 export function CapacityFigure() {
   return (
