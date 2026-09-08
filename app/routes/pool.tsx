@@ -1,6 +1,8 @@
 import {
   A,
   C,
+  Card,
+  Cards,
   H2,
   H3,
   Li,
@@ -34,18 +36,19 @@ export default function Pool() {
       <PageTitle
         eyebrow="Pool"
         title="Pool and liquidity"
-        intro="A separate desk from spot and from 2x–4x. USDG parimutuel on allowlisted Robinhood Chain memes. The tape shows a line. The two pots pay."
+        intro="A separate desk from spot and from 2x–4x. USDG parimutuel on allowlisted memes. The tape shows a line. The two pots pay. Featured long races add a Hedge overlay."
       />
 
       <P>
         Open it at{" "}
         <A href="https://hedgeapp.trade/pool">hedgeapp.trade/pool</A>. This is
         not a Polymarket book and not the leverage vault. There is no LP on
-        the other side. Traders are the liquidity.
+        the other side. Traders are the liquidity. Every formula is on{" "}
+        <A to="/pool/mathematics">The mathematics</A>.
       </P>
       <PoolDeskFigure />
 
-      <H2>Two kinds of card</H2>
+      <H2>Three kinds of card</H2>
       <Table head={["Kind", "Question", "Who wins"]}>
         <Tr>
           <Td>Strike</Td>
@@ -66,11 +69,22 @@ export default function Pool() {
             the stake.
           </Td>
         </Tr>
+        <Tr>
+          <Td>Community race</Td>
+          <Td>
+            Which name is closer to $1.00b. ZCAT vs ANSEM, then ANSEM vs
+            MEME, CASHCAT, AI, and PONS.
+          </Td>
+          <Td>
+            The larger live market cap at expiry. A tie voids.
+          </Td>
+        </Tr>
       </Table>
       <P>
-        Names are an allowlist, not a live screener. Today that is PONS, AI,
-        CASHCAT, INDEX, STONKBROKER, SHROOM, and OPTIMUS, plus a few PvP
-        pairings so leftover names still fight.
+        Names are an allowlist, not a live screener. Robinhood strikes use
+        PONS, AI, CASHCAT, INDEX, STONKBROKER, SHROOM, OPTIMUS, and MEME.
+        Featured races also use Solana ZCAT (Anonymous Cat) and ANSEM (The
+        Black Bull).
       </P>
 
       <H2>Timeframes</H2>
@@ -104,11 +118,23 @@ export default function Pool() {
           <Td>24h</Td>
           <Td>1h</Td>
         </Tr>
+        <Tr>
+          <Td>7d</Td>
+          <Td>12h</Td>
+        </Tr>
+        <Tr>
+          <Td>14d</Td>
+          <Td>24h</Td>
+        </Tr>
+        <Tr>
+          <Td>30d</Td>
+          <Td>48h</Td>
+        </Tr>
       </Table>
       <P>
-        Default board is the 1h window. Each card has its own slug, so a 15m
-        PONS strike and a 24h PONS strike are different markets and different
-        pots.
+        Short community races use 4h to 24h. Featured long races use 7d / 14d /
+        30d. Each card has its own slug, so a 15m PONS strike and a 24h PONS
+        strike are different markets and different pots.
       </P>
 
       <H2>Where liquidity comes from</H2>
@@ -144,19 +170,20 @@ export default function Pool() {
       <H2>How a winner is paid</H2>
       <P>
         Not a fixed 2x or 3x. Winners split the whole pot in proportion to
-        their stake:
+        their stake. Featured long races also add $200 USDG from Hedge:
       </P>
-      <Code title="HedgePool.previewPayout">{`pot  = poolA + poolB
-side = winning pot
+      <Code title="payout">{`pot  = poolA + poolB + overlay
 
-payout = (stake × pot) / side
+payout = (stake × pot) / winning side
 
 void     -> refund the stake
 wrong    -> 0
 unresolved or already claimed -> 0`}</Code>
       <P>
         Money is <C>USDG</C> with 6 decimals. Integer division truncates.
-        Dust stays in the contract.
+        Dust stays in the contract. The on-chain claim is the two pots.
+        The overlay is paid from escrow. Full derivation, including the
+        displayed blend: <A to="/pool/mathematics">The mathematics</A>.
       </P>
 
       <H3>Worked example</H3>
@@ -216,15 +243,20 @@ unresolved or already claimed -> 0`}</Code>
           <C>live² / (live² + strike²)</C>.
         </Li>
         <Li>
+          <strong className="text-white">Community race.</strong> Live
+          mcap share, <C>M_A / (M_A + M_B)</C>.
+        </Li>
+        <Li>
           <strong className="text-white">PvP.</strong> Score each name as
           live cap over open cap, then take that share of the two scores.
         </Li>
       </Ul>
       <P>
-        If the tape is missing, the card falls back to pot share{" "}
-        <C>side / (poolA + poolB)</C>. Either way, settlement does not use
-        that number. A 70% tape line with $90 / $10 in the pots still pays
-        as $90 / $10.
+        As tickets land, the card mixes tape with pot share. Weight is{" "}
+        <C>depth / (depth + 100)</C>. An empty book follows the tape. A
+        filled book follows the pots. Settlement still ignores the
+        displayed number. A 70% line with $90 / $10 in the pots still pays
+        as $90 / $10, plus overlay if the race has one.
       </P>
       <Note kind="warning" title="Do not size from the tape alone">
         Display odds can look like a CLOB. They are not. Your payout is
@@ -243,7 +275,7 @@ unresolved or already claimed -> 0`}</Code>
         </Tr>
         <Tr>
           <Td>Open desk float</Td>
-          <Td>$200 across every unresolved pool market</Td>
+          <Td>$1,000 across every unresolved pool market</Td>
         </Tr>
         <Tr>
           <Td>House seed</Td>
@@ -256,9 +288,10 @@ unresolved or already claimed -> 0`}</Code>
         app also blocks a stake outside $1–$25 on the button.
       </P>
       <P>
-        $200 is a risk cap on open tickets, not TVL you can earn on. When a
+        $1,000 is a risk cap on open tickets, not TVL you can earn on. When a
         market resolves, that pot leaves <C>deskOpen</C> and the room
-        frees up.
+        frees up. The live on-chain cap is <C>deskCap()</C>, which still
+        defaults to $200 until admin raises it.
       </P>
 
       <H2>Tickets live on chain</H2>
@@ -305,8 +338,17 @@ unresolved or already claimed -> 0`}</Code>
       <P>
         Spot and leverage still settle in USDG too. How those tickets
         work: <A to="/concepts/markets">Markets and prices</A> and{" "}
-        <A to="/leverage/overview">Leverage markets</A>.
+        <A to="/leverage/overview">Leverage markets</A>. Every pool
+        formula: <A to="/pool/mathematics">The mathematics</A>.
       </P>
+      <Cards>
+        <Card to="/pool/mathematics" title="The mathematics">
+          Tape, blend, pots, overlay, strikes, settlement, caps.
+        </Card>
+        <Card to="/leverage/mathematics" title="Leverage mathematics">
+          How 2x–4x tickets are sized against the vault.
+        </Card>
+      </Cards>
     </>
   );
 }

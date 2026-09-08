@@ -20,6 +20,7 @@ export default [
     route("guides/agent-wall", "routes/guides.agent-wall.tsx"),
 
     route("pool", "routes/pool.tsx"),
+    route("pool/mathematics", "routes/pool.mathematics.tsx"),
 
     route("leverage/overview", "routes/leverage.overview.tsx"),
     route("leverage/earn", "routes/leverage.earn.tsx"),

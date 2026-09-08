@@ -108,6 +108,11 @@ export const NAV: NavSection[] = [
         to: "/pool",
         summary: "Parimutuel USDG on Robinhood memes. Pots pay. Tape is display.",
       },
+      {
+        title: "The mathematics",
+        to: "/pool/mathematics",
+        summary: "Tape, blend, pots, overlay, and settlement formulas.",
+      },
     ],
   },
   {
