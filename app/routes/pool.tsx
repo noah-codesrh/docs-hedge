@@ -170,7 +170,7 @@ export default function Pool() {
       <H2>How a winner is paid</H2>
       <P>
         Not a fixed 2x or 3x. Winners split the whole pot in proportion to
-        their stake. Featured long races also add $200 USDG from Hedge:
+        their stake. Featured long races also add $1,000 USDG from Hedge:
       </P>
       <Code title="payout">{`pot  = poolA + poolB + overlay
 
@@ -290,8 +290,8 @@ unresolved or already claimed -> 0`}</Code>
       <P>
         $1,000 is a risk cap on open tickets, not TVL you can earn on. When a
         market resolves, that pot leaves <C>deskOpen</C> and the room
-        frees up. The live on-chain cap is <C>deskCap()</C>, which still
-        defaults to $200 until admin raises it.
+        frees up. The live on-chain cap is <C>deskCap()</C>, now $1,000
+        after admin <C>setLimits</C>.
       </P>
 
       <H2>Tickets live on chain</H2>
@@ -300,6 +300,14 @@ unresolved or already claimed -> 0`}</Code>
         card, shows the tape, and sponsors the call. The ticket is{" "}
         <C>stake(id, side, amount)</C> against{" "}
         <C>id = keccak256(slug)</C>.
+      </P>
+      <P>
+        The live pool with refund is{" "}
+        <C>0x40863A67e096B55C5847FA738086Eae67c18f39f</C>. The first live
+        pool, with no refund, is{" "}
+        <C>0xf0D392e67904acE892A6024E0501AbfAD67A1c8c</C>. Tickets there
+        wait until expiry, then <C>claim</C>. How to pull a test stake
+        back: <A to="/pool/money">Money and payouts</A>, first live pool.
       </P>
       <Ul>
         <Li>
@@ -318,13 +326,14 @@ unresolved or already claimed -> 0`}</Code>
       <P>
         Older tickets that went to the previous escrow wallet still pay
         from that path. New stakes go to the contract once the pool
-        address is set.
+        address is set. Who holds the USDG, who claims, and who pays
+        the overlay: <A to="/pool/money">Money and payouts</A>.
       </P>
 
       <H2>What this is not</H2>
       <Ul>
         <Li>
-          Not 1x shares on a venue book. There is nothing to sell mid-window.
+          Not 1x shares on a venue book. Refund the stake before lock. After lock there is nothing to sell.
         </Li>
         <Li>
           Not 2x–4x. No margin, no liquidation, no carry. You can lose the
@@ -345,8 +354,8 @@ unresolved or already claimed -> 0`}</Code>
         <Card to="/pool/mathematics" title="The mathematics">
           Tape, blend, pots, overlay, strikes, settlement, caps.
         </Card>
-        <Card to="/leverage/mathematics" title="Leverage mathematics">
-          How 2x–4x tickets are sized against the vault.
+        <Card to="/pool/money" title="Money and payouts">
+          Where USDG sits, who claims, who pays.
         </Card>
       </Cards>
     </>

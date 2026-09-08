@@ -21,6 +21,7 @@ export default [
 
     route("pool", "routes/pool.tsx"),
     route("pool/mathematics", "routes/pool.mathematics.tsx"),
+    route("pool/money", "routes/pool.money.tsx"),
 
     route("leverage/overview", "routes/leverage.overview.tsx"),
     route("leverage/earn", "routes/leverage.earn.tsx"),

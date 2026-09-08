@@ -113,6 +113,11 @@ export const NAV: NavSection[] = [
         to: "/pool/mathematics",
         summary: "Tape, blend, pots, overlay, and settlement formulas.",
       },
+      {
+        title: "Money and payouts",
+        to: "/pool/money",
+        summary: "Where USDG sits, who claims, who pays the overlay.",
+      },
     ],
   },
   {

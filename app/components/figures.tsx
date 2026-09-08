@@ -332,6 +332,49 @@ export function PoolDeskFigure() {
   );
 }
 
+/** Two payers: pots from the contract, overlay from escrow. */
+export function PoolMoneyFigure() {
+  return (
+    <Figure
+      title="Who pays"
+      caption="Losing tickets fund the pots. Hedge only adds the $1,000 overlay on featured long races. The app never holds new-path USDG."
+    >
+      <div className="space-y-4">
+        <div>
+          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-muted">
+            Pots
+          </p>
+          <div className="mt-2 grid gap-2 sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-center">
+            <Node label="Your wallet" sub="Approve USDG" />
+            <Arrow label="stake()" />
+            <Node
+              label="HedgePool"
+              sub="Holds both pots"
+              tone="gold"
+            />
+            <Arrow label="claim()" />
+            <Node label="Your wallet" sub="Winners pull USDG" tone="up" />
+          </div>
+        </div>
+        <div>
+          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-muted">
+            Overlay, featured longs only
+          </p>
+          <div className="mt-2 grid gap-2 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
+            <Node
+              label="Hedge escrow"
+              sub="$1,000 extra USDG"
+              tone="gold"
+            />
+            <Arrow label="transfer" />
+            <Node label="Your wallet" sub="Push after settle" tone="up" />
+          </div>
+        </div>
+      </div>
+    </Figure>
+  );
+}
+
 /** Parimutuel: payout is the other side, not a fixed multiple. */
 export function PoolSplitFigure() {
   return (

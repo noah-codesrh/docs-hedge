@@ -1,6 +1,8 @@
 import {
   A,
   C,
+  Card,
+  Cards,
   Code,
   H2,
   H3,
@@ -309,9 +311,10 @@ paid = (stake × pot) / side
 void  ->  stake
 wrong ->  0`}</Code>
       <P>
-        The $200 overlay is paid from the escrow path after a winning claim,
-        split the same way as <C>fromHedge</C>. Integer division truncates.
-        Dust stays in the contract. Money is 6-decimal USDG.
+        The $1,000 overlay is paid from the escrow path after settle, split
+        the same way as <C>fromHedge</C>. Integer division truncates. Dust
+        stays in the contract. Money is 6-decimal USDG. Who holds it and
+        who sends it: <A to="/pool/money">Money and payouts</A>.
       </P>
 
       <H3>Worked example, no overlay</H3>
@@ -364,26 +367,26 @@ wrong ->  0`}</Code>
 
       <H3>Worked example, featured overlay</H3>
       <P>
-        Featured long race. Hedge overlay <C>H = $200</C>. You put $25 on
+        Featured long race. Hedge overlay <C>H = $1,000</C>. You put $25 on
         ZCAT. ANSEM already has $75. After you land, ZCAT is $25.
       </P>
       <Table head={["Quantity", "Working", "Result"]}>
         <Tr>
           <Td>Pot if ZCAT wins</Td>
           <Td>
-            <C>25 + 75 + 200</C>
+            <C>25 + 75 + 1000</C>
           </Td>
-          <Td>$300</Td>
+          <Td>$1,100</Td>
         </Tr>
         <Tr>
           <Td>
             <strong className="text-white">Your payout if ZCAT wins</strong>
           </Td>
           <Td>
-            <C>25 × 300 / 25</C>
+            <C>25 × 1100 / 25</C>
           </Td>
           <Td>
-            <strong className="text-white">$300.00</strong>
+            <strong className="text-white">$1,100.00</strong>
           </Td>
         </Tr>
         <Tr>
@@ -403,22 +406,22 @@ wrong ->  0`}</Code>
         <Tr>
           <Td>From Hedge</Td>
           <Td>
-            <C>25 × 200 / 25</C>
+            <C>25 × 1000 / 25</C>
           </Td>
-          <Td>$200</Td>
+          <Td>$1,000</Td>
         </Tr>
         <Tr>
           <Td>If you are not alone on ZCAT</Td>
           <Td>split <C>H</C> and the ANSEM pot by your share of ZCAT</Td>
-          <Td>less than $300</Td>
+          <Td>less than $1,100</Td>
         </Tr>
       </Table>
       <P>
-        If you are the only ticket on ZCAT and ANSEM is empty, the on-chain
-        claim is your stake back. The $200 overlay still lands from escrow
-        as <C>fromHedge</C>, so the card shows $225 on a $25 ticket. The
-        contract will not <C>resolve</C> an empty winning side. That market
-        has to void, or the reporter cannot pick it.
+        The card can show that $1,025 while the window is open. If ANSEM is
+        still empty at expiry, the reporter cannot pick ZCAT. The market
+        voids, <C>claim</C> returns the $25, and the overlay does not pay.
+        Hedge does not cover an empty book. Path of the dollars:{" "}
+        <A to="/pool/money">Money and payouts</A>.
       </P>
 
       <H2>Empty winning side</H2>
@@ -515,7 +518,7 @@ slug = base + "-" + timeframe + "-" + floor(expiry / 1000)`}</Code>
         <Tr>
           <Td>Open desk float</Td>
           <Td>$1,000 across unresolved pool markets</Td>
-          <Td>$200 until admin <C>setLimits</C></Td>
+          <Td>$1,000. Admin can change it with <C>setLimits</C></Td>
         </Tr>
         <Tr>
           <Td>House seed</Td>
@@ -524,7 +527,7 @@ slug = base + "-" + timeframe + "-" + floor(expiry / 1000)`}</Code>
         </Tr>
         <Tr>
           <Td>Featured overlay</Td>
-          <Td>$200 on long races</Td>
+          <Td>$1,000 on long races</Td>
           <Td>Not in <C>HedgePool</C></Td>
         </Tr>
       </Table>
@@ -535,9 +538,9 @@ slug = base + "-" + timeframe + "-" + floor(expiry / 1000)`}</Code>
         frees up.
       </P>
       <Note>
-        If the on-chain cap is still $200, a ticket the app would allow can
-        revert <C>DeskCapReached</C>. The live cap is whatever{" "}
-        <C>deskCap()</C> returns, not the copy on the card.
+        A ticket the app would allow can still revert <C>DeskCapReached</C>{" "}
+        if <C>deskCap()</C> on chain is below the app copy. The live cap is
+        whatever <C>deskCap()</C> returns, not the number on the card.
       </Note>
 
       <H2>Phase</H2>
@@ -572,7 +575,7 @@ else                     ->  open`}</Code>
       <H2>What this is not</H2>
       <Ul>
         <Li>
-          Not a CLOB. There is nothing to sell mid-window.
+          Not a CLOB. Refund the stake before lock. After lock there is nothing to sell.
         </Li>
         <Li>
           Not 2x to 4x. No margin, no liquidation, no carry. You can lose the
@@ -586,7 +589,16 @@ else                     ->  open`}</Code>
       <P>
         How 2x to 4x tickets are sized:{" "}
         <A to="/leverage/mathematics">The mathematics</A> under leverage.
+        Path of the USDG: <A to="/pool/money">Money and payouts</A>.
       </P>
+      <Cards>
+        <Card to="/pool/money" title="Money and payouts">
+          Where USDG sits, who claims, who pays the overlay.
+        </Card>
+        <Card to="/pool" title="Pool and liquidity">
+          What the desk is, the three card kinds, and the board.
+        </Card>
+      </Cards>
     </>
   );
 }
