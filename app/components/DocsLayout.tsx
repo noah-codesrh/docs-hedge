@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router";
-import { NAV, flatNav, navItem, navNeighbours } from "../lib/nav";
+import {
+  docsBook,
+  flatNav,
+  navFor,
+  navItem,
+  navNeighbours,
+} from "../lib/nav";
 
 const APP_URL = "https://hedgeapp.trade";
 
@@ -17,19 +23,22 @@ function SidebarLinks({
 }) {
   const { pathname } = useLocation();
   const [query, setQuery] = useState("");
+  const book = navFor(pathname);
 
   const sections = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return NAV;
-    return NAV.map((section) => ({
-      ...section,
-      items: section.items.filter(
-        (item) =>
-          item.title.toLowerCase().includes(q) ||
-          item.summary.toLowerCase().includes(q),
-      ),
-    })).filter((section) => section.items.length > 0);
-  }, [query]);
+    if (!q) return book;
+    return book
+      .map((section) => ({
+        ...section,
+        items: section.items.filter(
+          (item) =>
+            item.title.toLowerCase().includes(q) ||
+            item.summary.toLowerCase().includes(q),
+        ),
+      }))
+      .filter((section) => section.items.length > 0);
+  }, [book, query]);
 
   return (
     <div className="flex h-full flex-col">
@@ -218,6 +227,41 @@ function OnThisPage({ pathname }: { pathname: string }) {
  * Chrome
  * ------------------------------------------------------------------ */
 
+function BookToggle() {
+  const { pathname } = useLocation();
+  const developers = docsBook(pathname) === "developers";
+  const tab = (active: boolean) =>
+    `rounded-md px-2.5 py-1 text-[12px] font-semibold transition ${
+      active ? "bg-gold text-black" : "text-muted hover:text-white"
+    }`;
+  return (
+    <div
+      role="tablist"
+      aria-label="Docs book"
+      className="flex shrink-0 rounded-lg border border-white/12 bg-white/[0.03] p-0.5"
+    >
+      <Link
+        to="/"
+        prefetch="intent"
+        role="tab"
+        aria-selected={!developers}
+        className={tab(!developers)}
+      >
+        App
+      </Link>
+      <Link
+        to="/developers"
+        prefetch="intent"
+        role="tab"
+        aria-selected={developers}
+        className={tab(developers)}
+      >
+        Developers
+      </Link>
+    </div>
+  );
+}
+
 function Header({ onOpenNav }: { onOpenNav: () => void }) {
   return (
     <header className="sticky top-0 z-40 border-b border-white/[0.07] bg-bg/80 pt-[env(safe-area-inset-top)] backdrop-blur-xl">
@@ -234,10 +278,11 @@ function Header({ onOpenNav }: { onOpenNav: () => void }) {
             height={32}
             className="h-7 w-auto max-w-[104px] sm:h-[30px] sm:max-w-none"
           />
-          <span className="rounded border border-white/12 bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-muted">
+          <span className="hidden rounded border border-white/12 bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-muted sm:inline">
             Docs
           </span>
         </Link>
+        <BookToggle />
 
         <div className="ml-auto flex items-center gap-2">
           <a
@@ -271,6 +316,7 @@ function Header({ onOpenNav }: { onOpenNav: () => void }) {
 function PageFooter() {
   const { pathname } = useLocation();
   const { prev, next } = navNeighbours(pathname);
+  const pages = flatNav(pathname).length;
 
   return (
     <footer className="mt-20 border-t border-white/[0.07] pt-8">
@@ -307,7 +353,7 @@ function PageFooter() {
         ) : null}
       </div>
       <p className="mt-10 pb-12 text-[12.5px] text-muted">
-        Hedge documentation · {flatNav().length} pages
+        Hedge documentation · {pages} pages
       </p>
     </footer>
   );

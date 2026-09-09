@@ -76,8 +76,8 @@ export default function PlacingATrade() {
         <C>Review &amp; open</C>. He never places the trade for you.
       </P>
       <P>
-        Outside agents that should execute (not just propose) use the{" "}
-        <A to="/guides/agent-wall">Agent Wall</A>.
+        Another product that should send a user into this panel uses{" "}
+        <A to="/guides/spot">1x spot integration</A>.
       </P>
 
       <H2>What is happening while you wait</H2>

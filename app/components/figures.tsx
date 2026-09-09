@@ -433,6 +433,166 @@ export function PoolTapeFigure() {
   );
 }
 
+function FlowStep({
+  n,
+  label,
+  sub,
+  tone = "neutral",
+}: {
+  n: string;
+  label: string;
+  sub: string;
+  tone?: "neutral" | "gold";
+}) {
+  return (
+    <div
+      className={`flex min-w-0 items-start gap-3 rounded-xl border p-3.5 ${
+        tone === "gold"
+          ? "border-gold/30 bg-gold/[0.07]"
+          : "border-white/10 bg-white/[0.04]"
+      }`}
+    >
+      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-gold/30 bg-gold/10 text-[12px] font-bold text-gold">
+        {n}
+      </span>
+      <div className="min-w-0">
+        <p className="text-[14px] font-semibold leading-tight text-white">
+          {label}
+        </p>
+        <p className="mt-1 text-[12px] leading-snug text-muted">{sub}</p>
+      </div>
+    </div>
+  );
+}
+
+function DownArrow({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-2 py-1.5 pl-3 text-[11px] font-medium text-gold/80">
+      <svg
+        viewBox="0 0 12 22"
+        className="h-5 w-3 shrink-0 text-gold/70"
+        aria-hidden
+      >
+        <path
+          d="M6 0v18M1.5 14.5L6 20.5l4.5-6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      {label}
+    </div>
+  );
+}
+
+/** Numbered hop from a Robinhood vault through Hedge to the venue book. */
+export function HedgePmFigure() {
+  return (
+    <Figure
+      title="Architecture flow"
+      caption="Your vault never talks to Polymarket. Hedge quotes, converts, signs, and fills. Shares sit in the operator session until USDG comes home."
+    >
+      <div className="space-y-3">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-3 sm:p-4">
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
+            Your product
+          </p>
+          <FlowStep
+            n="1"
+            label="Your vault"
+            sub="Robinhood Chain. USDG. Condition id. Relink lives here."
+          />
+          <DownArrow label="quote" />
+          <FlowStep
+            n="2"
+            label="Quote Hedge"
+            sub="GET /api/spot/quote. Size, entry, fillable, ticketUrl."
+          />
+        </div>
+
+        <DownArrow label="sweep only what the quote needs" />
+
+        <div className="rounded-2xl border border-gold/25 bg-gold/[0.05] p-3 sm:p-4">
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">
+            Hedge
+          </p>
+          <FlowStep
+            n="3"
+            label="Sweep USDG to the operator"
+            sub="One Hedge session. That cash wallet is the signer."
+            tone="gold"
+          />
+          <DownArrow label="first-party only" />
+          <FlowStep
+            n="4"
+            label="Hedge wrapper"
+            sub="Privy session. Relay USDG to pUSD. Builder HMAC. Gasless relayer."
+            tone="gold"
+          />
+        </div>
+
+        <DownArrow label="you never call this" />
+
+        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-3 sm:p-4">
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
+            Venue
+          </p>
+          <FlowStep
+            n="5"
+            label="1x fill"
+            sub="Hedge places the FAK. You never talk to the CLOB."
+          />
+          <DownArrow label="after resolve" />
+          <FlowStep
+            n="6"
+            label="Redeem, USDG home, relink"
+            sub="Redeem in Hedge. Send USDG back to the vault. Point at the next market."
+          />
+        </div>
+      </div>
+    </Figure>
+  );
+}
+
+/** What you drop when Hedge is the book hop. */
+export function VaultBridgeFigure() {
+  return (
+    <Figure
+      title="What you no longer run"
+      caption="Polygon, the bridge, and a CLOB key exist only to reach the venue. Hedge already has that path. You keep the vault and relink on Robinhood Chain."
+    >
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-muted">
+            Without Hedge
+          </p>
+          <ol className="mt-3 space-y-2 text-[13px] leading-snug text-muted">
+            <li>1. Vault on Robinhood Chain</li>
+            <li>2. Twin vault on Polygon</li>
+            <li>3. Bridge across</li>
+            <li>4. Your stack talks to the CLOB</li>
+            <li>5. Redeem, bridge back</li>
+          </ol>
+        </div>
+        <div className="rounded-xl border border-gold/25 bg-gold/[0.06] p-4">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-gold">
+            With Hedge
+          </p>
+          <ol className="mt-3 space-y-2 text-[13px] leading-snug text-muted">
+            <li>1. Vault stays on Robinhood Chain</li>
+            <li>2. Quote and ticket from Hedge</li>
+            <li>3. Operator confirms 1x in the app</li>
+            <li>4. Hedge redeems on resolve</li>
+            <li>5. USDG returns. You relink.</li>
+          </ol>
+        </div>
+      </div>
+    </Figure>
+  );
+}
+
 /** Why the vault needs to grow. */
 export function CapacityFigure() {
   return (

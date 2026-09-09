@@ -17,7 +17,12 @@ export default [
     route("guides/cashing-out", "routes/guides.cashing-out.tsx"),
     route("guides/sharing", "routes/guides.sharing.tsx"),
     route("guides/hedgie", "routes/guides.hedgie.tsx"),
+    route("guides/spot", "routes/guides.spot.tsx"),
     route("guides/agent-wall", "routes/guides.agent-wall.tsx"),
+
+    route("developers", "routes/developers.tsx"),
+    route("developers/architecture", "routes/developers.architecture.tsx"),
+    route("developers/vaults", "routes/developers.vaults.tsx"),
 
     route("pool", "routes/pool.tsx"),
     route("pool/mathematics", "routes/pool.mathematics.tsx"),

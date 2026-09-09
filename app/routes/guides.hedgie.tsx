@@ -215,8 +215,8 @@ export default function HedgieGuide() {
       <Note title="You are still the trader">
         The copilot compresses discovery and ticket prep. Execution, slippage,
         and settlement are unchanged. When in doubt, trust the market page.
-        Outside agents that need a fill use the{" "}
-        <A to="/guides/agent-wall">Agent Wall</A>, not Hedgie.
+        Another product that should send a user into a 1x ticket uses{" "}
+        <A to="/guides/spot">1x spot integration</A>, not Hedgie.
       </Note>
     </>
   );

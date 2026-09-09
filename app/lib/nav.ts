@@ -9,12 +9,13 @@ export type NavSection = {
   items: NavItem[];
 };
 
+export type DocsBook = "app" | "developers";
+
 /**
- * Single source of truth for the sidebar, the mobile picker, the search filter
- * and the prev/next footer links. Adding a page means adding it here and in
- * `routes.ts`, and nothing else.
+ * Two books. The header toggle switches the sidebar. Adding a page means
+ * adding it here and in `routes.ts`.
  */
-export const NAV: NavSection[] = [
+export const APP_NAV: NavSection[] = [
   {
     title: "Getting started",
     items: [
@@ -93,11 +94,6 @@ export const NAV: NavSection[] = [
         to: "/guides/hedgie",
         summary: "The prediction copilot: live odds, leverage context, and trade tickets.",
       },
-      {
-        title: "Agent Wall",
-        to: "/guides/agent-wall",
-        summary: "How outside agents quote and bet through Hedge.",
-      },
     ],
   },
   {
@@ -106,7 +102,7 @@ export const NAV: NavSection[] = [
       {
         title: "Pool and liquidity",
         to: "/pool",
-        summary: "Parimutuel USDG on Robinhood memes. Pots pay. Tape is display.",
+        summary: "Parimutuel USDG on allowlisted memes. Pots pay. Tape is display.",
       },
       {
         title: "The mathematics",
@@ -147,23 +143,90 @@ export const NAV: NavSection[] = [
   },
 ];
 
-const FLAT = NAV.flatMap((section) =>
-  section.items.map((item) => ({ ...item, section: section.title })),
-);
+export const DEV_NAV: NavSection[] = [
+  {
+    title: "Developers",
+    items: [
+      {
+        title: "Overview",
+        to: "/developers",
+        summary: "How another product uses Hedge without holding Privy or a builder key.",
+      },
+      {
+        title: "Architecture",
+        to: "/developers/architecture",
+        summary: "Hedge abstracts Polymarket. Your vault can stay on Robinhood Chain.",
+      },
+      {
+        title: "1x from a vault",
+        to: "/developers/vaults",
+        summary: "Keep the vault on Robinhood Chain. Hedge runs the 1x book hop.",
+      },
+    ],
+  },
+  {
+    title: "HTTP APIs",
+    items: [
+      {
+        title: "1x spot",
+        to: "/guides/spot",
+        summary: "List, quote, and deep-link a 1x ticket. The fill stays in Hedge.",
+      },
+      {
+        title: "Agent Wall",
+        to: "/guides/agent-wall",
+        summary: "Quote every live market. Vault tickets from the agent wallet.",
+      },
+    ],
+  },
+];
 
-export function flatNav() {
-  return FLAT;
+/** User book. Introduction still maps this. */
+export const NAV = APP_NAV;
+
+function flatten(sections: NavSection[]) {
+  return sections.flatMap((section) =>
+    section.items.map((item) => ({ ...item, section: section.title })),
+  );
+}
+
+const APP_FLAT = flatten(APP_NAV);
+const DEV_FLAT = flatten(DEV_NAV);
+
+export function isDeveloperPath(pathname: string) {
+  return (
+    pathname === "/developers" ||
+    pathname.startsWith("/developers/") ||
+    pathname === "/guides/spot" ||
+    pathname === "/guides/agent-wall"
+  );
+}
+
+export function docsBook(pathname: string): DocsBook {
+  return isDeveloperPath(pathname) ? "developers" : "app";
+}
+
+export function navFor(pathname: string) {
+  return docsBook(pathname) === "developers" ? DEV_NAV : APP_NAV;
+}
+
+export function flatNav(pathname?: string) {
+  if (!pathname) return APP_FLAT;
+  return docsBook(pathname) === "developers" ? DEV_FLAT : APP_FLAT;
 }
 
 export function navNeighbours(pathname: string) {
-  const index = FLAT.findIndex((item) => item.to === pathname);
+  const list = flatNav(pathname);
+  const index = list.findIndex((item) => item.to === pathname);
   if (index === -1) return { prev: null, next: null };
   return {
-    prev: index > 0 ? FLAT[index - 1]! : null,
-    next: index < FLAT.length - 1 ? FLAT[index + 1]! : null,
+    prev: index > 0 ? list[index - 1]! : null,
+    next: index < list.length - 1 ? list[index + 1]! : null,
   };
 }
 
 export function navItem(pathname: string) {
-  return FLAT.find((item) => item.to === pathname) ?? null;
+  return APP_FLAT.find((item) => item.to === pathname) ??
+    DEV_FLAT.find((item) => item.to === pathname) ??
+    null;
 }

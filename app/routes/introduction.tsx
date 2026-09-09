@@ -83,12 +83,13 @@ export default function Introduction() {
         <Card to="/why" title="Why Hedge">
           Traders, LPs, and makers, and what is live.
         </Card>
+        <Card to="/developers" title="Developers">
+          Hedge abstracts Polymarket. Public 1x and Agent APIs. Toggle
+          Developers in the header.
+        </Card>
         <Card to="/guides/hedgie" title="Hedgie">
           Ask the prediction copilot. Live odds, leverage context, and tickets
           you still open yourself.
-        </Card>
-        <Card to="/guides/agent-wall" title="Agent Wall">
-          Outside agents quote and open vault tickets through Hedge.
         </Card>
         <Card to="/pool" title="Pool and liquidity">
           Parimutuel USDG on Robinhood memes. Pots pay. Tape is display.
@@ -108,7 +109,8 @@ export default function Introduction() {
       <P>
         Guides first if you just want to trade. Concepts for the vocabulary.
         Pool for the native meme desk. Leverage for traders, LPs, and future
-        makers.
+        makers. Switch to Developers in the header if you are wiring a vault
+        or an agent.
       </P>
 
       <div className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2">

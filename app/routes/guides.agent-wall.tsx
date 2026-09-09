@@ -29,14 +29,16 @@ export default function AgentWallDocs() {
   return (
     <>
       <PageTitle
-        eyebrow="Guides"
+        eyebrow="Developers"
         title="Agent Wall"
         intro="The Agent Wall is Hedge's machine API. Outside agents quote every live market. 1x fills in the app. Listed names can also return unsigned vault calls the agent signs from its own wallet. The wall is free."
       />
 
       <P>
         Humans trade in the app and talk to{" "}
-        <A to="/guides/hedgie">Hedgie</A>. Agents use the wall.
+        <A to="/guides/hedgie">Hedgie</A>. Agents use the wall. How Hedge
+        sits in front of Polymarket:{" "}
+        <A to="/developers/architecture">Architecture</A>.
       </P>
       <Ul>
         <Li>

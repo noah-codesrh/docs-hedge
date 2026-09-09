@@ -1,0 +1,122 @@
+import {
+  A,
+  C,
+  Card,
+  Cards,
+  H2,
+  Li,
+  Note,
+  P,
+  PageTitle,
+  Ul,
+} from "../components/prose";
+import { HedgePmFigure } from "../components/figures";
+import { docMeta } from "../lib/seo";
+
+export function meta() {
+  return docMeta({
+    title: "Developers",
+    description:
+      "How another product uses Hedge as the Polymarket execution layer. Vaults stay on Robinhood Chain. No Privy token. No builder key.",
+  });
+}
+
+export default function Developers() {
+  return (
+    <>
+      <PageTitle
+        eyebrow="Developers"
+        title="Build on Hedge, not on Polymarket"
+        intro="Hedge already wraps the venue: session, USDG conversion, builder HMAC, and the gasless relayer. Another product lists, quotes, and hands off. The 1x fill stays here. Your vault can stay entirely on Robinhood Chain."
+      />
+
+      <HedgePmFigure />
+
+      <P>
+        You cannot drop Hedge in as a raw Polymarket SDK. The cash wallet is
+        Privy. Builder sign and the relayer are first-party and origin-locked.
+        That is by design. You do not get those secrets. You get a public
+        catalog, a live quote, and a ticket (or unsigned vault calls on listed
+        leverage names).
+      </P>
+
+      <Note title="What this book is">
+        App docs are for traders. This book is for a product that wants the 1x
+        book without standing up Polygon, a CLOB key, or a Privy app. Start
+        with <A to="/developers/architecture">Architecture</A> for the flow.
+        Then <A to="/developers/vaults">1x from a vault</A> for the steps.
+        HTTP only: <A to="/guides/spot">1x spot</A> or{" "}
+        <A to="/guides/agent-wall">Agent Wall</A>.
+      </Note>
+
+      <H2>What Hedge will do for you</H2>
+      <Ul>
+        <Li>
+          Hold the 1x Yes/No shares on the venue book. You never talk to the
+          CLOB.
+        </Li>
+        <Li>
+          Convert USDG on Robinhood Chain (4663) to the venue token and back.
+        </Li>
+        <Li>Quote the live asks so you do not size off a mid.</Li>
+        <Li>
+          Redeem after resolve, then you pull USDG back to your vault.
+        </Li>
+      </Ul>
+
+      <H2>What Hedge will not do</H2>
+      <Ul>
+        <Li>
+          Hand you a Privy access token, a builder secret, or{" "}
+          <C>/api/pm/builder-sign</C>. Another origin gets 401.
+        </Li>
+        <Li>
+          Let a smart contract on Robinhood Chain place the CLOB order. The
+          fill needs a Hedge session (1x) or an agent wallet signing vault
+          calldata (listed leverage only).
+        </Li>
+        <Li>
+          Custody the shares inside your vault. They sit in the Hedge cash
+          wallet until you send proceeds home.
+        </Li>
+      </Ul>
+
+      <H2>Two HTTP surfaces</H2>
+      <Cards>
+        <Card to="/developers/architecture" title="Architecture">
+          Numbered flow: vault, quote, sweep, wrapper, venue, redeem.
+        </Card>
+        <Card to="/developers/vaults" title="1x from a vault">
+          Same six steps, with curl, ticket URL, and third-party links.
+        </Card>
+        <Card to="/guides/spot" title="1x spot">
+          List every live market, walk the book, open a prefilled ticket. CORS
+          is open. There is no POST that fills.
+        </Card>
+        <Card to="/guides/agent-wall" title="Agent Wall">
+          Same catalog. Spot still fills in the app. Listed leverage names
+          return unsigned engine calls your wallet signs on chain 4663.
+        </Card>
+      </Cards>
+
+      <H2>Live URLs</H2>
+      <Ul>
+        <Li>
+          App: <A href="https://hedgeapp.trade">hedgeapp.trade</A>
+        </Li>
+        <Li>
+          Spot card:{" "}
+          <A href="https://hedgeapp.trade/api/spot">/api/spot</A>
+        </Li>
+        <Li>
+          Agent card:{" "}
+          <A href="https://hedgeapp.trade/api/agent">/api/agent</A>
+        </Li>
+        <Li>
+          Machine index:{" "}
+          <A href="https://hedgeapp.trade/llms.txt">/llms.txt</A>
+        </Li>
+      </Ul>
+    </>
+  );
+}
