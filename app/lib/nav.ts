@@ -162,6 +162,11 @@ export const DEV_NAV: NavSection[] = [
         to: "/developers/vaults",
         summary: "Keep the vault on Robinhood Chain. Hedge runs the 1x book hop.",
       },
+      {
+        title: "Your codebase",
+        to: "/developers/code",
+        summary: "Drop-in quote + ticket. Turn off your CLOB client and builder keys.",
+      },
     ],
   },
   {

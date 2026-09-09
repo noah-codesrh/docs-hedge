@@ -32,13 +32,17 @@ export default function DevelopersVaults() {
 
       <P>
         Same six steps as the{" "}
-        <A to="/developers/architecture">architecture flow</A>. HTTP shapes:{" "}
+        <A to="/developers/architecture">architecture flow</A>. Copy-paste
+        keeper and builder teardown:{" "}
+        <A to="/developers/code">Your codebase</A>. HTTP shapes:{" "}
         <A to="/guides/spot">1x spot</A>.
       </P>
 
       <Note>
         There is no POST that fills 1x. A keeper can quote and sweep. A signed-in
-        Hedge session still confirms the ticket.
+        Hedge session still confirms the ticket. The fill uses Hedge&rsquo;s
+        builder code, not yours.{" "}
+        <A to="/developers/code">Why your builder profile is not on the fill</A>.
       </Note>
 
       <H2>Steps</H2>

@@ -89,7 +89,10 @@ export default function DevelopersArchitecture() {
       </Ul>
       <P>
         Hedge owns the session, conversion, builder, relayer, and the 1x
-        shares until you pull USDG back.
+        shares until you pull USDG back. The fill is attributed to Hedge&rsquo;s
+        builder profile, not yours. Why, and what that means for{" "}
+        <C>POLY_BUILDER_CODE</C>:{" "}
+        <A to="/developers/code">Your codebase</A>.
       </P>
 
       <VaultBridgeFigure />
@@ -126,7 +129,9 @@ export default function DevelopersArchitecture() {
       </Ul>
       <P>
         Same six steps with curl and the ticket URL:{" "}
-        <A to="/developers/vaults">1x from a vault</A>.
+        <A to="/developers/vaults">1x from a vault</A>. Drop-in{" "}
+        <C>hedge.ts</C> and how to tear out your builder client:{" "}
+        <A to="/developers/code">Your codebase</A>.
       </P>
     </>
   );

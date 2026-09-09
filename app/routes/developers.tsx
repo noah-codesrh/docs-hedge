@@ -44,7 +44,9 @@ export default function Developers() {
         App docs are for traders. This book is for a product that wants the 1x
         book without standing up Polygon, a CLOB key, or a Privy app. Start
         with <A to="/developers/architecture">Architecture</A> for the flow.
-        Then <A to="/developers/vaults">1x from a vault</A> for the steps.
+        Then <A to="/developers/vaults">1x from a vault</A> for the steps,
+        then <A to="/developers/code">Your codebase</A> for the drop-in and
+        builder teardown.
         HTTP only: <A to="/guides/spot">1x spot</A> or{" "}
         <A to="/guides/agent-wall">Agent Wall</A>.
       </Note>
@@ -79,6 +81,11 @@ export default function Developers() {
           Custody the shares inside your vault. They sit in the Hedge cash
           wallet until you send proceeds home.
         </Li>
+        <Li>
+          Stamp your <C>POLY_BUILDER_CODE</C> on the 1x order. Hedge posts
+          the fill, so Hedge&rsquo;s builder code is on it.{" "}
+          <A to="/developers/code">Why, in your repo</A>.
+        </Li>
       </Ul>
 
       <H2>Two HTTP surfaces</H2>
@@ -88,6 +95,10 @@ export default function Developers() {
         </Card>
         <Card to="/developers/vaults" title="1x from a vault">
           Same six steps, with curl, ticket URL, and third-party links.
+        </Card>
+        <Card to="/developers/code" title="Your codebase">
+          Drop-in hedge.ts. Stop wiring ClobClient and POLY_BUILDER_* for this
+          loop.
         </Card>
         <Card to="/guides/spot" title="1x spot">
           List every live market, walk the book, open a prefilled ticket. CORS

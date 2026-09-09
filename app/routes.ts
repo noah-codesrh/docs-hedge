@@ -23,6 +23,7 @@ export default [
     route("developers", "routes/developers.tsx"),
     route("developers/architecture", "routes/developers.architecture.tsx"),
     route("developers/vaults", "routes/developers.vaults.tsx"),
+    route("developers/code", "routes/developers.code.tsx"),
 
     route("pool", "routes/pool.tsx"),
     route("pool/mathematics", "routes/pool.mathematics.tsx"),
