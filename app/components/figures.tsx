@@ -103,7 +103,7 @@ export function VisionFigure() {
         <Arrow label="price" />
         <Node
           label="Hedge"
-          sub="2x to 10x vs the vault"
+          sub="2x to 4x vs the vault"
           tone="gold"
         />
         <Arrow label="settle" />
@@ -587,6 +587,52 @@ export function VaultBridgeFigure() {
             <li>4. Hedge redeems on resolve</li>
             <li>5. USDG returns. You relink.</li>
           </ol>
+        </div>
+      </div>
+    </Figure>
+  );
+}
+
+/** Three ways another product reaches listed leverage. */
+export function LeverageIntegrateFigure() {
+  return (
+    <Figure
+      title="Three ways in"
+      caption="Same engine, same listed names. HTTP builds the calldata. Direct calls skip Hedge. A deep link still fills in the app."
+    >
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div className="rounded-xl border border-gold/25 bg-gold/[0.06] p-4">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-gold">
+            Agent Wall
+          </p>
+          <p className="mt-2 text-[14px] font-semibold text-white">
+            Quote and unsigned calls
+          </p>
+          <p className="mt-1 text-[13px] leading-snug text-muted">
+            Your wallet signs on chain 4663. Hedge never holds the key.
+          </p>
+        </div>
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-muted">
+            Engine
+          </p>
+          <p className="mt-2 text-[14px] font-semibold text-white">
+            Call the contract
+          </p>
+          <p className="mt-1 text-[13px] leading-snug text-muted">
+            Approve USDG, quoteOpen, openPosition. The trader is msg.sender.
+          </p>
+        </div>
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-muted">
+            Deep link
+          </p>
+          <p className="mt-2 text-[14px] font-semibold text-white">
+            Prefill a ticket
+          </p>
+          <p className="mt-1 text-[13px] leading-snug text-muted">
+            Send the user to hedgeapp.trade. They confirm in a Hedge session.
+          </p>
         </div>
       </div>
     </Figure>

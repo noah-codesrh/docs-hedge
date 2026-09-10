@@ -24,6 +24,8 @@ export default [
     route("developers/architecture", "routes/developers.architecture.tsx"),
     route("developers/vaults", "routes/developers.vaults.tsx"),
     route("developers/code", "routes/developers.code.tsx"),
+    route("developers/leverage", "routes/developers.leverage.tsx"),
+    route("developers/contracts", "routes/developers.contracts.tsx"),
 
     route("pool", "routes/pool.tsx"),
     route("pool/mathematics", "routes/pool.mathematics.tsx"),

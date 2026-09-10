@@ -36,8 +36,11 @@ export default function AgentWallDocs() {
 
       <P>
         Humans trade in the app and talk to{" "}
-        <A to="/guides/hedgie">Hedgie</A>. Agents use the wall. How Hedge
-        sits in front of Polymarket:{" "}
+        <A to="/guides/hedgie">Hedgie</A>. Agents use the wall. Putting
+        2x to 4x in another product:{" "}
+        <A to="/developers/leverage">Leveraged markets</A>. Addresses:{" "}
+        <A to="/developers/contracts">Contracts</A>. How Hedge sits in
+        front of Polymarket for 1x:{" "}
         <A to="/developers/architecture">Architecture</A>.
       </P>
       <Ul>

@@ -167,6 +167,16 @@ export const DEV_NAV: NavSection[] = [
         to: "/developers/code",
         summary: "Drop-in quote + ticket. Turn off your CLOB client and builder keys.",
       },
+      {
+        title: "Leveraged markets",
+        to: "/developers/leverage",
+        summary: "Put Hedge 2x to 4x tickets in another app. HTTP, engine, or deep link.",
+      },
+      {
+        title: "Contracts",
+        to: "/developers/contracts",
+        summary: "Live addresses on Robinhood Chain. Engine, vault, oracle, pool, tokens.",
+      },
     ],
   },
   {

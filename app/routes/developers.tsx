@@ -27,7 +27,7 @@ export default function Developers() {
       <PageTitle
         eyebrow="Developers"
         title="Build on Hedge, not on Polymarket"
-        intro="Hedge already wraps the venue: session, USDG conversion, builder HMAC, and the gasless relayer. Another product lists, quotes, and hands off. The 1x fill stays here. Your vault can stay entirely on Robinhood Chain."
+        intro="Hedge already wraps the venue: session, USDG conversion, builder HMAC, and the gasless relayer. Another product lists, quotes, and hands off. 1x fills stay here. 2x to 4x is on-chain on Robinhood Chain, so another app can open those tickets itself."
       />
 
       <HedgePmFigure />
@@ -36,18 +36,18 @@ export default function Developers() {
         You cannot drop Hedge in as a raw Polymarket SDK. The cash wallet is
         Privy. Builder sign and the relayer are first-party and origin-locked.
         That is by design. You do not get those secrets. You get a public
-        catalog, a live quote, and a ticket (or unsigned vault calls on listed
-        leverage names).
+        catalog, a live quote, a 1x ticket, and on listed names the
+        leverage engine itself (HTTP calldata or a direct contract call).
       </P>
 
       <Note title="What this book is">
-        App docs are for traders. This book is for a product that wants the 1x
-        book without standing up Polygon, a CLOB key, or a Privy app. Start
-        with <A to="/developers/architecture">Architecture</A> for the flow.
-        Then <A to="/developers/vaults">1x from a vault</A> for the steps,
-        then <A to="/developers/code">Your codebase</A> for the drop-in and
-        builder teardown.
-        HTTP only: <A to="/guides/spot">1x spot</A> or{" "}
+        App docs are for traders. This book is for another product. 1x:
+        <A to="/developers/architecture">Architecture</A>, then{" "}
+        <A to="/developers/vaults">1x from a vault</A>, then{" "}
+        <A to="/developers/code">Your codebase</A>. Leveraged markets:{" "}
+        <A to="/developers/leverage">Integrate leveraged markets</A> and{" "}
+        <A to="/developers/contracts">Contracts</A>. HTTP only:{" "}
+        <A to="/guides/spot">1x spot</A> or{" "}
         <A to="/guides/agent-wall">Agent Wall</A>.
       </Note>
 
@@ -63,6 +63,11 @@ export default function Developers() {
         <Li>Quote the live asks so you do not size off a mid.</Li>
         <Li>
           Redeem after resolve, then you pull USDG back to your vault.
+        </Li>
+        <Li>
+          On listed names, settle 2x to 4x on chain 4663. Your wallet or
+          contract is the trader. See{" "}
+          <A to="/developers/leverage">Leveraged markets</A>.
         </Li>
       </Ul>
 
@@ -88,8 +93,15 @@ export default function Developers() {
         </Li>
       </Ul>
 
-      <H2>Two HTTP surfaces</H2>
+      <H2>Where to start</H2>
       <Cards>
+        <Card to="/developers/leverage" title="Leveraged markets">
+          Put 2x to 4x tickets in your app. Agent Wall, engine calls, or a
+          deep link. Settles on chain 4663.
+        </Card>
+        <Card to="/developers/contracts" title="Contracts">
+          Live engine, vault, oracle, stock desk, pool, USDG, and $HEDGE.
+        </Card>
         <Card to="/developers/architecture" title="Architecture">
           Numbered flow: vault, quote, sweep, wrapper, venue, redeem.
         </Card>

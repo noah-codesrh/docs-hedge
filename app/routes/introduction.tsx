@@ -84,8 +84,8 @@ export default function Introduction() {
           Traders, LPs, and makers, and what is live.
         </Card>
         <Card to="/developers" title="Developers">
-          Hedge abstracts Polymarket. Public 1x and Agent APIs. Toggle
-          Developers in the header.
+          1x APIs, leveraged-market integration, and live contract
+          addresses. Toggle Developers in the header.
         </Card>
         <Card to="/guides/hedgie" title="Hedgie">
           Ask the prediction copilot. Live odds, leverage context, and tickets
