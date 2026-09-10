@@ -114,6 +114,11 @@ export const APP_NAV: NavSection[] = [
         to: "/pool/money",
         summary: "Where USDG sits, who claims, who pays the overlay.",
       },
+      {
+        title: "Refund, redeem, and claim",
+        to: "/pool/claim",
+        summary: "Refund before lock. Claim stake after expiry. Redeem when the chain pays.",
+      },
     ],
   },
   {
@@ -176,6 +181,11 @@ export const DEV_NAV: NavSection[] = [
         title: "Contracts",
         to: "/developers/contracts",
         summary: "Live addresses on Robinhood Chain. Engine, vault, oracle, pool, tokens.",
+      },
+      {
+        title: "Pool tickets",
+        to: "/developers/pool",
+        summary: "Stake, refund, resolve, claim, and holder release.",
       },
     ],
   },

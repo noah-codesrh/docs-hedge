@@ -64,7 +64,8 @@ export default function PlacingATrade() {
         different ticket. You pick a side, stake $1–$25 of USDG, and wait
         for the window. There are no shares to sell. Winners split the two
         pots. How the pots pay:{" "}
-        <A to="/pool">Pool and liquidity</A>.
+        <A to="/pool">Pool and liquidity</A>. How the stake comes back:{" "}
+        <A to="/pool/claim">Refund, redeem, and claim</A>.
       </P>
 
       <H2>Hedgie</H2>

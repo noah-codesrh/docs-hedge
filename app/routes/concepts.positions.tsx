@@ -1,4 +1,4 @@
-import { Code, H2, H3, Li, Note, P, PageTitle, Ul } from "../components/prose";
+import { A, C, Code, H2, H3, Li, Note, P, PageTitle, Ul } from "../components/prose";
 import { docMeta } from "../lib/seo";
 
 export function meta() {
@@ -99,6 +99,15 @@ Round trip                   -$0.24, about -4.8%`}</Code>
         your share count by walking the real book rather than dividing by the
         quoted price, so the estimate you see before confirming already accounts
         for this.
+      </P>
+
+      <H2>Pool tickets</H2>
+      <P>
+        A native pool ticket is not shares. It is a USDG stake in{" "}
+        <C>HedgePool</C>. The mark on the card is tape, not a bid you can
+        sell. After expiry the chain must resolve before anything pays.
+        Buttons and payouts:{" "}
+        <A to="/pool/claim">Refund, redeem, and claim</A>.
       </P>
 
       <H2>Where positions are shown</H2>

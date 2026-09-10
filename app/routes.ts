@@ -26,10 +26,12 @@ export default [
     route("developers/code", "routes/developers.code.tsx"),
     route("developers/leverage", "routes/developers.leverage.tsx"),
     route("developers/contracts", "routes/developers.contracts.tsx"),
+    route("developers/pool", "routes/developers.pool.tsx"),
 
     route("pool", "routes/pool.tsx"),
     route("pool/mathematics", "routes/pool.mathematics.tsx"),
     route("pool/money", "routes/pool.money.tsx"),
+    route("pool/claim", "routes/pool.claim.tsx"),
 
     route("leverage/overview", "routes/leverage.overview.tsx"),
     route("leverage/earn", "routes/leverage.earn.tsx"),

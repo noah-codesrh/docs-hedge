@@ -375,6 +375,53 @@ export function PoolMoneyFigure() {
   );
 }
 
+/** Ticket clock: refund, claim stake, redeem. */
+export function PoolClaimFigure() {
+  return (
+    <Figure
+      title="When each button appears"
+      caption="Refund is before lock. Claim stake is after expiry if the chain has not resolved yet. Redeem is only when previewPayout is above zero. Close is a different desk."
+    >
+      <div className="grid gap-2 sm:grid-cols-2">
+        <Node label="Open" sub="Refund pulls the stake. Undo, not a sale." />
+        <Node label="Locked" sub="No refund. No sell. Wait for expiry." />
+        <Node
+          label="Expired, unresolved"
+          sub="Claim stake voids a one-sided pot, then claim."
+          tone="gold"
+        />
+        <Node
+          label="Resolved, you can be paid"
+          sub="Redeem calls claim(). Losers get nothing."
+          tone="up"
+        />
+      </div>
+    </Figure>
+  );
+}
+
+/** Holder release: resolve on chain, then the wallet claims. */
+export function PoolReleaseFigure() {
+  return (
+    <Figure
+      title="Claim stake"
+      caption="The holder asks the reporter to resolve. USDG still sits in HedgePool until that wallet sends claim()."
+    >
+      <div className="grid gap-2 sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-center">
+        <Node label="You" sub="POST /api/native/release" />
+        <Arrow label="resolve()" />
+        <Node
+          label="HedgePool"
+          sub="outcome A, B, or void"
+          tone="gold"
+        />
+        <Arrow label="claim()" />
+        <Node label="Your wallet" sub="previewPayout USDG" tone="up" />
+      </div>
+    </Figure>
+  );
+}
+
 /** Parimutuel: payout is the other side, not a fixed multiple. */
 export function PoolSplitFigure() {
   return (

@@ -46,7 +46,8 @@ export default function Developers() {
         <A to="/developers/vaults">1x from a vault</A>, then{" "}
         <A to="/developers/code">Your codebase</A>. Leveraged markets:{" "}
         <A to="/developers/leverage">Integrate leveraged markets</A> and{" "}
-        <A to="/developers/contracts">Contracts</A>. HTTP only:{" "}
+        <A to="/developers/contracts">Contracts</A>. Native pool:{" "}
+        <A to="/developers/pool">Pool tickets</A>. HTTP only:{" "}
         <A to="/guides/spot">1x spot</A> or{" "}
         <A to="/guides/agent-wall">Agent Wall</A>.
       </Note>
@@ -101,6 +102,9 @@ export default function Developers() {
         </Card>
         <Card to="/developers/contracts" title="Contracts">
           Live engine, vault, oracle, stock desk, pool, USDG, and $HEDGE.
+        </Card>
+        <Card to="/developers/pool" title="Pool tickets">
+          Stake, refund, resolve, claim, and holder-triggered release.
         </Card>
         <Card to="/developers/architecture" title="Architecture">
           Numbered flow: vault, quote, sweep, wrapper, venue, redeem.

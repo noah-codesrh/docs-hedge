@@ -136,7 +136,9 @@ export default function PoolMoney() {
             <C>(stake × (poolA + poolB)) / winning side</C>. A void
             returns the stake. A loser gets 0 and the call reverts{" "}
             <C>NothingToClaim</C>. Dust from integer division stays in the
-            contract.
+            contract. If the chain is still <C>outcome = 0</C> after
+            expiry, Redeem is hidden. Use Claim stake first:{" "}
+            <A to="/pool/claim">Refund, redeem, and claim</A>.
           </P>
         </Step>
       </Steps>
@@ -328,6 +330,9 @@ cast send $OLD "claim(bytes32)" $ID \\
         </Card>
         <Card to="/pool" title="Pool and liquidity">
           What the desk is, the three card kinds, and the board.
+        </Card>
+        <Card to="/pool/claim" title="Refund, redeem, and claim">
+          When Refund, Claim stake, and Redeem show, and why.
         </Card>
       </Cards>
     </>

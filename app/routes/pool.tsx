@@ -91,7 +91,8 @@ export default function Pool() {
       <P>
         Windows roll on UTC. Lock is a slice of the window, not a flat hour.
         After lock, no new tickets. After expiry, a reporter pushes the
-        outcome and winners claim.
+        outcome and winners claim. Buttons, stuck cards, and one-sided
+        pots: <A to="/pool/claim">Refund, redeem, and claim</A>.
       </P>
       <Table head={["Window", "Lock before expiry"]}>
         <Tr>
@@ -321,6 +322,7 @@ unresolved or already claimed -> 0`}</Code>
         <Li>
           <C>claim</C> is a pull. Winners take{" "}
           <C>(stake × pot) / side</C>. A void returns the stake.
+          Redeem is hidden until <C>previewPayout</C> is above zero.
         </Li>
       </Ul>
       <P>
@@ -356,6 +358,9 @@ unresolved or already claimed -> 0`}</Code>
         </Card>
         <Card to="/pool/money" title="Money and payouts">
           Where USDG sits, who claims, who pays.
+        </Card>
+        <Card to="/pool/claim" title="Refund, redeem, and claim">
+          Refund, Claim stake, Redeem. Why a $0 mark is not a failed ticket.
         </Card>
       </Cards>
     </>

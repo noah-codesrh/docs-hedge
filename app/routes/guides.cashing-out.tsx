@@ -156,6 +156,16 @@ export default function CashingOut() {
         </Li>
       </Ul>
 
+      <H2>Pool tickets</H2>
+      <P>
+        Pool is a different desk. There are no shares to sell.{" "}
+        <C>Close</C> does not apply. Before lock use Refund. After expiry
+        use Claim stake if the chain is still unresolved, then Redeem
+        once <C>previewPayout</C> is above zero. A $0 mark on an expired
+        one-sided pot is not a failed ticket. Full walkthrough:{" "}
+        <A to="/pool/claim">Refund, redeem, and claim</A>.
+      </P>
+
       <P>
         For why the money moves between two tokens at all, see{" "}
         <A to="/concepts/tokens">money and tokens</A>.

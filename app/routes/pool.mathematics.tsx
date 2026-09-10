@@ -439,7 +439,8 @@ if outcome == B and poolB == 0  ->  EmptyWinningSide`}</Code>
       <P>
         Windows roll on UTC. Lock is a slice of the window, not a flat hour.
         After lock, no new tickets. After expiry, the reporter pushes the
-        outcome and winners claim.
+        outcome and winners claim. Button logic and stuck cards:{" "}
+        <A to="/pool/claim">Refund, redeem, and claim</A>.
       </P>
       <Table head={["Window", "Length", "Lock before expiry"]}>
         <Tr>
@@ -597,6 +598,9 @@ else                     ->  open`}</Code>
         </Card>
         <Card to="/pool" title="Pool and liquidity">
           What the desk is, the three card kinds, and the board.
+        </Card>
+        <Card to="/pool/claim" title="Refund, redeem, and claim">
+          When the chain pays, and when Claim stake has to run first.
         </Card>
       </Cards>
     </>

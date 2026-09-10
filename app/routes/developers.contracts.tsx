@@ -316,7 +316,9 @@ export default function DevelopersContracts() {
         Separate from leverage. <C>stake</C>, <C>refund</C> before lock,{" "}
         <C>claim</C> after resolve. Market id is also{" "}
         <C>keccak256(utf8(slug))</C>. $1 to $25, one ticket per wallet per
-        card, $1,000 desk cap. App docs: <A to="/pool">Pool</A>.
+        card, $1,000 desk cap. App docs: <A to="/pool">Pool</A>. Ticket
+        lifecycle and release: <A to="/developers/pool">Pool tickets</A>.
+        Trader buttons: <A to="/pool/claim">Refund, redeem, and claim</A>.
       </P>
       <P>
         First live pool (no refund, tickets stay until expiry):{" "}
